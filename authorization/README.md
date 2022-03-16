@@ -231,7 +231,7 @@ policy {
   }
   action: DENY
   level: READ
-  group { name: "brian" }
+  user { name: "brian" }
 }
 # Add a final rule which is an explicit deny rule.
 policy {
