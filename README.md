@@ -1,4 +1,4 @@
-# gNSI - gRPC Network Security Infrastructure
+# gNSI - gRPC Network Security Interface
 
 A repository which contains security infrastructure services
 necessary for safe operations of an OpenConfig platform. These
