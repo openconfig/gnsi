@@ -117,8 +117,6 @@ and evaluation should return a failure.
 ## An Example Authorization Protobuf
 
 ```proto
-# proto-file: //experimental/users/morrowc/gnXi/proto/authorization.proto
-# proto-message: Policies
 version: "UUID-1234-123123-123123"
 created_on: 1234567890
 # Define 2 groups.
