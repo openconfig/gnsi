@@ -1,0 +1,147 @@
+// Accounting for gnXi operations.
+//
+// Copyright 2022 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+// A protobuffer definition used for logging events reported to gNxI server.
+// This file assumes the following nomenclature:
+//
+//   Device >---connects---> gNxI accounting Server
+//
+// Device is a router, switch, PC, ... which connects to gNxI accounting server
+// to log accounting records.
+//
+// A gNxI accounting Server is a server which receives requests from devices and
+// logs them in the format specified using messages defined in this file.
+//
+// The current version covers event recording of shell/vendor-CLI and gRPC
+// based connections.
+
+syntax = "proto3";
+
+package gnsi.accounting;
+
+option go_package = "github.com/openconfig/gnsi/accounting";
+
+// Session identifier that identifies the context in which service
+// was executed.
+message SessionInfo {
+  // address of the device sending the event.
+  string device_address = 1;
+
+  // rest of the information for 5 tuple of the connection
+  uint32 layer4_proto = 2;
+  uint32 local_port = 3;
+  string remote_address = 4;
+  uint32 remote_port = 5;
+
+  // For multiplexing multiple channels over single 5 tuple
+  // - multiple CLI connections over single SSH
+  string channel_id = 6;
+}
+
+// Details of authentication - for gRPC or shell/vendor-CLI.
+message AuthenDetail {
+  // Identity string is used to identify the user that executed the
+  // command. For instance, it could be spiffe-id in the case of gRPC or
+  // unix-style user-name in the case of shell/vendor-CLI.
+  string identity = 1;
+
+  // Privilege level configured on the device.
+  uint32 privilege_level = 2;
+
+  // authentication status
+  enum AuthenStatus {
+    AUTHEN_STATUS_UNKNOWN = 0;
+    AUTHEN_STATUS_PERMIT = 1;
+    AUTHEN_STATUS_DENY = 2;
+  }
+  AuthenStatus status = 3;
+
+  // In case of STATUS_DENY, cause for the deny
+  string deny_cause = 4;
+}
+
+// Command details for shell/vendor-CLI
+message CommandService {
+  enum CmdServiceType {
+    CMD_SERVICE_UNKNOWN = 0;
+    CMD_SERVICE_SHELL = 1;
+    CMD_SERVICE_CLI = 2;
+  }
+  CmdServiceType service_type = 1;
+
+  // The command that was executed.
+  string cmd = 2;
+
+  // Arguments to a command above.
+  repeated string cmd_args = 3;
+}
+
+// Command details for openconfig gNxI commands.
+message GrpcService {
+  enum GrpcServiceType {
+    GRPC_SERVICE_UNKNWON = 0;
+    GRPC_SERVICE_GNMI = 1;
+    GRPC_SERVICE_GNOI = 2;
+    GRPC_SERVICE_GNSI = 3;
+    // GRIBI records could be very verbose.
+    // By default, the logging authorization
+    // should keep GRIBI logging off.
+    GRPC_SERVICE_GRIBI = 4;
+  }
+  GrpcServiceType service_type = 1;
+
+  // A string of bytes that are gRPC encoded. Best to decode using PROTO_ANY.
+  repeated byte payload = 2;
+
+  // config_meta_Data can be used to track all set requests that were to be
+  // applied atomically.
+  string config_meta_data = 3;
+}
+
+// An accounting record message is generated everytime the user types a
+// shell/vendorCLI command or sends a gNxI setRequests.
+message Record {
+  // Session information
+  SessionInfo session_info = 1;
+
+  // The time when the device recorded this event. Recorded as nanoseconds
+  // since epoch.
+  int64 event_epoch_ns = 2;
+
+  // Service request details of the accounting record.
+  oneof service_request {
+    CommandService cmd_service = 3;
+    GrpcService grpc_service = 4;
+  }
+
+  // Service processing status at the time of event reporting.
+  enum ServiceStatus {
+    SERVICE_STATUS_UNKNOWN = 0;
+    SERVICE_STATUS_SUCCESS = 1;
+    SERVICE_STATUS_FAILURE = 2;
+  }
+  ServiceStatus status = 5;
+
+  // In case of STATUS_FAILURE, cause for the failure
+  string failure_cause = 6;
+
+  // Authentication related details
+  AuthenDetail authen = 7;
+
+  // Optional repeated task_id that represent tasks that were used to
+  // accomplish the request on the device.
+  repeated string task_ids = 32;
+}
