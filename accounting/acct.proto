@@ -112,7 +112,7 @@ message GrpcService {
 }
 
 // An accounting record message is generated everytime the user types a
-// shell/vendorCLI command or sends a gNxI setRequests.
+// shell/vendorCLI command or sends a gNxI setRequest.
 message Record {
   // Session information
   SessionInfo session_info = 1;
