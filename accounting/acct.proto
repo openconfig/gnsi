@@ -104,7 +104,7 @@ message GrpcService {
   GrpcServiceType service_type = 1;
 
   // A string of bytes that are gRPC encoded. Best to decode using PROTO_ANY.
-  repeated byte payload = 2;
+  repeated google.Protobuf.Any payload = 2;
 
   // config_meta_Data can be used to track all set requests that were to be
   // applied atomically.
