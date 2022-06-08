@@ -2,7 +2,7 @@
 
 ## Objective
 
-This proto definition and the reference code(to be delivered seperately) serve
+This proto definition and the reference code(to be delivered separately) serve
 to describe an authorization framework for controlling which gNMI paths of a
 network device users can access. The authorization policy is initially intended
 to be deployed to a device, with the ability to define:
@@ -46,14 +46,14 @@ An implicit deny is assumed, if there is no matching rule in the policy. Logging
 may be specified on a per-policy-rule basis as well as a default for the whole
 authorization policy.
 
-As a request is evaluated against the configured policy, a READ / SUBSCRIBE
-request for the configuration tree may traverse all of the tree and subtrees.
-For portions of the tree for which the user has no access no data will be
-returned. A WRITE request which attempts to write to a denied gNMI path or
-element will return a "Permission Denied" error to the caller.
+As a request is evaluated against the configured policy, a READ (gNMI `Get` or
+`Subscribe`) request for the configuration tree may traverse all of the tree 
+and subtrees. For portions of the tree for which the user has no access no data
+will be returned. A WRITE request which attempts to write to a denied gNMI path
+or element will return a "Permission Denied" error to the caller.
 
 [gNMI paths](https://github.com/openconfig/reference/blob/master/rpc/gnmi/gnmi-specification.md#222-paths)
-are hierarchical, and rooted at a defined "origin". gNMOpenConfigI may contain paths
+are hierarchical, and rooted at a defined "origin". gNMI may contain paths
 such as:
 
 ```proto
@@ -105,7 +105,7 @@ and services have immediate authorized access to finish installation and
 move devices into production in a timely manner.
 
 Using the Secure Zero Touch Provisioning (sZTP - RFC8572) process for
-bootstrap/installation is a reocommended method for to accomplish this
+bootstrap/installation is a recommended method for to accomplish this
 delivery, and the delivery of all other bootstrap artifacts in a secure manner.
 
 ## Conflict Resolution
@@ -348,7 +348,7 @@ read only manner:
     /this/is/a/keyed[name=Ethernet1/2/3]/message_path
 ```
 
-and all path elementas as beyond "message_path". The final policy rule:
+and all path elements as beyond "message_path". The final policy rule:
 
 ```proto
 # Demonstrate a key with a wildcard attribute.
@@ -411,6 +411,6 @@ policy {
 }
 ```
 
-provides an explcit deny for any request wich does not match any other policy
+provides an explicit deny for any request which does not match any other policy
 rule. This rule also requests that the result be logged in full fidelity.
 
