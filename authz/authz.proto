@@ -1,0 +1,214 @@
+//
+// Copyright 2021 Google Inc. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
+// This file defines the gNSI API to be used for authz policy rotation.
+syntax = "proto3";
+
+package gnsi.authz;
+
+import "github.com/openconfig/gnoi/types/types.proto";
+
+option go_package = "github.com/openconfig/gnsi/authz";
+option (gnoi.types.gnoi_version) = "0.1.0";
+
+// The Authz Policy Management Service exported by targets.
+//
+
+// Authorization Policy defines which principals are permitted to access which
+// resource. Resources are individual RPC methods scoped by services.
+
+// Example policy:
+//
+// {
+//     "name": "gNSI.ssh policy",
+//     "allow_rules": [{
+//         "name": "admin-access",
+//         "principals": [
+//             "spiffe://company.com/sa/alice",
+//             "spiffe://company.com/sa/bob"
+//         ],
+//         "request": {
+//             "paths": [
+//                 "/gnsi.ssh.Ssh/MutateAccountCredentials",
+//                 "/gnsi.ssh.Ssh/MutateHostCredentials"
+//             ]
+//         }
+//     }]
+// }
+//
+// This example would authorizes "alice" and "bob" to call
+// "MutateHostCredentials" and "MutateAccountCredentials" of "gnsi.ssh.Ssh"
+// service.
+
+service AuthzManagement {
+
+  // Rotate will replace an existing Authz Policy on the target.
+  // If the stream is broken or any of the steps fail the
+  // target must rollback to the original state, i.e. revert any changes to
+  // the Authz Policy made during this RPC.
+  //
+  // Note that only one such RPC can be in progress. An attempt to call this
+  // RPC while another is already in progress will be rejected with the
+  // `UNAVAILABLE` gRPC error.
+  //
+  // An attempt to rotate a policy with not exisitng `id` will be rejected
+  // with the `FAILED_PRECONDITION` gRPC error.
+  //
+  // The following describes the sequence of messages that must be exchanged
+  // in the Rotate() RPC.
+  //
+  // Sequence of expected messages:
+  //   Step 1: Start the stream
+  //     Client ----> Rotate() RPC stream begin ------> Target
+  //
+  //   Step 2: Send Authz Policy to Target.
+  //     Client --> UploadRequest(authz_policy) ----> Target
+  //     Client <-- UploadResponse <--- Target
+  //
+  //   Step 3 (optional): Test/Validation by the client.
+  //     During this step client attempts to call a RPC that is allowed
+  //     in the new policy and validates that the new policy "works".
+  //     Additionally the client should call a RPC that is not allowed and
+  //     the attempt must fail prooving that the Authz Policy "works".
+  //     Once verfied, the client then proceeds to finalize the rotation.
+  //     If the new verification did not succeed the client will cancel the
+  //     RPC thereby forcing the target to rollback of the new Authz Policy.
+  //
+  //   Step 4: Final commit.
+  //     Client ---> FinalizeRequest ----> Target
+  //
+  rpc Rotate(stream RotateAuthzRequest)
+      returns (stream RotateAuthzResponse);
+
+  // Install will add a new Authz Policy on the target.
+  // If the stream is broken or any of the steps fail the target must rollback
+  // to the original state, i.e. revert any changes to the Authz Policy made
+  // during this RPC.
+  //
+  // Note that only one such RPC can be in progress. An attempt to call this
+  // RPC while another is already in progress will be rejected with the
+  // `UNAVAILABLE gRPC` error.
+  //
+  // An attempt to install a policy with already existing `id` will be rejected
+  // with the `ALREADY_EXISTS` gRPC error.
+  //
+  // As a policy has to be installed on a target before it is activated using
+  // the gNMI API it cannot be tested after uploading.
+  //
+  // The following describes the sequence of messages that must be exchanged
+  // in the Install() RPC.
+  //
+  // Sequence of expected messages:
+  //   Step 1: Start the stream
+  //     Client ----> Install() RPC stream begin ------> Target
+  //
+  //   Step 2: Send Authz Policy to Target.
+  //     Client --> UploadRequest(authz_policy) ----> Target
+  //     Client <-- UploadResponse <--- Target
+  //
+  //   Step 3: Final commit.
+  //     Client ---> FinalizeRequest ----> Target
+  //
+  rpc Install(stream InstallAuthzRequest)
+      returns (stream InstallAuthzResponse);
+}
+
+// Request messages to rotate existing Authz Policy on the target.
+message RotateAuthzRequest {
+  // Request Messages.
+  oneof rotate_request {
+    UploadRequest upload_request = 1;
+    FinalizeRequest finalize_rotation = 2;
+  }
+
+  // If set to `true` the requested operation will succeed even if the
+  // combination of `id` and `version` is already in use (is not unique).
+  // If set to `false` the requested operation will fail and the streaming RPC
+  // will be closed with the `ALREADY_EXISTS` gRPC error if the combination
+  // of `id` and `version` is already in use (is not unique).
+  // It is a no-op for the `finalize_rotation` request.
+  bool force_overwrite = 3;
+}
+
+// Response messages from the target.
+message RotateAuthzResponse {
+  // Response messages.
+  oneof rotate_response {
+    UploadResponse upload_response = 1;
+  }
+}
+
+// Request messages to install a new Authz Policy on
+// the target.
+message InstallAuthzRequest {
+  // Request Messages.
+  oneof install_request {
+    UploadRequest upload_request = 1;
+    FinalizeRequest finalize_installation = 2;
+  }
+}
+
+// Response messages from the target.
+message InstallAuthzResponse {
+  // Response messages.
+  oneof install_response {
+    UploadResponse upload_response = 1;
+  }
+}
+
+// A Finalize message is sent to the target to confirm the rotation of
+// the Authz Policy and that it should not be rolled back when
+// the RPC concludes.
+// Note that the Authz Policy change is considered rolled back by the target
+// if the target returns an error as response to the Finalize message.
+message FinalizeRequest {
+}
+
+// UploadRequest instructs the target to store the given Authz Policy.
+//
+// If there is another ongoing Rotate RPC the UploadRequest must fail.
+//
+message UploadRequest {
+  // `version` contains versioning information that is controlled by
+  // the policy manager and reported as-is by the telemetry reporting system
+  // (ie, transparent to the target policy management service). Policy managers
+  // should choose version strings as discrete as possible to ease alert
+  // generation (eg, for policies sourced from a bundle, the timestamp of
+  // the bundle should be used but not the time when the policy is pushed to
+  // a particular switch). Also, such version string should be persisted by
+  // the device onto non-volatile memory for preservation across system
+  // reboots.
+  string version = 1;
+  // `created_on` contains information when the policy was created.
+  // This information is controlled by the policy manager and reported as-is
+  // by the telemetry reporting system (ie, transparent to the device policy
+  // management service). Policy manager should use the timestamp of the moment
+  // when policy was created, not the time when the policy is pushed to
+  // a particular switch).
+  // Also, this timestamp should be persisted by the device onto non-volatile
+  // memory for preservation across system reboots.
+  // `created_on` is a timestamp: the number of seconds since
+  // January 1st, 1970 00:00:00 GMT.
+  uint64 created_on = 2;
+
+  // The actual Authz Policy.
+  // It is provided as a JSON formatted string whose structure is defined by
+  // gRPC.
+  string policy = 3;
+}
+
+message UploadResponse {}
+
