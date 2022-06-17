@@ -42,13 +42,23 @@ load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies", "go_repository")
 
 go_repository(
     name = "com_github_openconfig_gnoi",
-    importpath = "github.com/openconfig/gnoi",
-    sum = "h1:koTAGmBf6l9XvBqinTC484NSBuCCUaz01136ofgShgo=",
-    version = "v0.0.0-20220615151501-18d7d5153945",
-    build_file_generation = "on",
     build_directives = [
         "gazelle:proto_import_prefix github.com/openconfig/gnoi",
     ],
+    build_file_generation = "on",
+    importpath = "github.com/openconfig/gnoi",
+    sum = "h1:koTAGmBf6l9XvBqinTC484NSBuCCUaz01136ofgShgo=",
+    version = "v0.0.0-20220615151501-18d7d5153945",
+)
+
+go_repository(
+    name = "com_github_openconfig_gnmi",
+    build_directives = [
+        "gazelle:proto_import_prefix github.com/openconfig/gnmi",
+    ],    build_file_generation = "on",
+    importpath = "github.com/openconfig/gnmi",
+    sum = "h1:tv9HygDMXnoGyWuLmNCodMV2+PK6+uT/ndAxDVzsUUQ=",
+    version = "v0.0.0-20220617175856-41246b1b3507",
 )
 
 gazelle_dependencies()
@@ -65,4 +75,3 @@ rules_proto_grpc_cpp_repos()
 load("@com_github_grpc_grpc//bazel:grpc_deps.bzl", "grpc_deps")
 
 grpc_deps()
-
