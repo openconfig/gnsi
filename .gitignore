@@ -1,0 +1,5 @@
+.vscode/
+bazel-*
+*/Makefile
+*/*.tmpl
+yang.settings
