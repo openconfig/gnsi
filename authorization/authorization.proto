@@ -69,15 +69,15 @@ enum Action {
   ACTION_PERMIT = 2;
 }
 
-// Level is:
-//   READ: Ability to view/read data.
+// Method is:
+//   GET: Ability to view/read data.
 //   SUBSCRIBE: Ability to subscribe for updates to data.
-//   WRITE: Ability to mutate data.
+//   SET: Ability to mutate data, with a set request.
 enum Level {
   LEVEL_UNDEFINED = 0;
-  LEVEL_READ = 1;
+  LEVEL_GET = 1;
   LEVEL_SUBSCRIBE = 2;
-  LEVEL_WRITE = 3;
+  LEVEL_SET = 3;
 }
 
 message AuthorizationRule {
