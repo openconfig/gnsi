@@ -27,34 +27,29 @@ import "github.com/openconfig/gnsi/authorization/authorization.proto";
 option go_package = "github.com/openconfig/gnsi/pathz";
 option (gnoi.types.gnoi_version) = "0.1.0";
 
-// The OpenConfig Path-based Authz Policy Management Service exported by
-// targets.
+// The OpenConfig gNMI Path-based Authorization Policy Management Service
+// exported by targets.
 //
 
 // The OpenConfig Path-based Authorization Policy defines which principals
 // are permitted to access which OpenConfig path.
 
-// The service allows for installation of a policy using the Install() RPC and
-// then to change/update it using the Rotate() RPC.
-// There can be multiple polices installed on a target of which only one is
-// active and the rest are on-standby.
-// Activation of a standby policy is not handled by this service and is done
-// using the gNMI API.
+// The service allows for change/update of the OpenConfig Path-based
+// Authorization Policy using the Rotate() RPC.
+// There can be only one OpenConfig Path-based Authorization Policy installed on
+// a target.
 
 service Pathz {
 
-  // Rotate will replace an existing OpenConfig Path-based Authz Policy on
-  // the target.
+  // Rotate will replace an existing OpenConfig gNMI Path-based Authorization
+  // Policy on the target.
   // If the stream is broken or any of the steps fail the target must rollback
-  // to the original state, i.e. revert any changes to the OpenConfig Path-based
-  // Authz Policy made during this RPC.
+  // to the original state, i.e. revert any changes to the OpenConfig gNMI
+  // Path-based Authorization Policy made during this RPC.
   //
   // Note that only one such RPC can be in progress. An attempt to call this
   // RPC while another is already in progress will be rejected with the
   // `UNAVAILABLE` gRPC error.
-  //
-  // An attempt to rotate a policy with not exisitng `id` will be rejected
-  // with the `FAILED_PRECONDITION` gRPC error.
   //
   // The following describes the sequence of messages that must be exchanged
   // in the Rotate() RPC.
@@ -63,7 +58,7 @@ service Pathz {
   //   Step 1: Start the stream
   //     Client ----> Rotate() RPC stream begin ------> Target
   //
-  //   Step 2: Send OpenConfig Path-based Authz Policy to Target.
+  //   Step 2: Send OpenConfig gNMI Path-based Authorization Policy to Target.
   //     Client --> UploadRequest(pathz_policy) ----> Target
   //     Client <-- UploadResponse <--- Target
   //
@@ -72,60 +67,32 @@ service Pathz {
   //     in the new policy and validates that the new policy "works".
   //     Additionally the client should access an OpenConfig path that is
   //     not allowed and the attempt must fail proving that the OpenConfig
-  //     Path-based Authz Policy "works".
-  //     Once verfied, the client then proceeds to finalize the rotation.
-  //     If the new verification did not succeed the client will cancel the
+  //     gNMI Path-based Authorization Policy "works".
+  //     Once verified, the client then proceeds to finalize the rotation.
+  //     If the verification did not succeed the client will cancel the
   //     RPC thereby forcing the target to perform a rollback of the new
-  //     OpenConfig Path-based Authz Policy.
+  //     OpenConfig gNMI Path-based Authorization Policy.
   //
   //   Step 4: Final commit.
   //     Client ---> FinalizeRequest ----> Target
   //
-  rpc Rotate(stream RotatePathzRequest)
-      returns (stream RotatePathzResponse);
-
-  // Install will add a new OpenConfig Path-based Authz Policy on the target.
-  // If the stream is broken or any of the steps fail the target must rollback
-  // to the original state, i.e. revert any changes to the OpenConfig Path-based
-  // Authz Policy made during this RPC.
-  //
-  // Note that only one such RPC can be in progress. An attempt to call this
-  // RPC while another is already in progress will be rejected with the
-  // `UNAVAILABLE gRPC` error.
-  //
-  // An attempt to install a policy with already existing `id` will be rejected
-  // with the `ALREADY_EXISTS` gRPC error.
-  //
-  // As a policy has to be installed on a target before it is activated using
-  // the gNMI API it cannot be tested after uploading.
-  //
-  // The following describes the sequence of messages that must be exchanged
-  // in the Install() RPC.
-  //
-  // Sequence of expected messages:
-  //   Step 1: Start the stream
-  //     Client ----> Install() RPC stream begin ------> Target
-  //
-  //   Step 2: Send OpenConfig Path-based Authz Policy to Target.
-  //     Client --> UploadRequest(pathz_policy) ----> Target
-  //     Client <-- UploadResponse <--- Target
-  //
-  //   Step 3: Final commit.
-  //     Client ---> FinalizeRequest ----> Target
-  //
-  rpc Install(stream InstallPathzRequest)
-      returns (stream InstallPathzResponse);
+  rpc Rotate(stream RotateRequest)
+      returns (stream RotateResponse);
 
   // Probe allows for evaluation of the pathz policy engine response to a gNMI
   // operation performed by a user on a single gNMI path.
-  // The response is based on the currently active policy and is evaluated
-  // without actually performing the gNMI operation.
+  // The response is based on the instance of policy specified in the request
+  // and is evaluated without actually performing the gNMI operation.
   rpc Probe(ProbeRequest) returns (ProbeResponse);
+
+  // Get returns specified instance of the OpenConfig gNMI Path-based
+  // Authorization Policy together with its version and created-on information.
+  rpc Get(GetRequest) returns (GetRequest);
 }
 
-// Request messages to rotate existing OpenConfig Path-based Authz Policy on
-// the target.
-message RotatePathzRequest {
+// Request messages to rotate existing OpenConfig gNMI Path-based Authorization
+// Policy on the target.
+message RotateRequest {
   // Request Messages.
   oneof rotate_request {
     UploadRequest upload_request = 1;
@@ -142,49 +109,28 @@ message RotatePathzRequest {
 }
 
 // Response messages from the target.
-message RotatePathzResponse {
+message RotateResponse {
   // Response messages.
   oneof rotate_response {
     UploadResponse upload_response = 1;
   }
 }
 
-// Request messages to install a new OpenConfig Path-based Authz Policy on
-// the target.
-message InstallPathzRequest {
-  // Request Messages.
-  oneof install_request {
-    UploadRequest upload_request = 1;
-    FinalizeRequest finalize_installation = 2;
-  }
-}
-
-// Response messages from the target.
-message InstallPathzResponse {
-  // Response messages.
-  oneof install_response {
-    UploadResponse upload_response = 1;
-  }
-}
-
 // A Finalize message is sent to the target to confirm the rotation of
-// the OpenConfig Path-based Authz Policy and that it should not be rolled back
-// when the RPC concludes.
-// Note that the OpenConfig Path-based Authz Policy change is considered rolled
-// back by the target if the target returns an error as response to
-// the Finalize message.
+// the OpenConfig gNMI Path-based Authorization Policy and that it should not be
+// rolled back when the RPC concludes.
+// Note that the OpenConfig gNMI Path-based Authorization Policy change is
+// considered rolled back by the target if the target returns an error as
+// response to the Finalize message.
 message FinalizeRequest {
 }
 
-// UploadRequest instructs the target to store the given OpenConfig Path-based
-// Authz Policy.
+// UploadRequest instructs the target to store the given OpenConfig gNMI Path-
+// based Authorization Policy.
 //
 // If there is another ongoing Rotate RPC the UploadRequest must fail.
 //
 message UploadRequest {
-  // Policy ID. The ID is used to identify the policy in the gNMI API.
-  string id = 1;
-
   // `version` contains versioning information that is controlled by
   // the policy manager and reported as-is by the telemetry reporting system
   // (ie, transparent to the target policy management service). Policy managers
@@ -194,7 +140,8 @@ message UploadRequest {
   // a particular switch). Also, such version string should be persisted by
   // the device onto non-volatile memory for preservation across system
   // reboots.
-  string version = 2;
+  string version = 1;
+
   // `created_on` contains information when the policy was created.
   // This information is controlled by the policy manager and reported as-is
   // by the telemetry reporting system (ie, transparent to the device policy
@@ -205,27 +152,89 @@ message UploadRequest {
   // memory for preservation across system reboots.
   // `created_on` is a timestamp: the number of seconds since
   // January 1st, 1970 00:00:00 GMT a.k.a. unix epoch.
-  uint64 created_on = 3;
+  uint64 created_on = 2;
 
-  // The actual OpenConfig Path-based Authz Policy.
-  gnsi.authorization.AuthorizationPolicy policy = 4;
+  // The actual OpenConfig gNMI Path-based Authorization Policy.
+  gnsi.authorization.AuthorizationPolicy policy = 3;
 }
 
 message UploadResponse {
 }
 
-// ProbeRequest contains a single user name and gNMI Path being attempted.
-// Data returned to an RPC Caller should adhere to the policy.
-message ProbeRequest {
-  string user = 1;
-  gnmi.Path path = 2;
+enum PolicyInstance {
+  // Invalid instance. Referring to this instance in any of the RPCs always
+  // results in an error report.
+  UNSPECIFIED = 0;
+
+  // The policy that is currently used by the gNMI service to authorize access.
+  ACTIVE = 1;
+
+  // The most recent policy that has been uploaded during the Rotation() RPC.
+  // If there is no Rotate() RPC in progress, then referring to this instance
+  // of the OpenConfig gNMI Path-based Authorization Policy will result in
+  // an error.
+  SANDBOX = 2;
 }
 
-// ProbeResponse returns the ack/nack for a single user request
-// as evaluated against the current policy, along with the policy ID
-// and current policy version.
+// ProbeRequest contains a single user name and gNMI path being attempted.
+// Data returned to an RPC caller should adhere to the policy.
+message ProbeRequest {
+  // The user name to be used to perform the evaluation.
+  string user = 1;
+
+  // The gNMI path to be used to perform the evaluation.
+  gnmi.Path path = 2;
+
+  // The operation type (read or write) to be used to perform the evaluation.
+  gnsi.authorization.Mode mode = 3;
+
+  // The instance of the OpenConfig gNMI Path-based Authorization Policy to be
+  // used to perform the evaluation.
+  PolicyInstance policy_instance = 4;
+}
+
+// ProbeResponse returns the ACK/NACK for a single user request
+// as evaluated against the current policy, along with the version of the policy
+// that the gNMI path/user were evaluated against.
 message ProbeResponse {
   gnsi.authorization.Action action = 1;
-  string id = 2;
-  string version = 3;
+  string version = 2;
+}
+
+// GetRequest specifies which instance of the OpenConfig gNMI Path-based
+// Authorization Policy is to be returned to the caller.
+message GetRequest {
+  // The instance of the OpenConfig gNMI Path-based Authorization Policy to be
+  // returned to the caller.
+  PolicyInstance policy_instance = 1;
+}
+
+// GetResponse returns the requested instance of the OpenConfig gNMI Path-based
+// Authorization Policy together with `version` and `created_on` information.
+message GetResponse {
+  // `version` contains versioning information that is controlled by
+  // the policy manager and reported as-is by the telemetry reporting system
+  // (ie, transparent to the target policy management service). Policy managers
+  // should choose version strings as discrete as possible to ease alert
+  // generation (eg, for policies sourced from a bundle, the timestamp of
+  // the bundle should be used but not the time when the policy is pushed to
+  // a particular switch). Also, such version string should be persisted by
+  // the device onto non-volatile memory for preservation across system
+  // reboots.
+  string version = 1;
+
+  // `created_on` contains information when the policy was created.
+  // This information is controlled by the policy manager and reported as-is
+  // by the telemetry reporting system (ie, transparent to the device policy
+  // management service). Policy manager should use the timestamp of the moment
+  // when policy was created, not the time when the policy is pushed to
+  // a particular switch).
+  // Also, this timestamp should be persisted by the device onto non-volatile
+  // memory for preservation across system reboots.
+  // `created_on` is a timestamp: the number of seconds since
+  // January 1st, 1970 00:00:00 GMT a.k.a. unix epoch.
+  uint64 created_on = 2;
+
+  // The actual OpenConfig gNMI Path-based Authorization Policy.
+  gnsi.authorization.AuthorizationPolicy policy = 3;
 }
