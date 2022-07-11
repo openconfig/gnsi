@@ -8,6 +8,7 @@ package(default_visibility = ["//visibility:public"])
 proto_library(
     name = "authz_proto",
     srcs = ["authz.proto"],
+    import_prefix = "github.com/openconfig/gnsi",
     deps = ["@com_github_openconfig_gnoi//types:types_proto"],
 )
 
