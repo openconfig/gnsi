@@ -8,6 +8,7 @@ package(default_visibility = ["//visibility:public"])
 proto_library(
     name = "authorization_proto",
     srcs = ["authorization.proto"],
+    import_prefix = "github.com/openconfig/gnsi",
     deps = ["@com_github_openconfig_gnmi//proto/gnmi:gnmi_proto"],
 )
 

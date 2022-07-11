@@ -8,6 +8,7 @@ package(default_visibility = ["//visibility:public"])
 proto_library(
     name = "cert_proto",
     srcs = ["cert.proto"],
+    import_prefix = "github.com/openconfig/gnsi",
     deps = [
         "@com_github_openconfig_gnoi//types:types_proto",
     ],

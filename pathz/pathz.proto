@@ -20,8 +20,9 @@ syntax = "proto3";
 
 package gnsi.pathz;
 
+import "github.com/openconfig/gnmi/proto/gnmi/gnmi.proto";
 import "github.com/openconfig/gnoi/types/types.proto";
-import "google/protobuf/any.proto";
+import "github.com/openconfig/gnsi/authorization/authorization.proto";
 
 option go_package = "github.com/openconfig/gnsi/pathz";
 option (gnoi.types.gnoi_version) = "0.1.0";
@@ -40,7 +41,7 @@ option (gnoi.types.gnoi_version) = "0.1.0";
 // Activation of a standby policy is not handled by this service and is done
 // using the gNMI API.
 
-service PathzManagement {
+service Pathz {
 
   // Rotate will replace an existing OpenConfig Path-based Authz Policy on
   // the target.
@@ -114,6 +115,12 @@ service PathzManagement {
   //
   rpc Install(stream InstallPathzRequest)
       returns (stream InstallPathzResponse);
+
+  // Probe allows for evaluation of the pathz policy engine response to a gNMI
+  // operation performed by a user on a single gNMI path.
+  // The response is based on the currently active policy and is evaluated
+  // without actually performing the gNMI operation.
+  rpc Probe(ProbeRequest) returns (ProbeResponse);
 }
 
 // Request messages to rotate existing OpenConfig Path-based Authz Policy on
@@ -201,10 +208,23 @@ message UploadRequest {
   uint64 created_on = 3;
 
   // The actual OpenConfig Path-based Authz Policy.
-  // It is provided as a PROTO that is defined by
-  // https://github.com/openconfig/public/release/authorization/authorization.proto.
-  google.protobuf.Any policy = 4;
+  gnsi.authorization.AuthorizationPolicy policy = 4;
 }
 
 message UploadResponse {}
 
+// ProbeRequest contains a single user name and gNMI Path being attempted.
+// Data returned to an RPC Caller should adhere to the policy.
+message ProbeRequest {
+  string user = 1;
+  gnmi.Path path = 2;
+}
+
+// ProbeResponse returns the ack/nack for a single user request
+// as evaluated against the current policy, along with the policy ID
+// and current policy version.
+message ProbeResponse {
+  gnsi.authorization.Action action = 1;
+  string id = 2;
+  string version = 3;
+}
