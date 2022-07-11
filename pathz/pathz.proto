@@ -24,7 +24,7 @@ import "github.com/openconfig/gnmi/proto/gnmi/gnmi.proto";
 import "github.com/openconfig/gnoi/types/types.proto";
 import "github.com/openconfig/gnsi/authorization/authorization.proto";
 
-option go_package = "gnsi.googlesource.com/gnsi/pathz";
+option go_package = "github.com/openconfig/gnsi/pathz";
 option (gnoi.types.gnoi_version) = "0.1.0";
 
 // The OpenConfig Path-based Authz Policy Management Service exported by
