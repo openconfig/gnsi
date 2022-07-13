@@ -10,27 +10,28 @@ to be deployed to a device, with the ability to define:
 *   Policy rules - each rule defines a single authorization policy.
 *   Groups of users - as a method to logically group users in the administrative
     domain, for instance: operators or administrators.
-*   Users - individual referenced in rules or group definitions.
+*   Users - individuals referenced in rules or group definitions.
 
 Authentication information is not included in this Authorization configuration.
 
 Policy rules are matched based on the best match for the authorization request,
 not the first match against a policy rule. Best match enables a configuration
-which permits a user or group access to particular gNMI paths while
-denying subordinate portions of the permitted paths, or the converse, without
-regard to ordering of the rules in the configuration.
+which permits a user or group access to particular gNMI paths while denying
+subordinate portions of the permitted paths, or the converse, without regard
+to ordering of the rules in the configuration.
 
 ## Best Match
 
 Authorization is performed for a singular user, gNMI path access, and access
 methodology (READ/WRITE). The result of an Authorization evaluation is an
-Action (Permit/Deny), policy version, and rule identifier.
+Action (PERMIT/DENY), policy version, and rule identifier.
 
 A Best, or most specific, match is that which has the longest match to the
 requested path and prefers:
 
 *   a specific user over a group in the matching policy.
 *   a defined KEY over a wildcard element in a keyed path.
+*   a mode which matches that of the request (READ/WRITE).
 
 Authorization rules must be defined such that a single best match is possible.
 If the result of policy evaluation is more than one match, an error must be
@@ -40,14 +41,12 @@ Match rules permit a match against:
 
 *   User or Group (not both)
 *   an gNMI path
-*   an access method (READ / WRITE / SUBSCRIBE)
+*   an access mode (READ / WRITE)
 
-An implicit deny is assumed, if there is no matching rule in the policy. Logging
-may be specified on a per-policy-rule basis as well as a default for the whole
-authorization policy.
+An implicit deny is assumed, if there is no matching rule in the policy.
 
 As a request is evaluated against the configured policy, a READ (gNMI `Get` or
-`Subscribe`) request for the configuration tree may traverse all of the tree 
+`Subscribe`) request for the configuration tree may traverse all of the tree
 and subtrees. For portions of the tree for which the user has no access no data
 will be returned. A WRITE request which attempts to write to a denied gNMI path
 or element will return a "Permission Denied" error to the caller.
@@ -105,13 +104,13 @@ and services have immediate authorized access to finish installation and
 move devices into production in a timely manner.
 
 Using the Secure Zero Touch Provisioning (sZTP - RFC8572) process for
-bootstrap/installation is a recommended method for to accomplish this
+bootstrap/installation is a recommended method for accomplishing this
 delivery, and the delivery of all other bootstrap artifacts in a secure manner.
 
 ## Conflict Resolution
 
-Policy evaluation should end with a single best match policy for the provided
-user / path. If there is more than one 'best match', an error must be logged
+Policy evaluation should end with a single best match rule for the provided
+user / path / mode. If there is more than one 'best match', an error must be logged
 and evaluation should return a failure.
 
 ## An Example Authorization Protobuf
@@ -133,7 +132,6 @@ group {
 # Action stevie to access /this/is/a/message_path in a READ manner.
 policy {
   id: "one"
-  log_level: LOG_NONE
   path {
     origin: "foo"
     elem { name: "this" }
@@ -142,14 +140,13 @@ policy {
     elem { name: "message_path" }
   }
   action: PERMIT
-  level: READ
+  mode: READ
   user { name: "stevie" }
 }
 # Action members of family-group to access /this/is/a/different/message_path in
-# both READ and WRITE methods.
+# READ mode.
 policy {
-  id: "two"
-  log_level: LOG_BRIEF
+  id: "two-read"
   path {
     origin: "foo"
     elem { name: "this" }
@@ -159,14 +156,27 @@ policy {
     elem { name: "message_path" }
   }
   action: PERMIT
-  level: READ
-  level: WRITE
+  mode: READ
   group { name: "family-group" }
 }
+# Action members of family-group to access /this/is/a/different/message_path in
+# WRIITE mode.
+policy {
+  id: "two-write"
+  path {
+    origin: "foo"
+    elem { name: "this" }
+    elem { name: "is" }
+    elem { name: "a" }
+    elem { name: "different" }
+    elem { name: "message_path" }
+  }
+  action: PERMIT
+  mode: WRITE
+  group { name: "family-group" }
 # Demonstrate READ access to a key with an attribute defined.
 policy {
   id: "key"
-  log_level: LOG_BRIEF
   path {
     origin: "foo"
     elem { name: "this" }
@@ -182,13 +192,12 @@ policy {
     elem { name: "message_path" }
   }
   action: PERMIT
-  level: READ
+  mode: READ
   group { name: "test-group" }
 }
 # Demonstrate READ access to a key with a wildcard attribute.
 policy {
   id: "wyld"
-  log_level: LOG_BRIEF
   path {
     origin: "foo"
     elem { name: "this" }
@@ -204,7 +213,7 @@ policy {
     elem { name: "message_path" }
   }
   action: PERMIT
-  level: READ
+  mode: READ
   group { name: "family-group" }
 }
 # Demonstrate a key with a wildcard attribute and a user specific match.
@@ -212,7 +221,6 @@ policy {
 # path, the policy rule below specifically denies brian access to these paths.
 policy {
   id: "wyld-stallions"
-  log_level: LOG_BRIEF
   path {
     origin: "foo"
     elem { name: "this" }
@@ -228,15 +236,12 @@ policy {
     elem { name: "message_path" }
   }
   action: DENY
-  level: READ
+  mode: READ
   user { name: "brian" }
 }
 # Add a final rule which is an explicit deny rule.
 policy {
   id: "explicit-deny"
-  log_level: LOG_FULL
-  level: READ
-  level: WRITE
   action: DENY
 }
 ```
@@ -247,7 +252,6 @@ The example first policy rule:
 # Action stevie to access /this/is/a/message_path for READ.
 policy {
   id: "one"
-  log_level: LOG_NONE
   path {
     origin: "foo"
     elem { name: "this" }
@@ -256,7 +260,7 @@ policy {
     elem { name: "message_path" }
   }
   action: PERMIT
-  level: READ
+  mode: READ
   user { name: "stevie" }
 }
 ```
@@ -282,8 +286,7 @@ The second policy rule:
 ```proto
 # Action members of family-group to run /this/is/a/different/message_path
 policy {
-  id: "two"
-  log_level: LOG_BRIEF
+  id: "two-read"
   path {
     origin: "foo"
     elem { name: "this" }
@@ -293,14 +296,13 @@ policy {
     elem { name: "message_path" }
   }
   action: PERMIT
-  level: READ
-  level: WRITE
+  mode: READ
   group { name: "family-group" }
 }
 ```
 
 example policy permits members or the family-group access to a single path, for
-reading or writing:
+reading:
 
 ```shell
     /this/is/a/different/message_path
@@ -317,10 +319,44 @@ and all path elements beyond "message_path":
 The third policy rule:
 
 ```proto
+# Action members of family-group to run /this/is/a/different/message_path
+policy {
+  id: "two-write"
+  path {
+    origin: "foo"
+    elem { name: "this" }
+    elem { name: "is" }
+    elem { name: "a" }
+    elem { name: "different" }
+    elem { name: "message_path" }
+  }
+  action: PERMIT
+  mode: WRITE
+  group { name: "family-group" }
+}
+```
+
+example policy permits members or the family-group access to a single path, for
+writing:
+
+```shell
+    /this/is/a/different/message_path
+```
+
+and all path elements beyond "message_path":
+
+```shell
+    /this/is/a/different/message_path/foo
+    /this/is/a/different/message_path/bar
+    /this/is/a/different/message_path/foo/baz/bing/boop
+```
+
+The fourth policy rule:
+
+```proto
 # Demonstrate a key with an attribute defined.
 policy {
   id: "key"
-  log_level: LOG_BRIEF
   path {
     origin: "foo"
     elem { name: "this" }
@@ -336,7 +372,7 @@ policy {
     elem { name: "message_path" }
   }
   action: PERMIT
-  level: READ
+  mode: READ
   group { name: "test-group" }
 }
 ```
@@ -348,13 +384,12 @@ read only manner:
     /this/is/a/keyed[name=Ethernet1/2/3]/message_path
 ```
 
-and all path elements as beyond "message_path". The final policy rule:
+and all path elements beyond "message_path". The final policy rule:
 
 ```proto
 # Demonstrate a key with a wildcard attribute.
 policy {
   id: "wyld"
-  log_level: LOG_BRIEF
   path {
     origin: "foo"
     elem { name: "this" }
@@ -370,7 +405,7 @@ policy {
     elem { name: "message_path" }
   }
   action: PERMIT
-  level: READ
+  mode: READ
   group { name: "family-group" }
 }
 ```
@@ -388,9 +423,9 @@ restrictions on the key values, but still as read-only:
 Additionally, the path elements beyond "message_path" are available for access
 to this group as well.
 
-The wildcard character "*" (asterisk) is only able to be used as a value in
-keyed elements, if the keys are missing in a keyed path a wildcard is assumed.
-The wildcard is only used to mask out all possible values but not portions of
+The wildcard character "*" (asterisk) may only be used as a value in keyed
+elements, if the keys are missing in a keyed path a wildcard is assumed. The
+wildcard is only used to mask out all possible values but not portions of
 values, for instance:
 
 ```shell
@@ -404,9 +439,6 @@ The policy rule:
 # Add a final rule which is an explicit deny rule.
 policy {
   id: "explicit-deny"
-  log_level: LOG_FULL
-  level: READ
-  level: WRITE
   action: DENY
 }
 ```
