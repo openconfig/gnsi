@@ -161,10 +161,12 @@ will be able to call any of the `gNSI.ssh` RPCs.
   "name": "gNSI.ssh policy",
   "allow_rules": [{
     "name": "admin-access",
-    "principals": [
-      "spiffe://company.com/sa/alice",
-      "spiffe://company.com/sa/bob"
-      ],
+    "source": {
+       "principals": [
+         "spiffe://company.com/sa/alice",
+         "spiffe://company.com/sa/bob"
+       ],
+    },
     "request": {
       "paths": [
         "/gnsi.ssh.Ssh/*"
