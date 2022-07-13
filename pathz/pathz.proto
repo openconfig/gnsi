@@ -173,8 +173,7 @@ message InstallPathzResponse {
 // Note that the OpenConfig Path-based Authz Policy change is considered rolled
 // back by the target if the target returns an error as response to
 // the Finalize message.
-message FinalizeRequest {
-}
+message FinalizeRequest {}
 
 // UploadRequest instructs the target to store the given OpenConfig Path-based
 // Authz Policy.
