@@ -36,7 +36,7 @@ to the Finalize message being received at the server, the candidate
 AuthorizationPolicy is discarded and the existing policy again becomes
 active.
 
-#### Pathz.Install
+### Pathz.Install
 
 Pathz.Install will permit installation, and verification of function,
 of an AuthorizationPolicy. The normal use-case would be to:
@@ -47,7 +47,7 @@ InstallPathzRequest
 through existing gNMI methods, or with pathz.Probe requests.
 * send a FinalizeRequest to finish the installation process.
 
-#### Pathz.Rotate
+### Pathz.Rotate
 
 Pathz.Rotate will permit rotation, and verification of function,
 of an AuthorizationPolicy. The normal use-case would be to:
@@ -58,7 +58,7 @@ RotatePathzRequest
 through existing gNMI methods, or with pathz.Probe requests.
 * send a FinalizeRequest to finish the installation process.
 
-#### Pathz.Probe
+### Pathz.Probe
 
 Pathz.Probe provides a method to test the AuthorizationPolicy
 with a path.ProbeRequest which includes a user and gNMI path. This
