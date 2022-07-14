@@ -7,10 +7,10 @@ to describe an authorization framework for controlling which gNMI paths of a
 network device users can access. The authorization policy is initially intended
 to be deployed to a device, with the ability to define:
 
-*   Policy rules - each rule defines a single authorization policy.
-*   Groups of users - as a method to logically group users in the administrative
-    domain, for instance: operators or administrators.
-*   Users - individuals referenced in rules or group definitions.
+* Policy rules - each rule defines a single authorization policy.
+* Groups of users - as a method to logically group users in the administrative
+  domain, for instance: operators or administrators.
+* Users - individuals referenced in rules or group definitions.
 
 Authentication information is not included in this Authorization configuration.
 
@@ -29,9 +29,9 @@ Action (PERMIT/DENY), policy version, and rule identifier.
 A Best, or most specific, match is that which has the longest match to the
 requested path and prefers:
 
-*   a specific user over a group in the matching policy.
-*   a defined KEY over a wildcard element in a keyed path.
-*   a mode which matches that of the request (READ/WRITE).
+* a specific user over a group in the matching policy.
+* a defined KEY over a wildcard element in a keyed path.
+* a mode which matches that of the request (READ/WRITE).
 
 Authorization rules must be defined such that a single best match is possible.
 If the result of policy evaluation is more than one match, an error must be
@@ -39,9 +39,9 @@ raised.
 
 Match rules permit a match against:
 
-*   User or Group (not both)
-*   an gNMI path
-*   an access mode (READ / WRITE)
+* User or Group (not both)
+* an gNMI path
+* an access mode (READ / WRITE)
 
 An implicit deny is assumed, if there is no matching rule in the policy.
 
