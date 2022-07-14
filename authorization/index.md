@@ -27,6 +27,15 @@ system, or in every gNMI service individually on the network system.
 It is expected that gNMI services enabled on a network system respect
 the AuthorizationPolicy installed, however.
 
+The pathz.Install and pathz.Rotate rpcs are bi-directional streaming
+rpcs, it's possible to send more than one policy change through an
+open stream checkpointing the policy with pathz.Finalize messages or
+replacing the candidate AuthorizationPolicy to verify functionality
+changes prior to the Finalize message. If the stream is closed prior
+to the Finalize message being received at the server, the candidate
+AuthorizationPolicy is discarded and the existing policy again becomes
+active.
+
 #### Pathz.Install()
 
 Pathz.Install() will permit installation, and verification of function,
@@ -59,31 +68,43 @@ with the expected to be deployed AuthroizationPolicy.
 
 ## User Experiences
 
-#### An AuthorizationPolicy is to be installed.
+### An AuthorizationPolicy is to be installed.
 
-##### Expected Action
+#### Expected Action
 
 Create, and test, a new AuthorizationPolicy{}.
 
-Send that policy to the target network system with a call to pathz.Install()
+Send that policy to the target network system with a
+pathz.InstallAuthzRequest to the pathz.Install rpc. The
+InstallAuthzRequest's install_request will be a pathz.UploadRequest.
 
 Verify that the policy newly deployed performs according to the documented
-intent, by sending pathz.Probe() requests to the network system.
+intent, by sending pathz.Probe requests to the network system.
 
-Send a Finalize{} message to the pathz.Install() rpc.
+Send a pathz.Finalize message to the pathz.Install() rpc to close
+out the action.
 
-#### An AuthorizationPolicy is to be rotated or updated.
+If the stream is disconnected prior to the Finalize message being
+sent, the proposed configuration is rolled back automatically.
 
-##### Expected Action
+### An AuthorizationPolicy is to be rotated or updated.
+
+#### Expected Action
 
 Create, and test, a new AuthorizationPolicy{}.
 
-Send that policy to the target network system with a call to pathz.Rotate()
+Send that policy to the target network system with a
+pathz.RotateAuthzRequest to pathz.Rotate rpc. The
+RotateAuthzRequest's rotate_request will be a pathz.UploadRequest.
 
 Verify that the policy newly rotated performs according to the documented
-intent, by sending pathz.Probe() requests to the network system.
+intent, by sending pathz.Probe requests to the network system.
 
-Send a Finalize{} message to the pathz.Rotate() rpc.
+Send a Finalize message to the pathz.Rotate rpc to close
+out the action.
+
+If the stream is disconnected prior to the Finalize message being
+sent, the proposed configuration is rolled back automatically.
 
 ## Open Questions/Considerations
 
