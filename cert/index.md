@@ -73,7 +73,7 @@ cert.InstallCertificateRequest to the cert.Install rpc. The
 InstallCertificateRequest's install_request will be a
 cert.CertificateRevocationListBundle.
 
-Verify that the CRL newly deployed is usable by the relevant
+Optional, verify that the CRL newly deployed is usable by the relevant
 services.
 
 Send a cert.Finalize message to the cert.Install rpc to close
