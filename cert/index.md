@@ -5,14 +5,14 @@
 ## Background
 
 The cert service definition provides the API to be used for installing,
-rotating, and testing PKI primatives used on network systems. The Rotate
-and Install are bidirectional streaming rpcs which permit mutating
-Certificates, Root Certificate Bundles, Certificate Revocation Lists.
-For either an Install or Rotate stream it is possible to mutate one or
-more of the elements, and to send a Finalize message once the in-flight
-change has been verified to be operational. Failure to send the Finalize
-message will result in the candidate element being discarded and the
-original element being used instead.
+rotating, deleting, and testing PKI primatives used on network systems.
+The Rotate and Install are bidirectional streaming rpcs which permit
+mutating Certificates, Root Certificate Bundles, Certificate Revocation
+Lists.  For either an Install or Rotate stream it is possible to mutate
+one or more of the elements, and to send a Finalize message once the
+in-flight change has been verified to be operational. Failure to send
+the Finalize message will result in the candidate element being discarded
+and the original element being used instead.
 
 ## Motivation
 
@@ -97,6 +97,25 @@ Send a Finalize message to the cert.Rotate rpc to close out the action.
 
 If the stream is disconnected prior to the Finalize message being
 sent, the proposed configuration is rolled back automatically.
+
+### A Certificate is rotated, the session breaks before Finalize
+
+Create a new Certificate and Key.
+
+Send that certificate to the target network system with a
+cert.InstallCertificateRequest to the cert.Install rpc. The
+InstallCertificateRequest's install_request will be a
+cert.Certificate.
+
+Verify that the certificate newly deployed is usable by the relevant
+services, that the services properly present the certificate upon
+new service connections.
+
+The connection to the network system is broken, there is no Finalize sent.
+
+The gNSI service rolls back the candidate and re-installs the original
+certificate and key.
+
 
 ## Open Questions/Considerations
 
