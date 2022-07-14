@@ -23,7 +23,7 @@
 // Paths may be referenced in whole or in complete parts, ie:
 //   /interfaces/interface[name=Ethernet1/2/3]/state/counters
 //   /interfaces/interface[name=*]/state/oper-status
-//   /network-instances/network-instance/tables/table[protocol=BGP][address-family=*]
+//   /network-instances/network-instance/tables/table[proto=BGP][family=*]
 //
 // Paths are gnmi.Path protobufs.
 //
@@ -57,7 +57,7 @@ message Group {
 
 // Action is the defined action for an AuthorizationPolicy.
 enum Action {
-  ACTION_UNKNOWN = 0;
+  ACTION_UNSPECIFIED = 0;
   ACTION_DENY = 1;
   ACTION_PERMIT = 2;
 }
@@ -66,7 +66,7 @@ enum Action {
 //   READ: Ability to read/subscribe to data from the model.
 //   WRITE: Ability to mutate/write updates to data in the model.
 enum Mode {
-  MODE_UNDEFINED = 0;
+  MODE_UNSPECIFIED = 0;
   MODE_READ = 1;
   MODE_WRITE = 2;
 }
