@@ -1,4 +1,4 @@
-# gNSI Authorization Protobuf Definition.
+# gNSI Authorization Protobuf Definition
 **Contributors**: hines@google.com, morrowc@google.com, tmadejski@google.com
 **Last Updated**: 2022-07-12
 
@@ -36,43 +36,41 @@ to the Finalize message being received at the server, the candidate
 AuthorizationPolicy is discarded and the existing policy again becomes
 active.
 
-#### Pathz.Install()
+#### Pathz.Install
 
-Pathz.Install() will permit installation, and verification of function,
+Pathz.Install will permit installation, and verification of function,
 of an AuthorizationPolicy. The normal use-case would be to:
 
-* send an AuthorizationPolicy{} to a network system as an
-InstallPathzRequest{}
+* send an AuthorizationPolicy to a network system as an
+InstallPathzRequest
 * verify access/authorization has changed to the desired state
-through existing gNMI methods, or with pathz.Probe() requests.
-* send a FinalizeRequest{} to finish the installation process.
+through existing gNMI methods, or with pathz.Probe requests.
+* send a FinalizeRequest to finish the installation process.
 
-#### Pathz.Rotate()
+#### Pathz.Rotate
 
-Pathz.Rotate() will permit rotation, and verification of function,
+Pathz.Rotate will permit rotation, and verification of function,
 of an AuthorizationPolicy. The normal use-case would be to:
 
-* send an AuthorizationPolicy{} to a network system as a
-RotatePathzRequest{}
+* send an AuthorizationPolicy to a network system as a
+RotatePathzRequest
 * verify access/authorization has changed to the desired state
-through existing gNMI methods, or with pathz.Probe() requests.
-* send a FinalizeRequest{} to finish the installation process.
+through existing gNMI methods, or with pathz.Probe requests.
+* send a FinalizeRequest to finish the installation process.
 
-#### Pathz.Probe()
+#### Pathz.Probe
 
-Pathz.Probe() provides a method to test the AuthorizationPolicy
-with a ProbeRequest{} which includes a user and gNMI path. This
+Pathz.Probe provides a method to test the AuthorizationPolicy
+with a path.ProbeRequest which includes a user and gNMI path. This
 enables network operations and management systems to verify that
 the access expected is either permitted or denied in accordance
 with the expected to be deployed AuthroizationPolicy.
 
 ## User Experiences
 
-### An AuthorizationPolicy is to be installed.
+### An AuthorizationPolicy is to be installed
 
-#### Expected Action
-
-Create, and test, a new AuthorizationPolicy{}.
+Create, and test, a new AuthorizationPolicy.
 
 Send that policy to the target network system with a
 pathz.InstallAuthzRequest to the pathz.Install rpc. The
@@ -87,11 +85,9 @@ out the action.
 If the stream is disconnected prior to the Finalize message being
 sent, the proposed configuration is rolled back automatically.
 
-### An AuthorizationPolicy is to be rotated or updated.
+### An AuthorizationPolicy is to be rotated or updated
 
-#### Expected Action
-
-Create, and test, a new AuthorizationPolicy{}.
+Create, and test, a new AuthorizationPolicy.
 
 Send that policy to the target network system with a
 pathz.RotateAuthzRequest to pathz.Rotate rpc. The
