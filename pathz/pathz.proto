@@ -164,16 +164,16 @@ message UploadResponse {
 enum PolicyInstance {
   // Invalid instance. Referring to this instance in any of the RPCs always
   // results in an error report.
-  UNSPECIFIED = 0;
+  POLICY_INSTANCE_UNSPECIFIED = 0;
 
   // The policy that is currently used by the gNMI service to authorize access.
-  ACTIVE = 1;
+  POLICY_INSTANCE_ACTIVE = 1;
 
   // The most recent policy that has been uploaded during the Rotation() RPC.
   // If there is no Rotate() RPC in progress, then referring to this instance
   // of the OpenConfig gNMI Path-based Authorization Policy will result in
   // an error.
-  SANDBOX = 2;
+  POLICY_INSTANCE_SANDBOX = 2;
 }
 
 // ProbeRequest contains a single user name and gNMI path being attempted.
