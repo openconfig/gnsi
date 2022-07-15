@@ -5,6 +5,8 @@ load("@rules_proto_grpc//cpp:defs.bzl", "cpp_grpc_library")
 
 package(default_visibility = ["//visibility:public"])
 
+filegroup( name = "yang", srcs = glob(["*.yang"]))
+
 proto_library(
     name = "authz_proto",
     srcs = ["authz.proto"],

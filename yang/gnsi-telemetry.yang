@@ -9,14 +9,11 @@ module gnsi-telemetry {
     import gnsi-cert {
         prefix gnsi-cert;
     }
-    import gnsi-console {
-        prefix gnsi-console;
+    import gnsi-credentialz {
+        prefix gnsi-credz;
     }
     import gnsi-pathz {
         prefix gnsi-pathz;
-    }
-    import gnsi-ssh {
-        prefix gnsi-ssh;
     }
     organization
         "Google LLC";
@@ -28,6 +25,12 @@ module gnsi-telemetry {
         "This module provides a data model for the metadata of credentials
         installed on a networking device.";
 
+    revision 2022-09-10 {
+        description
+            "Updated to reflect combination of gNSI.ssh and gNSI.console into
+            gNSI.credentialz.";
+        reference "0.3.0";
+    }
     revision 2022-02-10 {
         description
             "Split into sub-api files.";

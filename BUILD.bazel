@@ -2,3 +2,48 @@ load("@bazel_gazelle//:def.bzl", "gazelle")
 
 # gazelle:prefix github.com/openconfig/gnsi
 gazelle(name = "gazelle")
+
+alias(
+    name = "yang",
+    actual = "//yang:ocbinds",
+)
+
+alias(
+    name = "authz_go",
+    actual = "//authz:authz",
+)
+
+alias(
+    name = "authz_cc",
+    actual = "//authz:authz_cc_proto",
+)
+
+alias(
+    name = "cert_cc",
+    actual = "//cert:cert_cc_proto",
+)
+
+alias(
+    name = "cert_go",
+    actual = "//cert:cert",
+)
+
+alias(
+    name = "credentialz_go",
+    actual = "//credentialz:credentialz",
+)
+
+alias(
+    name = "credentialz_cc",
+    actual = "//credentialz:credentialz_cc_proto",
+)
+
+alias(
+    name = "pathz_go",
+    actual = "//pathz:pathz_go_proto",
+)
+
+alias(
+    name = "pathz_cc",
+    actual = "//pathz:pathz_cc_proto",
+)

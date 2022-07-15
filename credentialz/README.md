@@ -473,13 +473,13 @@ module: openconfig-system
      |  |  +--rw rate-limit?         uint16
      |  |  +--rw session-limit?      uint16
      |  +--ro state
-     |     +--ro enable?                                boolean
-     |     +--ro protocol-version?                      enumeration
-     |     +--ro timeout?                               uint16
-     |     +--ro rate-limit?                            uint16
-     |     +--ro session-limit?                         uint16
-     |     +--ro gnsi:active-trust-bundle-version?      version
-     |     +--ro gnsi:active-trust-bundle-created-on?   created-on
+     |     +--ro enable?                                      boolean
+     |     +--ro protocol-version?                            enumeration
+     |     +--ro timeout?                                     uint16
+     |     +--ro rate-limit?                                  uint16
+     |     +--ro session-limit?                               uint16
+     |     +--ro gnsi-credz:active-trust-bundle-version?      version
+     |     +--ro gnsi-credz:active-trust-bundle-created-on?   created-on
      +--rw telnet-server
      |  +--rw config
      |  |  +--rw enable?          boolean
@@ -549,16 +549,16 @@ module: openconfig-system
      |  |        |  +--rw username?   string
      |  |        |  +--rw role?       union
      |  |        +--ro state
-     |  |           +--ro username?                                string
-     |  |           +--ro password?                                string
-     |  |           +--ro password-hashed?                         oc-aaa-types:crypt-password-type
-     |  |           +--ro role?                                    union
-     |  |           +--ro gnsi:password-version?                   version
-     |  |           +--ro gnsi:password-created-on?                created-on
-     |  |           +--ro gnsi:authorized-users-list-version?      version
-     |  |           +--ro gnsi:authorized-users-list-created-on?   created-on
-     |  |           +--ro gnsi:authorized-keys-list-version?       version
-     |  |           +--ro gnsi:authorized-keys-list-created-on?    created-on
+     |  |           +--ro username?                                      string
+     |  |           +--ro password?                                      string
+     |  |           +--ro password-hashed?                               oc-aaa-types:crypt-password-type
+     |  |           +--ro role?                                          union
+     |  |           +--ro gnsi-credz:password-version?                   version
+     |  |           +--ro gnsi-credz:password-created-on?                created-on
+     |  |           +--ro gnsi-credz:authorized-users-list-version?      version
+     |  |           +--ro gnsi-credz:authorized-users-list-created-on?   created-on
+     |  |           +--ro gnsi-credz:authorized-keys-list-version?       version
+     |  |           +--ro gnsi-credz:authorized-keys-list-created-on?    created-on
      |  +--rw authorization
      |  |  +--rw config
      |  |  |  +--rw authorization-method*   union
