@@ -2,10 +2,10 @@
 
 ## `gnsi-pathz.yang`
 
-An overview of the changes defined in the `gnmi-pathz.yang ` file are shown
+An overview of the changes defined in the `gnmi-pathz.yang` file are shown
 below.
 
-```
+```sh
 module: gnsi-pathz
 
   augment /oc-sys:system:
@@ -24,12 +24,12 @@ module: gnsi-pathz
 
 ## `openconfig-system` tree
 
-The  `openconfig-system` sub-tree after augments defined in the
+The  `openconfig-system` subtree after augments defined in the
 `gnsi-pathz.yang` file is shown below.
 
 For interactive version click [here](gnsi-pathz.html).
 
-```
+```sh
 module: openconfig-system
   +--rw system
      +--rw config
