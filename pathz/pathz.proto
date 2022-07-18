@@ -22,7 +22,7 @@ package gnsi.pathz;
 
 import "github.com/openconfig/gnmi/proto/gnmi/gnmi.proto";
 import "github.com/openconfig/gnoi/types/types.proto";
-import "github.com/openconfig/gnsi/authorization/authorization.proto";
+import "github.com/openconfig/gnsi/pathz/authorization/authorization.proto";
 
 option go_package = "github.com/openconfig/gnsi/pathz";
 option (gnoi.types.gnoi_version) = "0.1.0";
@@ -207,7 +207,7 @@ message UploadRequest {
   uint64 created_on = 3;
 
   // The actual OpenConfig Path-based Authz Policy.
-  gnsi.authorization.AuthorizationPolicy policy = 4;
+  gnsi.pathz.authorization.AuthorizationPolicy policy = 4;
 }
 
 message UploadResponse {}
@@ -223,7 +223,7 @@ message ProbeRequest {
 // as evaluated against the current policy, along with the policy ID
 // and current policy version.
 message ProbeResponse {
-  gnsi.authorization.Action action = 1;
+  gnsi.pathz.authorization.Action action = 1;
   string id = 2;
   string version = 3;
 }

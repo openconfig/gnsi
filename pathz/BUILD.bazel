@@ -10,7 +10,7 @@ proto_library(
     srcs = ["pathz.proto"],
     import_prefix = "github.com/openconfig/gnsi",
     deps = [
-        "//authorization:authorization_proto",
+        "//pathz/authorization:authorization_proto",
         "@com_github_openconfig_gnmi//proto/gnmi:gnmi_proto",
         "@com_github_openconfig_gnoi//types:types_proto",
     ],
@@ -23,7 +23,7 @@ cpp_grpc_library(
     name = "pathz_cc_proto",
     protos = [
         ":pathz_proto",
-        "//authorization:authorization_proto",
+        "//pathz/authorization:authorization_proto",
         "@com_github_openconfig_gnmi//proto/gnmi:gnmi_proto",
         "@com_github_openconfig_gnmi//proto/gnmi_ext:gnmi_ext_proto",
         "@com_github_openconfig_gnoi//types:types_proto",
@@ -39,7 +39,7 @@ go_proto_library(
     importpath = "github.com/openconfig/gnsi/pathz",
     proto = ":pathz_proto",
     deps = [
-        "//authorization:authorization_go_proto",
+        "//pathz/authorization:authorization_go_proto",
         "@com_github_openconfig_gnmi//proto/gnmi:gnmi_go_proto",
         "@com_github_openconfig_gnoi//types:types_go_proto",
     ],
