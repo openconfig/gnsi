@@ -1,5 +1,5 @@
 //
-// Copyright 2021 Google Inc. All Rights Reserved.
+// Copyright 2021, 2022 Google Inc. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -63,15 +63,18 @@ service Pathz {
   //     Client <-- UploadResponse <--- Target
   //
   //   Step 3 (optional): Test/Validation by the client.
-  //     During this step client attempts to call a RPC that is allowed
-  //     in the new policy and validates that the new policy "works".
-  //     Additionally the client should access an OpenConfig path that is
-  //     not allowed and the attempt must fail proving that the OpenConfig
-  //     gNMI Path-based Authorization Policy "works".
+  //     During this step client calls (possibly multiple times)
+  //     the Probe(POLICY_INSTANCE_SANDBOX) RPC to check that a combination of
+  //     user ID, gNMI path and operation mode that is supposed to be allowed by
+  //     the new policy and validates that the response is ACTION_PERMIT.
+  //     Additionally the client should call the Probe(POLICY_INSTANCE_SANDBOX)
+  //     RPC with a combination of user ID, gNMI path and operation mode that is
+  //     not allowed in the new policy and the attempt must result in
+  //     the ACTION_DENY response proving that the new policy "works".
   //     Once verified, the client then proceeds to finalize the rotation.
-  //     If the verification did not succeed the client will cancel the
+  //     If the verification did not succeed the client will cancel the Rotate
   //     RPC thereby forcing the target to perform a rollback of the new
-  //     OpenConfig gNMI Path-based Authorization Policy.
+  //     OpenConfig gNMI Path-based Authorization Policy to the previous one.
   //
   //   Step 4: Final commit.
   //     Client ---> FinalizeRequest ----> Target
@@ -87,7 +90,7 @@ service Pathz {
 
   // Get returns specified instance of the OpenConfig gNMI Path-based
   // Authorization Policy together with its version and created-on information.
-  rpc Get(GetRequest) returns (GetRequest);
+  rpc Get(GetRequest) returns (GetResponse);
 }
 
 // Request messages to rotate existing OpenConfig gNMI Path-based Authorization
