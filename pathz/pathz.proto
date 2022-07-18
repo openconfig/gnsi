@@ -177,9 +177,7 @@ message FinalizeRequest {}
 
 // UploadRequest instructs the target to store the given OpenConfig Path-based
 // Authz Policy.
-//
 // If there is another ongoing Rotate RPC the UploadRequest must fail.
-//
 message UploadRequest {
   // Policy ID. The ID is used to identify the policy in the gNMI API.
   string id = 1;
