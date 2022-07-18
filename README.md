@@ -1,5 +1,7 @@
 # gNSI - gRPC Network Security Interface
 
+[![GitHub Super-Linter](https://github.com/openconfig/gnsi/workflows/Lint%20Code%20Base/badge.svg)](https://github.com/marketplace/actions/super-linter)
+
 A repository which contains security infrastructure services
 necessary for safe operations of an OpenConfig platform. These
 services include:
