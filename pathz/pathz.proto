@@ -206,7 +206,7 @@ message UploadRequest {
   uint64 created_on = 3;
 
   // The actual OpenConfig Path-based Authz Policy.
-  gnsi.pathz.authorization.AuthorizationPolicy policy = 4;
+  gnsi.pathz.AuthorizationPolicy policy = 4;
 }
 
 message UploadResponse {
@@ -223,7 +223,7 @@ message ProbeRequest {
 // as evaluated against the current policy, along with the policy ID
 // and current policy version.
 message ProbeResponse {
-  gnsi.pathz.authorization.Action action = 1;
+  gnsi.pathz.Action action = 1;
   string id = 2;
   string version = 3;
 }
