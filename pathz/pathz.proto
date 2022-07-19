@@ -113,10 +113,6 @@ message RotateRequest {
 
 // Response messages from the target.
 message RotateResponse {
-  // Response messages.
-  oneof rotate_response {
-    UploadResponse upload_response = 1;
-  }
 }
 
 // A Finalize message is sent to the target to confirm the rotation of
