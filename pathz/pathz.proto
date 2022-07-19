@@ -22,7 +22,7 @@ package gnsi.pathz;
 
 import "github.com/openconfig/gnmi/proto/gnmi/gnmi.proto";
 import "github.com/openconfig/gnoi/types/types.proto";
-import "github.com/openconfig/gnsi/authorization/authorization.proto";
+import "github.com/openconfig/gnsi/pathz/authorization.proto";
 
 option go_package = "github.com/openconfig/gnsi/pathz";
 option (gnoi.types.gnoi_version) = "0.1.0";
@@ -154,7 +154,7 @@ message UploadRequest {
   uint64 created_on = 2;
 
   // The actual OpenConfig gNMI Path-based Authorization Policy.
-  gnsi.authorization.AuthorizationPolicy policy = 3;
+  AuthorizationPolicy policy = 3;
 }
 
 message UploadResponse {
@@ -185,7 +185,7 @@ message ProbeRequest {
   gnmi.Path path = 2;
 
   // The operation type (read or write) to be used to perform the evaluation.
-  gnsi.authorization.Mode mode = 3;
+  Mode mode = 3;
 
   // The instance of the OpenConfig gNMI Path-based Authorization Policy to be
   // used to perform the evaluation.
@@ -196,7 +196,7 @@ message ProbeRequest {
 // as evaluated against the current policy, along with the version of the policy
 // that the gNMI path/user were evaluated against.
 message ProbeResponse {
-  gnsi.authorization.Action action = 1;
+  Action action = 1;
   string version = 2;
 }
 
@@ -235,5 +235,5 @@ message GetResponse {
   uint64 created_on = 2;
 
   // The actual OpenConfig gNMI Path-based Authorization Policy.
-  gnsi.authorization.AuthorizationPolicy policy = 3;
+  AuthorizationPolicy policy = 3;
 }
