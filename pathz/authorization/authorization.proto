@@ -37,8 +37,6 @@
 //
 syntax = "proto3";
 
-package gnsi.pathz;
-
 import "github.com/openconfig/gnmi/proto/gnmi/gnmi.proto";
 
 // User is a singular username used only in the matching criteria.
