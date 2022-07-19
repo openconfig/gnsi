@@ -153,7 +153,7 @@ message UploadRequest {
   uint64 created_on = 2;
 
   // The actual OpenConfig gNMI Path-based Authorization Policy.
-  gnsi.pathz.AuthorizationPolicy policy = 4;
+  gnsi.pathz.AuthorizationPolicy policy = 3;
 }
 
 message UploadResponse {
