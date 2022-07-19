@@ -2,37 +2,34 @@
 
 ## `gnsi-pathz.yang`
 
-An overview of the changes defined in the `gnmi-pathz.yang ` file are shown
+An overview of the changes defined in the `gnmi-pathz.yang` file are shown
 below.
 
-```
+```sh
 module: gnsi-pathz
 
   augment /oc-sys:system:
     +--ro gnmi-pathz-policies
        +--ro policies
-          +--ro policy* [id]
-             +--ro id       -> ../state/id
+          +--ro policy* [instance]
+             +--ro instance    -> ../state/instance
              +--ro state
-                +--ro id?           string
+                +--ro instance?     enumeration
                 +--ro version?      version
                 +--ro created-on?   created-on
-  augment /oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:config:
-    +--rw gnmi-pathz-policy-id?   string
   augment /oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state:
     +--ro gnmi-pathz-policy-version?      version
     +--ro gnmi-pathz-policy-created-on?   created-on
-    +--ro gnmi-pathz-policy-id?           string
 ```
 
 ## `openconfig-system` tree
 
-The  `openconfig-system` sub-tree after augments defined in the
+The  `openconfig-system` subtree after augments defined in the
 `gnsi-pathz.yang` file is shown below.
 
 For interactive version click [here](gnsi-pathz.html).
 
-```
+```sh
 module: openconfig-system
   +--rw system
      +--rw config
@@ -446,7 +443,6 @@ module: openconfig-system
      |     |  +--rw oc-sys-grpc:metadata-authentication?   boolean
      |     |  +--rw oc-sys-grpc:listen-addresses*          union
      |     |  +--rw oc-sys-grpc:network-instance?          oc-ni:network-instance-ref
-     |     |  +--rw gnsi-pathz:gnmi-pathz-policy-id?       string
      |     +--ro oc-sys-grpc:state
      |        +--ro oc-sys-grpc:name?                          string
      |        +--ro oc-sys-grpc:services*                      identityref
@@ -459,13 +455,12 @@ module: openconfig-system
      |        +--ro oc-sys-grpc:network-instance?              oc-ni:network-instance-ref
      |        +--ro gnsi-pathz:gnmi-pathz-policy-version?      version
      |        +--ro gnsi-pathz:gnmi-pathz-policy-created-on?   created-on
-     |        +--ro gnsi-pathz:gnmi-pathz-policy-id?           string
      +--ro gnsi-pathz:gnmi-pathz-policies
         +--ro gnsi-pathz:policies
-           +--ro gnsi-pathz:policy* [id]
-              +--ro gnsi-pathz:id       -> ../state/id
+           +--ro gnsi-pathz:policy* [instance]
+              +--ro gnsi-pathz:instance    -> ../state/instance
               +--ro gnsi-pathz:state
-                 +--ro gnsi-pathz:id?           string
+                 +--ro gnsi-pathz:instance?     enumeration
                  +--ro gnsi-pathz:version?      version
                  +--ro gnsi-pathz:created-on?   created-on
 

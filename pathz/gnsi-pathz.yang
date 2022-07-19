@@ -50,21 +50,6 @@ module gnsi-pathz {
 
     // gRPC server related definitions.
 
-    grouping grpc-server-gnmi-pathz-policy-config {
-        description
-            "OpenConfig-path-based-authorization-policy-related configuration
-            data for a gNMI server.";
-
-        leaf gnmi-pathz-policy-id {
-            type string;
-            description
-                "The ID of the OpenConfig-path-based authorization policy that
-                is used by this gNMI server. The policy is provisioned
-                through other interfaces to the device, such as the gNSI
-                OpenConfig-path-based Authorization Policy management service.";
-        }
-    }
-
     grouping grpc-server-gnmi-pathz-policy-state {
         description
             "gNMI server OpenConfig-path-based authorization policy
@@ -83,18 +68,32 @@ module gnsi-pathz {
                 authorization policy that is currently used by this gNMI server
                 was created.";
         }
-        uses grpc-server-gnmi-pathz-policy-config;
     }
 
     grouping gnmi-pathz-policy-state {
         description
             "Operational state data for a gNMI OpenConfig-path-based
             authorization policy.";
-        leaf id {
-            type string;
+        leaf instance {
+            type enumeration {
+                enum ACTIVE {
+                    value 1;
+                    description
+                        "The policy that is currently used by the gNMI service
+                        to authorize access.";
+                }
+                enum SANDBOX {
+                    value 2;
+                    description
+                        "The most recent policy that has been uploaded during
+                        the Rotation() RPC. If there is no Rotate() RPC in
+                        progress, then referring to this instance of the policy
+                        will result in an error.";
+                }
+            }
             description
-                "The ID of the gNMI OpenConfig-path-based authorization
-                policy.";
+                "The instance identifier of the gNMI OpenConfig-path-based
+                authorization policy.";
         }
         leaf version {
             type version;
@@ -128,14 +127,14 @@ module gnsi-pathz {
                  authorization policy management service.";
 
             list policy {
-                key id;
+                key instance;
                 ordered-by system;
                 description
                     "Information about the OpenConfig-path-based authorization
-                     policy that is identified by the `id`.";
-                leaf id {
+                     policy that is identified by the `instance`.";
+                leaf instance {
                     type leafref {
-                        path "../state/id";
+                        path "../state/instance";
                     }
                     description
                         "The ID of the OpenConfig-path-based authorization
@@ -184,15 +183,6 @@ module gnsi-pathz {
              and creation date/time listed.";
 
         uses system-gnmi-pathz-policies;
-    }
-    augment "/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/" +
-            "oc-sys-grpc:config" {
-        description
-            "Configuration of OpenConfig-path-based authorization policy used by
-             a gRPC server and managed by the gNSI OpenConfig-path-based
-             authorization policies management service.";
-
-        uses grpc-server-gnmi-pathz-policy-config;
     }
     augment "/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/" +
             "oc-sys-grpc:state" {
