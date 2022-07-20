@@ -1,7 +1,10 @@
 # gNSI OpenConfig-path-based Authorization Policy Extension
 
-## `gnsi-pathz.yang`
+## Yang schema
 
+<details>
+  <summary>### `gnsi-pathz.yang`</summary>
+  
 An overview of the changes defined in the `gnmi-pathz.yang` file are shown
 below.
 
@@ -21,8 +24,9 @@ module: gnsi-pathz
     +--ro gnmi-pathz-policy-version?      version
     +--ro gnmi-pathz-policy-created-on?   created-on
 ```
+</details>
 
-## `openconfig-system` tree
+### `openconfig-system` tree
 
 The  `openconfig-system` subtree after augments defined in the
 `gnsi-pathz.yang` file is shown below.
