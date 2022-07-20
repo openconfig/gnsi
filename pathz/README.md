@@ -3,10 +3,11 @@
 ## Yang schema
 
 <details>
-  <summary>### `gnsi-pathz.yang`</summary>
+  <summary>
+### `gnsi-pathz.yang`
   
 An overview of the changes defined in the `gnmi-pathz.yang` file are shown
-below.
+below.</summary>
 
 ```sh
 module: gnsi-pathz
