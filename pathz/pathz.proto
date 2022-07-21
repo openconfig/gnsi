@@ -128,7 +128,6 @@ message FinalizeRequest {
 // based Authorization Policy.
 //
 // If there is another ongoing Rotate RPC the UploadRequest must fail.
-//
 message UploadRequest {
   // `version` contains versioning information that is controlled by
   // the policy manager and reported as-is by the telemetry reporting system
