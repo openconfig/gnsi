@@ -4,8 +4,8 @@
 
 <details>
   <summary>
-### `gnsi-pathz.yang`
-  
+ `gnsi-pathz.yang`
+
 An overview of the changes defined in the `gnmi-pathz.yang` file are shown
 below.</summary>
 
