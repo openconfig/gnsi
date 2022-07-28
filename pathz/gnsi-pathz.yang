@@ -115,8 +115,8 @@ module gnsi-pathz {
              have been installed on the device using the gNSI OpenConfig-path-
              based authorization policy management service.
              Each OpenConfig-path-based authorization policy listed here is
-             identified by an ID and has its version and creation date/time
-             listed.";
+             identified by its status (either ACTIVE or SANDBOX) and has its
+             version and creation date/time listed.";
 
         container policies {
             config false;
@@ -156,8 +156,8 @@ module gnsi-pathz {
             "Collection of OpenConfig-path-based authorization policies that
              have been installed on the device using the gNSI OpenConfig-path-
              based authorization policy management service.
-             Each policy listed here is identified by an ID and has its version
-             and creation date/time listed.";
+             Each policy listed here is identified by its status (either ACTIVE
+             or SANDBOX) and has its version and creation date/time listed.";
 
         container gnmi-pathz-policies {
             config false;
@@ -165,8 +165,9 @@ module gnsi-pathz {
                 "Collection of OpenConfig-path-based authorization policies that
                 have been installed on the device using the gNSI OpenConfig-
                 path-based authorization policy management service.
-                Each policy listed here is identified by an ID and has its
-                version and creation date/time listed.";
+                Each policy listed here is identified by its status (either
+                ACTIVE or SANDBOX) and has its version and creation date/time
+                listed.";
 
             uses gnmi-pathz-policies;
         }
@@ -179,8 +180,8 @@ module gnsi-pathz {
             "Collection of OpenConfig-path-based authorization policies that
              have been installed on the device using the gNSI OpenConfig-path-
              based authorization policy management service.
-             Each policy listed here is identified by an ID and has its version
-             and creation date/time listed.";
+             Each policy listed here is identified by its status (either ACTIVE
+             or SANDBOX) and has its version and creation date/time listed.";
 
         uses system-gnmi-pathz-policies;
     }

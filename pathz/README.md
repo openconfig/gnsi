@@ -2,12 +2,13 @@
 
 ## Yang schema
 
+## `gnsi-pathz` tree
 <details>
-  <summary>
- `gnsi-pathz.yang`
+<summary>
 
 An overview of the changes defined in the `gnmi-pathz.yang` file are shown
-below.</summary>
+below.
+</summary>
 
 ```sh
 module: gnsi-pathz
@@ -27,10 +28,13 @@ module: gnsi-pathz
 ```
 </details>
 
-### `openconfig-system` tree
+## `openconfig-system` tree
+<details>
+<summary>
 
 The  `openconfig-system` subtree after augments defined in the
 `gnsi-pathz.yang` file is shown below.
+</summary>
 
 For interactive version click [here](gnsi-pathz.html).
 
@@ -470,3 +474,4 @@ module: openconfig-system
                  +--ro gnsi-pathz:created-on?   created-on
 
 ```
+</details>
