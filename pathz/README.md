@@ -6,7 +6,7 @@
 <details>
 <summary>
 
-An overview of the changes defined in the `gnmi-pathz.yang` file are shown
+An overview of the changes defined in the `gnsi-pathz.yang` file are shown
 below.
 </summary>
 
