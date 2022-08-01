@@ -6,9 +6,6 @@ module gnsi-authz {
     import openconfig-system {
         prefix oc-sys;
     }
-    import openconfig-system-grpc {
-        prefix oc-sys-grpc;
-    }
     import openconfig-types {
         prefix oc-types;
     }
@@ -21,6 +18,12 @@ module gnsi-authz {
     description
         "This module provides a data model for the metadata of the gRPC
          authorization policies installed on a networking device.";
+
+    revision 2022-08-01 {
+        description
+            "Single authz policy.";
+        reference "0.2.0";
+    }
 
     revision 2022-01-17 {
         description
@@ -46,32 +49,32 @@ module gnsi-authz {
              a reboot.";
     }
 
-    // gRPC server related definitions.
+    // gRPC server authorization policy related definitions.
 
     grouping grpc-server-authz-policy-state {
         description
             "gNMI server's gRPC authorization policy freshness-related data.";
 
-        leaf authz-policy-version {
+        leaf grpc-authz-policy-version {
             type version;
             description
                 "The version of the gRPC authorization policy that is used by
-                 this gNMI server.";
+                 this system.";
         }
-        leaf authz-policy-created-on {
+        leaf grpc-authz-policy-created-on {
             type created-on;
             description
                 "The timestamp of the moment when the gRPC authorization policy
-                that is currently used by this gNMI server was created.";
+                that is currently used by this system was created.";
         }
     }
 
     // Augments section.
 
-    augment "/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/" +
-            "oc-sys-grpc:state" {
+    augment "/oc-sys:system/oc-sys:aaa/oc-sys:authorization/" +
+            "oc-sys:state" {
         description
-            "A gNMI server's gRPC authorization policy freshness information.";
+            "A system's gRPC authorization policy freshness information.";
 
         uses grpc-server-authz-policy-state;
     }

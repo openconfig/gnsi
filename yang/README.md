@@ -195,7 +195,9 @@ module: openconfig-system
      |  |  +--rw config
      |  |  |  +--rw authorization-method*   union
      |  |  +--ro state
-     |  |  |  +--ro authorization-method*   union
+     |  |  |  +--ro authorization-method*                      union
+     |  |  |  +--ro gnsi-authz:grpc-authz-policy-version?      version
+     |  |  |  +--ro gnsi-authz:grpc-authz-policy-created-on?   created-on
      |  |  +--rw events
      |  |     +--rw event* [event-type]
      |  |        +--rw event-type    -> ../config/event-type
@@ -427,7 +429,6 @@ module: openconfig-system
      |     |  +--rw oc-sys-grpc:network-instance?                 oc-ni:network-instance-ref
      |     |  +--rw gnsi:ca-trust-bundle-id?                      string
      |     |  +--rw gnsi:certificate-revocation-list-bundle-id?   string
-     |     |  +--rw gnsi-pathz:gnmi-pathz-policy-id?              string
      |     +--ro oc-sys-grpc:state
      |        +--ro oc-sys-grpc:name?                                     string
      |        +--ro oc-sys-grpc:services*                                 identityref
@@ -438,8 +439,6 @@ module: openconfig-system
      |        +--ro oc-sys-grpc:metadata-authentication?                  boolean
      |        +--ro oc-sys-grpc:listen-addresses*                         union
      |        +--ro oc-sys-grpc:network-instance?                         oc-ni:network-instance-ref
-     |        +--ro gnsi-authz:authz-policy-version?                      version
-     |        +--ro gnsi-authz:authz-policy-created-on?                   created-on
      |        +--ro gnsi:certificate-version?                             version
      |        +--ro gnsi:certificate-created-on?                          created-on
      |        +--ro gnsi:ca-trust-bundle-version?                         version
@@ -450,7 +449,6 @@ module: openconfig-system
      |        +--ro gnsi:certificate-revocation-list-bundle-id?           string
      |        +--ro gnsi-pathz:gnmi-pathz-policy-version?                 version
      |        +--ro gnsi-pathz:gnmi-pathz-policy-created-on?              created-on
-     |        +--ro gnsi-pathz:gnmi-pathz-policy-id?                      string
      +--ro gnsi:grpc-credentials
      |  +--ro gnsi:entities
      |     +--ro gnsi:entity* [id]
@@ -462,10 +460,10 @@ module: openconfig-system
      |           +--ro gnsi:created-on?   created-on
      +--ro gnsi-pathz:gnmi-pathz-policies
         +--ro gnsi-pathz:policies
-           +--ro gnsi-pathz:policy* [id]
-              +--ro gnsi-pathz:id       -> ../state/id
+           +--ro gnsi-pathz:policy* [instance]
+              +--ro gnsi-pathz:instance    -> ../state/instance
               +--ro gnsi-pathz:state
-                 +--ro gnsi-pathz:id?           string
+                 +--ro gnsi-pathz:instance?     enumeration
                  +--ro gnsi-pathz:version?      version
                  +--ro gnsi-pathz:created-on?   created-on
 

@@ -1,5 +1,5 @@
 //
-// Copyright 2021 Google Inc. All Rights Reserved.
+// Copyright 2021, 2022 Google Inc. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -50,7 +50,7 @@ option (gnoi.types.gnoi_version) = "0.1.0";
 //     }]
 // }
 //
-// This example would authorizes "alice" and "bob" to call
+// This example would authorize "alice" and "bob" to call
 // "MutateHostCredentials" and "MutateAccountCredentials" of "gnsi.ssh.Ssh"
 // service.
 
@@ -67,9 +67,6 @@ service Authz {
   // RPC while another is already in progress will be rejected with the
   // `UNAVAILABLE` gRPC error.
   //
-  // An attempt to rotate a policy with not existing `id` will be rejected
-  // with the `FAILED_PRECONDITION` gRPC error.
-  //
   // The following describes the sequence of messages that must be exchanged
   // in the Rotate() RPC.
   //
@@ -78,7 +75,7 @@ service Authz {
   //     Client ----> Rotate() RPC stream begin ------> Target
   //
   //   Step 2: Send gRPC-level Authorization Policy to Target.
-  //     Client --> UploadRequest(server, authz_policy) ----> Target
+  //     Client --> UploadRequest(authz_policy) ----> Target
   //     Client <-- UploadResponse <--- Target
   //
   //   Step 3 (optional): Test/Validation by the client.
@@ -104,7 +101,7 @@ service Authz {
   // and is evaluated without actually performing the gRPC call.
   rpc Probe(ProbeRequest) returns (ProbeResponse);
 
-  // Get returns specified instance of the gRPC-level Authorization Policy
+  // Get returns current instance of the gRPC-level Authorization Policy
   // together with its version and created-on information.
   rpc Get(GetRequest) returns (GetResponse);
 }
@@ -118,11 +115,11 @@ message RotateAuthzRequest {
     FinalizeRequest finalize_rotation = 2;
   }
 
-  // If set to `true` the requested operation will succeed even if the
-  // combination of `id` and `version` is already in use (is not unique).
+  // If set to `true` the requested operation will succeed even if the specified
+  // `version` is already in use (is not unique).
   // If set to `false` the requested operation will fail and the streaming RPC
-  // will be closed with the `ALREADY_EXISTS` gRPC error if the combination
-  // of `id` and `version` is already in use (is not unique).
+  // will be closed with the `ALREADY_EXISTS` gRPC error if the specified
+  // version` is already in use (is not unique).
   // It is a no-op for the `finalize_rotation` request.
   bool force_overwrite = 3;
 }
@@ -176,17 +173,13 @@ message UploadRequest {
   // It is provided as a JSON formatted string whose structure is defined by
   // gRPC.
   string policy = 3;
-
-  // The ID of the gRPC server the gRPC-level Authorization Policy will be
-  // applied to.
-  string server = 4;
 }
 
 message UploadResponse {
 }
 
-// ProbeRequest contains a single user name, the gRPC service name and the gRPC
-// call being attempted.
+// ProbeRequest contains a single user name and the fully qualified name of the
+// gRPC call being attempted.
 message ProbeRequest {
   // The user name to be used to perform the evaluation.
   string user = 1;
@@ -195,10 +188,6 @@ message ProbeRequest {
   // It has to be a fully qualified name, like:
   //    "/gnsi.ssh.Ssh/MutateHostCredentials"
   string rpc = 2;
-  
-  // The ID of the gRPC server the gRPC-level Authorization Policy will be
-  // applied to.
-  string server = 3;
 }
 
 // ProbeResponse returns the ACK/NACK for a single user request

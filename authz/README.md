@@ -198,13 +198,13 @@ Authorization Policy, namely:
 1. Starting the `gNSI.authz.Rotate()` streaming RPC.
 
    As the result a streaming connection is created between the server (the
-   switch) and the client (the management aplication) that is used in the
+   switch) and the client (the management application) that is used in the
    following steps.
 
    > **⚠ Warning**
    > Only one `gNSI.authz.Rotate()` can be in progress.
 
-1. The client uplads new gRPC-level Authorization Policy using
+1. The client uploads new gRPC-level Authorization Policy using
    the `UploadRequest` message.
 
    For example:
@@ -227,19 +227,14 @@ Authorization Policy, namely:
               ]
             }
           }]
-        }",
-     "server": "gnxi"
+        }"
    }
    ```
 
    The information passed in both the `version` and the `created_on` fields is
-   not used internally be the `gNSI.authz` service and is designed to help keep
+   not used internally by the `gNSI.authz` service and is designed to help keep
    track of what gRPC-level Authorization Policy is active on a particular
    switch.
-
-   The name of the `server` is the name used to index the gNMI subtree
-   `/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server` list of
-   gRPC services.
 
 1. After pre-validating and activating the new policy, the server sends the
    `UploadResponse` is sent back to the client
@@ -247,8 +242,8 @@ Authorization Policy, namely:
 1. The client verifies the correctness of the new gRPC-level Authorization
    Policy using separate `gNSI.authz.Probe()` RPC(s)
 
-1. The client sends the `Finalize` message indicating the previous  Auth Policy
-   can be deleted.
+1. The client sends the `Finalize` message indicating the previous gRPC-level
+   Authorization Policy can be deleted.
 
    > **⚠ Warning**
    > Closing the stream without sending the `Finalize` message will result in
@@ -281,8 +276,7 @@ called with the following parameters:
 ```json
 {
   "user": "spiffe://company.com/sa/alice",
-  "rpc": "gNSI.ssh.MutateAccountCredentials",
-  "server": "gnmi"
+  "rpc": "gNSI.ssh.MutateAccountCredentials"
 }
 ```
 
@@ -306,14 +300,19 @@ below.
 ```txt
 module: gnsi-authz
 
-  augment /oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state:
-    +--ro authz-policy-version?      version
-    +--ro authz-policy-created-on?   created-on
+  augment /oc-sys:system/oc-sys:aaa/oc-sys:authorization/oc-sys:state:
+    +--ro grpc-authz-policy-version?      version
+    +--ro grpc-authz-policy-created-on?   created-on
 ```
 
 ### `openconfig-system` tree
-The  `openconfig-system` subtree after augments defined in the
-`gnsi-authz.yang` file is shown below.
+The  `openconfig-system` subtree after augments defined in the `gnsi-authz.yang`
+file is shown below.
+
+<details>
+<summary>
+The diagram of the tree.
+</summary>
 
 <details>
 <summary>
@@ -504,7 +503,9 @@ module: openconfig-system
      |  |  +--rw config
      |  |  |  +--rw authorization-method*   union
      |  |  +--ro state
-     |  |  |  +--ro authorization-method*   union
+     |  |  |  +--ro authorization-method*                      union
+     |  |  |  +--ro gnsi-authz:grpc-authz-policy-version?      version
+     |  |  |  +--ro gnsi-authz:grpc-authz-policy-created-on?   created-on
      |  |  +--rw events
      |  |     +--rw event* [event-type]
      |  |        +--rw event-type    -> ../config/event-type
@@ -744,8 +745,6 @@ module: openconfig-system
               +--ro oc-sys-grpc:metadata-authentication?   boolean
               +--ro oc-sys-grpc:listen-addresses*          union
               +--ro oc-sys-grpc:network-instance?          oc-ni:network-instance-ref
-              +--ro gnsi-authz:authz-policy-version?       version
-              +--ro gnsi-authz:authz-policy-created-on?    created-on
 
 ```
 </details>
