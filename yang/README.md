@@ -2,12 +2,12 @@
 
 ## `openconfig-system` tree
 
-The  `openconfig-system` sub-tree after augments defined in the
+The `openconfig-system` subtree after applying augments defined in the
 `gnsi-telemetry.yang` file is shown below.
 
 For interactive version click [here](gnsi-telemetry.html).
 
-```
+```txt
 module: openconfig-system
   +--rw system
      +--rw config
