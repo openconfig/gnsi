@@ -12,7 +12,7 @@ management APIs.
 `gNSI.authz` defines an API that allows for configuration of the RPC service on
 a switch to control which user can and cannot access specific RPCs.
 
-## The Authz Policy
+## The gRPC-level Authorization Policy
 
 The policy the RPC is to enforce is defined in a form of a JSON string whose
 structure depends on the requirements of the RPC server.
@@ -21,7 +21,7 @@ In the case of a `gRPC`-based server the JSON string's schema can be found
 [here](https://github.com/grpc/proposal/pull/246).
 It also can be described using the following PROTOBUF definition.
 
-```
+```protobuf
 // Copyright 2021 The gRPC Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -152,11 +152,11 @@ message AuthorizationPolicy {
 
 ## An example
 
-Below is an example of a Authz Policy that allows two admins: Alice and Bob
-access to all RPCs that are defined by the `gNSI.ssh` interface. Nobody else
-will be able to call any of the `gNSI.ssh` RPCs.
+Below is an example of a gRPC-level Authorization Policy that allows two admins:
+Alice and Bob access to all RPCs that are defined by the `gNSI.ssh` interface.
+Nobody else will be able to call any of the `gNSI.ssh` RPCs.
 
-```
+```json
 {
   "name": "gNSI.ssh policy",
   "allow_rules": [{
@@ -174,29 +174,159 @@ will be able to call any of the `gNSI.ssh` RPCs.
 }
 ```
 
-# OpenConfig Extension for the gMNI gRPC-based Authorization Policy telemetry
+## Managing the gRPC-based Authorization Policy
 
-## `gnsi-authz.yang`
+### Initial (fresh out of the box) state assumption
+
+When a device boots for the first time it should have:
+
+1. The `gNSI.authz` service up and running
+1. A default gRPC-level Authorization Policy for every active gRPC service.
+
+   The initial default gRPC-level Authorization Policy can either allow access
+   to all RPCs or deny access to all RPCs except for the `gNSI.authz` family of
+   RPCs.
+
+### Updating the policy
+
+Every policy needs changes from time to time and the `gNSI.authz.Rotate()` RPC
+is designed to do this task.
+
+There are 5 steps in the process of updating (rotating) an gRPC-level
+Authorization Policy, namely:
+
+1. Starting the `gNSI.authz.Rotate()` streaming RPC.
+
+   As the result a streaming connection is created between the server (the
+   switch) and the client (the management application) that is used in the
+   following steps.
+
+   > **⚠ Warning**
+   > Only one `gNSI.authz.Rotate()` can be in progress.
+
+1. The client uploads new gRPC-level Authorization Policy using
+   the `UploadRequest` message.
+
+   For example:
+   ```json
+   {
+     "version": "version-1",
+     "created_on": "1632779276520673693",
+     "policy": "
+        {
+          "name": "gNSI.ssh policy",
+          "allow_rules": [{
+            "name": "admin-access",
+            "principals": [
+              "spiffe://company.com/sa/alice",
+              "spiffe://company.com/sa/bob"
+              ],
+            "request": {
+              "paths": [
+                "/gnsi.ssh.Ssh/*"
+              ]
+            }
+          }]
+        }"
+   }
+   ```
+
+   > **⚠ Warning**
+   > There is only one gRPC-level Authorization Policy on the device therefore
+   > it is "declarative" for all gRPC servers and services on the device.
+   > In other words: all policies must be defined in the policy being rotated as
+   > this rotate operation will replace all previously defined/used policies
+   > once the `Finalize` message is sent.
+
+   The information passed in both the `version` and the `created_on` fields is
+   not used internally by the `gNSI.authz` service and is designed to help keep
+   track of what gRPC-level Authorization Policy is active on a particular
+   switch.
+
+1. After pre-validating and activating the new policy, the server sends the
+   `UploadResponse` is sent back to the client
+
+1. The client verifies the correctness of the new gRPC-level Authorization
+   Policy using separate `gNSI.authz.Probe()` RPC(s)
+
+1. The client sends the `Finalize` message indicating the previous gRPC-level
+   Authorization Policy can be deleted.
+
+   > **⚠ Warning**
+   > Closing the stream without sending the `Finalize` message will result in
+   > abandoning the uploaded policy and rollback of the one that was active
+   > before the RPC started.
+
+### Evaluating the rules
+
+In a simple deployment the set of rules in the gRPC-level Authorization Policy
+most likely will be clear enough for a human to analyze but in a data-center
+environment most likely the list of rules will be long and complex and therefore
+hard to reason about.
+
+To help this process the `gNSI.authz` API includes the `gNSI.authz.Probe()` RPC.
+
+This RPC allows for checking the response of the gRPC-level Authorization Policy
+engine to a RPC performed by a specific user based the installed policy.
+
+Because the policy uploaded during the `gNSI.authz.Rotate()` call becomes active
+immediately, the `gNSI.authz.Probe()` can be used to check if the uploaded
+policy provides the expected response without attempting performing the
+(potentially destructive) RPC in question while the `gNSI.authz.Rotate()` is
+still active (the stream is opened and the `Finalize` message has not been sent
+yet.
+
+For example, to check if `alice` can perform the
+`gNSI.ssh.MutateAccountCredentials()` RPC the `gNSI.authz.Probe()` should be
+called with the following parameters:
+
+```json
+{
+  "user": "spiffe://company.com/sa/alice",
+  "rpc": "gNSI.ssh.MutateAccountCredentials"
+}
+```
+
+As `alice` is listed in the example policy in the `allow_rules` section the
+expected result of the `gNSI.authz.Probe()` RPC is:
+
+```json
+{
+  "action": "ACTION_PERMIT",
+  "version": "<a version string provided during in the UploadRequest>"
+}
+```
+
+## OpenConfig Extension for the gMNI gRPC-based Authorization Policy telemetry
+
+### `gnsi-authz.yang`
 
 An overview of the changes defined in the `gnmi-authz.yang` file are shown
 below.
 
-```
+```txt
 module: gnsi-authz
 
-  augment /oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state:
-    +--ro authz-policy-version?      version
-    +--ro authz-policy-created-on?   created-on
+  augment /oc-sys:system/oc-sys:aaa/oc-sys:authorization/oc-sys:state:
+    +--ro grpc-authz-policy-version?      version
+    +--ro grpc-authz-policy-created-on?   created-on
 ```
 
-## `openconfig-system` tree
+### `openconfig-system` tree
+The  `openconfig-system` subtree after augments defined in the `gnsi-authz.yang`
+file is shown below.
 
-The  `openconfig-system` sub-tree after augments defined in the
-`gnsi-authz.yang` file is shown below.
+<details>
+<summary>
+The diagram of the tree.
+</summary>
 
-For interactive version click [here](gnsi-authz.html).
+<details>
+<summary>
+The diagram of the tree.
+</summary>
 
-```
+```txt
 module: openconfig-system
   +--rw system
      +--rw config
@@ -380,7 +510,9 @@ module: openconfig-system
      |  |  +--rw config
      |  |  |  +--rw authorization-method*   union
      |  |  +--ro state
-     |  |  |  +--ro authorization-method*   union
+     |  |  |  +--ro authorization-method*                      union
+     |  |  |  +--ro gnsi-authz:grpc-authz-policy-version?      version
+     |  |  |  +--ro gnsi-authz:grpc-authz-policy-created-on?   created-on
      |  |  +--rw events
      |  |     +--rw event* [event-type]
      |  |        +--rw event-type    -> ../config/event-type
@@ -620,7 +752,8 @@ module: openconfig-system
               +--ro oc-sys-grpc:metadata-authentication?   boolean
               +--ro oc-sys-grpc:listen-addresses*          union
               +--ro oc-sys-grpc:network-instance?          oc-ni:network-instance-ref
-              +--ro gnsi-authz:authz-policy-version?       version
-              +--ro gnsi-authz:authz-policy-created-on?    created-on
 
 ```
+</details>
+
+For interactive version click [here](gnsi-authz.html).
