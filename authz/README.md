@@ -231,6 +231,13 @@ Authorization Policy, namely:
    }
    ```
 
+   > **⚠ Warning**
+   > There is only one gRPC-level Authorization Policy on the device therefore
+   > it is "declarative" for all gRPC servers and services on the device.
+   > In other words: all policies must be defined in the policy being rotated as
+   > this rotate operation will replace all previously defined/used policies
+   > once the `Finalize` message is sent.
+
    The information passed in both the `version` and the `created_on` fields is
    not used internally by the `gNSI.authz` service and is designed to help keep
    track of what gRPC-level Authorization Policy is active on a particular
