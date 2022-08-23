@@ -37,7 +37,7 @@ There are two methods to configure a password:
 
 To change password execute the following command after logging-in to the device
 using `ssh` or directly using a console (for example a RS232-based one or
-simmilar method):
+similar method):
 
 ```bash
 $ echo "TeStP_w0rD" | passwd ${account} --stdin
@@ -56,7 +56,7 @@ stream := RotateAccountCredentials()
 ```go
 stream.Send(
     RotateAccountCredentialsRequest {
-        password: RotatePasswordRequest {
+        password: PasswordRequest {
             accounts: Account {
                 account: "user",
                 password: Password {
@@ -131,7 +131,7 @@ stream := RotateAccountCredentials()
 ```go
 stream.Send(
     RotateAccountCredentialsRequest {
-        credential: RotateAuthorizedKeysRequest {
+        credential: AuthorizedKeysRequest {
             credentials: AccountCredentials {
                 account: "user",
                 authorized_keys: AuthorizedKey {
@@ -177,7 +177,7 @@ stream := RotateAccountCredentials()
 ```go
 stream.Send(
     RotateAccountCredentialsRequest {
-        user: RotateAuthorizedUsersRequest {
+        user: AuthorizedUsersRequest {
             policies: UserPolicy {
                 account: "user",
                 authorized_users: SshAuthorizedUser {
@@ -221,7 +221,7 @@ stream := RotateHostCredentials()
 ```go
 stream.Send(
     RotateHostCredentialsRequest {
-        server_keys: RotateServerKeysRequest {
+        server_keys: ServerKeysRequest {
             public_key: "AAAAB3JlHJKJSdsoosaAJlOIhhsdKhaiPsa....==",
             private_key: "AAAAB3NzaC1yc2EAAAABJQAAAIBmhLUTJiP....==",
             version: "v1.0",
@@ -279,7 +279,7 @@ stream := RotateHostCredentials()
 ```go
 stream.Send(
     RotateHostCredentialsRequest {
-        ssh_ca_public_key: RotateCaPublicKeyRequest {
+        ssh_ca_public_key: CaPublicKeyRequest {
             ssh_ca_public_keys: "AAAAB3JlHJklasjdKSAFDLKSADjldaLKJDS....==",
             version: "v1.0",
             created_on: 3214451134,
@@ -316,7 +316,7 @@ stream := RotateHostCredentials()
 ```go
 stream.Send(
     RotateHostCredentialsRequest {
-        server_keys: RotateServerKeysRequest {
+        server_keys: ServerKeysRequest {
             certificate: "AAAAB3JlHJklasjdKSAFDLKSADjldaLKJDS....==",
             public_key: "AAAAB3JlHJKJSdsoosaAJlOIhhsdKhaiPsa....==",
             private_key: "AAAAB3NzaC1yc2EAAAABJQAAAIBmhLUTJiP....==",
