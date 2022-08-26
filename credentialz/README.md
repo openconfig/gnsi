@@ -1,31 +1,381 @@
-# gNSI.ssh Telemetry Extension
+# gNSI.credentialz
 
-## `gnsi-ssh.yang`
+## Bootstrap / Assumptions
 
-An overview of the changes defined in the `gnsi-ssh.yang ` file are shown
-below.
+The `gNSI.credentialz` API allows for changing of the exisitng credentials only,
+therefore for it to work the credentials should be set up before any of the RPCs
+are executed.
 
+The following files are expected to be created during the bootstrap process:
+
+* Certificate Authority's public key
+  * required for certificate-based client authentication
+  * used to check if the client's certificate is valid
+* target's certificate
+  * required for remote (this) host authentication by the clients
+  * presented to the clients who validate it using CA's public key
+* target's public key
+  * always required
+* target's private key
+  * always required
+* `${system_role_home}/.ssh/authorized_users` file for every system account
+  * always required
+  * used to authorize the `username` provided by a client to use this system
+    account
+* `${system_role_home}/.ssh/authorized_keys` file for every system account
+  * always required
+  * used to specify SSH keys that clients can use to use this system account
+
+## Console access authentication
+
+There are two methods to configure a password:
+
+* directly on the device
+* using `gNSI.credentialz` API
+
+### Method 1: Directly on the device
+
+To change password execute the following command after logging-in to the device
+using `ssh` or directly using a console (for example a RS232-based one or
+similar method):
+
+```bash
+$ echo "TeStP_w0rD" | passwd ${account} --stdin
+$
 ```
-module: gnsi-ssh
+
+### Method 2: Using ``gNSI.credentialz`` API
+
+* Start streaming RPC call to the target device.
+
+```go
+stream := RotateAccountCredentials()
+```
+* Send a password change request message to the target device.
+
+```go
+stream.Send(
+    RotateAccountCredentialsRequest {
+        password: PasswordRequest {
+            accounts: Account {
+                account: "user",
+                password: Password {
+                    value: {
+                        plaintext: "password",
+                    }
+                },
+                version: "v1.0",
+                created_on: 3214451134,
+            }
+        }
+    }
+)
+
+resp := stream.Receive()
+```
+
+* Check if the new password 'works'
+
+* Finalize the operation
+
+```go
+stream.Send(
+    RotateAccountCredentialsRequest {
+        finalize: FinalizeRequest {}
+    }
+)
+```
+
+## SSH authentication
+
+There are three authentication methods used with SSH:
+
+* password
+* public key
+* certificate
+
+### Method 1: Password-based
+
+> **_NOTE:_**  The method is strongly discouraged.
+
+Check out the ["Console access authentication"](#console-access-authentication)
+section for information how to change account's password.
+
+### Method 2: Public key-based
+
+In the case of public key based authentication users are authenticated by:
+
+* `username`
+* SSH public key
+
+Provided `username` is checked against the list of known `username`s that are
+stored in `${system_role_home}/.ssh/authorized_users` file.
+
+Provided credentials are checked with the known to the target device public
+keys that are stored in `${system_role_home}/.ssh/authorized_keys`
+
+#### Update the client's credentials
+
+##### Update the client's authorized key
+
+* Start streaming RPC call to the target device.
+
+```go
+stream := RotateAccountCredentials()
+```
+
+* Send a authorized keys change request message to the target device.
+
+> **_NOTE:_**  The current list of authorized keys will be **replaced**.
+
+```go
+stream.Send(
+    RotateAccountCredentialsRequest {
+        credential: AuthorizedKeysRequest {
+            credentials: AccountCredentials {
+                account: "user",
+                authorized_keys: AuthorizedKey {
+                    authorized_key: "AAAAB3NzaC1yc2EAAAABJQAAAIBmhLUTJiP....==",
+                },
+                authorized_keys: AuthorizedKey {
+                    authorized_key: "AAAAB3JlHJKJSdsoosaAJlOIhhsdKhaiPsa....==",
+                },
+                version: "v1.0",
+                created_on: 3214451134,
+            }
+        }
+    }
+)
+
+resp := stream.Receive()
+```
+
+* Check if the new SSH keys 'work'
+
+* Finalize the operation
+
+```go
+stream.Send(
+    RotateAccountCredentialsRequest {
+        finalize: FinalizeRequest {}
+    }
+)
+```
+
+##### Update the account's authorized `username` list
+
+* Start streaming RPC call to the target device.
+
+```go
+stream := RotateAccountCredentials()
+```
+
+* Send a authorized `username` list change request message to the target device.
+
+> **_NOTE:_**  The current list of authorized `username`s will be **replaced**.
+
+```go
+stream.Send(
+    RotateAccountCredentialsRequest {
+        user: AuthorizedUsersRequest {
+            policies: UserPolicy {
+                account: "user",
+                authorized_users: SshAuthorizedUser {
+                    authorized_user: "alice",
+                },
+                authorized_users: SshAuthorizedUser {
+                    authorized_user: "bob",
+                },
+                version: "v1.0",
+                created_on: 3214451134,
+            }
+        }
+    }
+)
+
+resp := stream.Receive()
+```
+
+* Check if the new list of authorized `username`s 'works'
+
+* Finalize the operation
+
+```go
+stream.Send(
+    RotateAccountCredentialsRequest {
+        finalize: FinalizeRequest {}
+    }
+)
+```
+
+#### Update the host's keys
+
+* Start streaming RPC call to the target device.
+
+```go
+stream := RotateHostCredentials()
+```
+
+* Send a server's keys change request message to the target device.
+
+```go
+stream.Send(
+    RotateHostCredentialsRequest {
+        server_keys: ServerKeysRequest {
+            public_key: "AAAAB3JlHJKJSdsoosaAJlOIhhsdKhaiPsa....==",
+            private_key: "AAAAB3NzaC1yc2EAAAABJQAAAIBmhLUTJiP....==",
+            version: "v1.0",
+            created_on: 3214451134,
+        }
+    }
+)
+
+resp := stream.Receive()
+```
+
+* Check if the new keys 'work'
+
+* Finalize the operation
+
+```go
+stream.Send(
+    RotateHostCredentialsResponse {
+        finalize: FinalizeRequest {}
+    }
+)
+```
+
+### Method 3: Certificate-based
+
+In this method both ends of the connection present a certificate signed by
+the Certificate Authority.
+This method is better than the key-based one as both the client and the server
+can verify the credentials of the remote side.
+
+For this method to work the target's server has to have configured:
+
+* Certificate Authority public key (certificate) of the CA that has signed
+  the client's certificate
+* A SSH certificate singed by a Certificate Authority trusted by the client
+* server's public key
+
+Similarly, the client has to have the following:
+
+* Certificate Authority public key (certificate) of the CA that has signed
+  the servers's certificate
+* A SSH certificate singed by a Certificate Authority trusted by the server
+* client's public key
+
+#### Update the CA certificate
+
+* Start streaming RPC call to the target device.
+
+```go
+stream := RotateHostCredentials()
+```
+
+* Send a CA certificate change request message to the target device.
+
+```go
+stream.Send(
+    RotateHostCredentialsRequest {
+        ssh_ca_public_key: CaPublicKeyRequest {
+            ssh_ca_public_keys: "AAAAB3JlHJklasjdKSAFDLKSADjldaLKJDS....==",
+            version: "v1.0",
+            created_on: 3214451134,
+        }
+    }
+)
+
+resp := stream.Receive()
+```
+
+* Check if the new CA certificate 'works'
+
+* Finalize the operation
+
+```go
+stream.Send(
+    RotateHostCredentialsResponse {
+        finalize: FinalizeRequest {}
+    }
+)
+```
+
+#### Update the host's keys and certificate
+
+* Start streaming RPC call to the target device.
+
+```go
+stream := RotateHostCredentials()
+```
+
+* Send a server's keys and certificate change request message to the target
+  device.
+
+```go
+stream.Send(
+    RotateHostCredentialsRequest {
+        server_keys: ServerKeysRequest {
+            certificate: "AAAAB3JlHJklasjdKSAFDLKSADjldaLKJDS....==",
+            public_key: "AAAAB3JlHJKJSdsoosaAJlOIhhsdKhaiPsa....==",
+            private_key: "AAAAB3NzaC1yc2EAAAABJQAAAIBmhLUTJiP....==",
+            version: "v1.0",
+            created_on: 3214451134,
+        }
+    }
+)
+
+resp := stream.Receive()
+```
+
+* Check if the new keys and certificate 'work'
+
+* Finalize the operation
+
+```go
+stream.Send(
+    RotateHostCredentialsResponse {
+        finalize: FinalizeRequest {}
+    }
+)
+```
+
+## gNSI.credentialz Telemetry Extension
+
+### `gnsi-credentialz.yang`
+
+An overview of the changes defined in the `gnsi-credentialz.yang` file are
+shown below.
+
+```txt
+module: gnsi-credentialz
 
   augment /oc-sys:system/oc-sys:ssh-server/oc-sys:state:
     +--ro active-trust-bundle-version?      version
     +--ro active-trust-bundle-created-on?   created-on
   augment /oc-sys:system/oc-sys:aaa/oc-sys:authentication/oc-sys:users/oc-sys:user/oc-sys:state:
+    +--ro password-version?                   version
+    +--ro password-created-on?                created-on
     +--ro authorized-users-list-version?      version
     +--ro authorized-users-list-created-on?   created-on
     +--ro authorized-keys-list-version?       version
     +--ro authorized-keys-list-created-on?    created-on
 ```
 
-## `openconfig-system` tree
+### `openconfig-system` tree
 
-The  `openconfig-system` sub-tree after augments defined in the
-`gnsi-ssh.yang` file is shown below.
+The `openconfig-system` subtree after augments defined in the
+`gnsi-credentialz.yang` file is shown below.
 
-For interactive version click [here](gnsi-ssh.html).
+For interactive version click [here](gnsi-credentialz.html).
 
-```
+<details>
+<summary>
+The diagram of the tree.
+</summary>
+
+```txt
 module: openconfig-system
   +--rw system
      +--rw config
@@ -196,15 +546,15 @@ module: openconfig-system
      |  |     +--rw user* [username]
      |  |        +--rw username    -> ../config/username
      |  |        +--rw config
-     |  |        |  +--rw username?          string
-     |  |        |  +--rw password?          string
-     |  |        |  +--rw password-hashed?   oc-aaa-types:crypt-password-type
-     |  |        |  +--rw role?              union
+     |  |        |  +--rw username?   string
+     |  |        |  +--rw role?       union
      |  |        +--ro state
      |  |           +--ro username?                                string
      |  |           +--ro password?                                string
      |  |           +--ro password-hashed?                         oc-aaa-types:crypt-password-type
      |  |           +--ro role?                                    union
+     |  |           +--ro gnsi:password-version?                   version
+     |  |           +--ro gnsi:password-created-on?                created-on
      |  |           +--ro gnsi:authorized-users-list-version?      version
      |  |           +--ro gnsi:authorized-users-list-created-on?   created-on
      |  |           +--ro gnsi:authorized-keys-list-version?       version
@@ -455,3 +805,4 @@ module: openconfig-system
               +--ro oc-sys-grpc:network-instance?          oc-ni:network-instance-ref
 
 ```
+</details>
