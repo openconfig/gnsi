@@ -66,7 +66,7 @@ message AuthenDetail {
 
   // authentication status
   enum AuthenStatus {
-    AUTHEN_STATUS_UNKNOWN = 0;
+    AUTHEN_STATUS_UNSPECIFIED = 0;
     AUTHEN_STATUS_PERMIT = 1;
     AUTHEN_STATUS_DENY = 2;
   }
@@ -79,9 +79,9 @@ message AuthenDetail {
 // Command details for shell/vendor-CLI
 message CommandService {
   enum CmdServiceType {
-    CMD_SERVICE_UNKNOWN = 0;
-    CMD_SERVICE_SHELL = 1;
-    CMD_SERVICE_CLI = 2;
+    CMD_SERVICE_TYPE_UNSPECIFIED = 0;
+    CMD_SERVICE_TYPE_SHELL = 1;
+    CMD_SERVICE_TYPE_CLI = 2;
   }
   CmdServiceType service_type = 1;
 
@@ -95,14 +95,14 @@ message CommandService {
 // Command details for openconfig gNxI commands.
 message GrpcService {
   enum GrpcServiceType {
-    GRPC_SERVICE_UNKNWON = 0;
-    GRPC_SERVICE_GNMI = 1;
-    GRPC_SERVICE_GNOI = 2;
-    GRPC_SERVICE_GNSI = 3;
+    GRPC_SERVICE_TYPE_UNSPECIFIED = 0;
+    GRPC_SERVICE_TYPE_GNMI = 1;
+    GRPC_SERVICE_TYPE_GNOI = 2;
+    GRPC_SERVICE_TYPE_GNSI = 3;
     // GRIBI records could be very verbose.
     // By default, the logging authorization
     // should keep GRIBI logging off.
-    GRPC_SERVICE_GRIBI = 4;
+    GRPC_SERVICE_TYPE_GRIBI = 4;
   }
   GrpcServiceType service_type = 1;
 
@@ -113,7 +113,7 @@ message GrpcService {
   string rpc_name = 2;
 
   // A string of bytes that are gRPC encoded. Best to decode using PROTO_ANY.
-  repeated google.Protobuf.Any payload = 3;
+  repeated google.Protobuf.Any payloads = 3;
 
   // config_meta_Data can be used to track all set requests that were to be
   // applied atomically.
@@ -138,7 +138,7 @@ message Record {
 
   // Service processing status at the time of event reporting.
   enum ServiceStatus {
-    SERVICE_STATUS_UNKNOWN = 0;
+    SERVICE_STATUS_UNSPECIFIED = 0;
     SERVICE_STATUS_SUCCESS = 1;
     SERVICE_STATUS_FAILURE = 2;
   }
