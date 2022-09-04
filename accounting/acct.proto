@@ -14,15 +14,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-// A protobuffer definition used for logging events reported to gNMI server.
-// This file assumes the following nomenclature:
+// A protocol buffer definition used for logging events reported to a
+// gNMI server. This file assumes the following nomenclature:
 //
-//   Device >---connects---> gNxI accounting Server
+//   gNMI Accounting Server -> Device
+//   gNxI accounting Server <-- messages -- Device
 //
-// Device is a router, switch, PC, ... which connects to gNxI accounting server
-// to log accounting records.
+// Device is a router, switch, PC, ... which accepts a connection from a
+// gNMI accounting server to collect and record accounting Records.
 //
-// A gNxI accounting Server is a server which receives requests from devices and
+// A gNMI accounting Server is a server which receives records from devices and
 // logs them in the format specified using messages defined in this file.
 //
 // The current version covers event recording of shell/vendor-CLI and gRPC
