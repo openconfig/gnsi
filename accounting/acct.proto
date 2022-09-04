@@ -106,19 +106,25 @@ message GrpcService {
   }
   GrpcServiceType service_type = 1;
 
+  // rpc_name is the rpc to which the request was sent, examples:
+  //   gnmi.Set()
+  //   gnoi.os.Install()
+  //   gnsi.cert.Rotate()
+  string rpc_name = 2;
+
   // A string of bytes that are gRPC encoded. Best to decode using PROTO_ANY.
-  repeated google.Protobuf.Any payload = 2;
+  repeated google.Protobuf.Any payload = 3;
 
   // config_meta_Data can be used to track all set requests that were to be
   // applied atomically.
-  string config_meta_data = 3;
+  string config_meta_data = 4;
 }
 
 // An accounting record message is generated everytime the user types a
 // shell/vendorCLI command or sends a gNxI setRequest.
 message Record {
   // Session information
-  SessionInfo session_info = 1;
+  SessionInfo session_info = 5;
 
   // The time when the system recorded this event. Recorded as nanoseconds
   // since epoch.
