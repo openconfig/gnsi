@@ -17,13 +17,13 @@
 // A protocol buffer definition used for logging events reported to a
 // gNMI server. This file assumes the following nomenclature:
 //
-//   gNMI Accounting Server -> Device
-//   gNxI accounting Server <-- messages -- Device
+//   gNMI Accounting Server -> System
+//   gNxI accounting Server <-- messages -- System
 //
-// Device is a router, switch, PC, ... which accepts a connection from a
+// System is a router, switch, PC, ... which accepts a connection from a
 // gNMI accounting server to collect and record accounting Records.
 //
-// A gNMI accounting Server is a server which receives records from devices and
+// A gNMI accounting Server is a server which receives records from systems and
 // logs them in the format specified using messages defined in this file.
 //
 // The current version covers event recording of shell/vendor-CLI and gRPC
@@ -38,8 +38,10 @@ option go_package = "github.com/openconfig/gnsi/accounting";
 // Session identifier that identifies the context in which service
 // was executed.
 message SessionInfo {
-  // address of the device sending the event.
-  string device_address = 1;
+  // address of the system sending the event, in most cases this address
+  // is the Loopback or Loopback equivalent on system which is sending
+  // the messages to the collector.
+  string system_address = 1;
 
   // rest of the information for 5 tuple of the connection
   uint32 layer4_proto = 2;
@@ -59,7 +61,7 @@ message AuthenDetail {
   // unix-style user-name in the case of shell/vendor-CLI.
   string identity = 1;
 
-  // Privilege level configured on the device.
+  // Privilege level configured on the system.
   uint32 privilege_level = 2;
 
   // authentication status
@@ -118,7 +120,7 @@ message Record {
   // Session information
   SessionInfo session_info = 1;
 
-  // The time when the device recorded this event. Recorded as nanoseconds
+  // The time when the system recorded this event. Recorded as nanoseconds
   // since epoch.
   int64 event_epoch_ns = 2;
 
@@ -143,6 +145,6 @@ message Record {
   AuthenDetail authen = 7;
 
   // Optional repeated task_id that represent tasks that were used to
-  // accomplish the request on the device.
+  // accomplish the request on the system.
   repeated string task_ids = 32;
 }
