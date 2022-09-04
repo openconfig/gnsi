@@ -1,0 +1,242 @@
+//
+// Copyright 2021, 2022 Google Inc. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
+// This file defines the gNSI API to be used for gRPC-level Authorization Policy
+// management.
+syntax = "proto3";
+
+package gnsi.authz;
+
+import "github.com/openconfig/gnoi/types/types.proto";
+
+option go_package = "github.com/openconfig/gnsi/authz";
+option (gnoi.types.gnoi_version) = "0.1.0";
+
+// The gRPC-level Authorization Policy Management Service exported by targets.
+//
+
+// Authorization Policy defines which principals are permitted to access which
+// resource. Resources are individual RPC methods scoped by services.
+
+// Example policy:
+//
+// {
+//     "name": "gNSI.ssh policy",
+//     "allow_rules": [{
+//         "name": "admin-access",
+//         "principals": [
+//             "spiffe://company.com/sa/alice",
+//             "spiffe://company.com/sa/bob"
+//         ],
+//         "request": {
+//             "paths": [
+//                 "/gnsi.ssh.Ssh/MutateAccountCredentials",
+//                 "/gnsi.ssh.Ssh/MutateHostCredentials"
+//             ]
+//         }
+//     }]
+// }
+//
+// This example would authorize "alice" and "bob" to call
+// "MutateHostCredentials" and "MutateAccountCredentials" of "gnsi.ssh.Ssh"
+// service.
+
+service Authz {
+
+  // Rotate will replace an existing gRPC-level Authorization Policy on the
+  // target.
+  //
+  // If the stream is broken or any of the steps fail the
+  // target must rollback to the original state, i.e. revert any changes to
+  // the gRPC-level Authorization Policy made during this RPC.
+  //
+  // Note that only one such RPC can be in progress. An attempt to call this
+  // RPC while another is already in progress will be rejected with the
+  // `UNAVAILABLE` gRPC error.
+  //
+  // The following describes the sequence of messages that must be exchanged
+  // in the Rotate() RPC.
+  //
+  // Sequence of expected messages:
+  //   Step 1: Start the stream
+  //     Client ----> Rotate() RPC stream begin ------> Target
+  //
+  //   Step 2: Send gRPC-level Authorization Policy to Target.
+  //     Client --> UploadRequest(authz_policy) ----> Target
+  //     Client <-- UploadResponse <--- Target
+  //
+  //   Step 3 (optional): Test/Validation by the client.
+  //     During this step client attempts to call a RPC that is allowed
+  //     in the new policy and validates that the new policy "works".
+  //     Additionally the client should call a RPC that is not allowed and
+  //     the attempt must fail proving that the gRPC-level Authorization Policy
+  //     "works".
+  //     Once verified, the client then proceeds to finalize the rotation.
+  //     If the new verification did not succeed the client will cancel the
+  //     RPC thereby forcing the target to rollback of the new gRPC-level
+  //     Authorization Policy.
+  //
+  //   Step 4: Final commit.
+  //     Client ---> FinalizeRequest ----> Target
+  //
+  rpc Rotate(stream RotateAuthzRequest)
+      returns (stream RotateAuthzResponse);
+
+  // Probe allows for evaluation of the gRPC-level Authorization Policy engine
+  // response to a gRPC call performed by a user.
+  // The response is based on the instance of policy specified in the request
+  // and is evaluated without actually performing the gRPC call.
+  rpc Probe(ProbeRequest) returns (ProbeResponse);
+
+  // Get returns current instance of the gRPC-level Authorization Policy
+  // together with its version and created-on information.
+  rpc Get(GetRequest) returns (GetResponse);
+}
+
+// Request messages to rotate existing gRPC-level Authorization Policy on
+// the target.
+message RotateAuthzRequest {
+  // Request Messages.
+  oneof rotate_request {
+    UploadRequest upload_request = 1;
+    FinalizeRequest finalize_rotation = 2;
+  }
+
+  // If set to `true` the requested operation will succeed even if the specified
+  // `version` is already in use (is not unique).
+  // If set to `false` the requested operation will fail and the streaming RPC
+  // will be closed with the `ALREADY_EXISTS` gRPC error if the specified
+  // version` is already in use (is not unique).
+  // It is a no-op for the `finalize_rotation` request.
+  bool force_overwrite = 3;
+}
+
+// Response messages from the target.
+message RotateAuthzResponse {
+  // Response messages.
+  oneof rotate_response {
+    UploadResponse upload_response = 1;
+  }
+}
+
+// A Finalize message is sent to the target to confirm the rotation of
+// the gRPC-level Authorization Policy and that it should not be rolled back
+// when the RPC concludes.
+// Note that the gRPC-level Authorization Policy change is considered rolled
+// back by the target if the target returns an error as response to the Finalize
+// message.
+message FinalizeRequest {
+}
+
+// UploadRequest instructs the target to store the given gRPC-level
+// Authorization Policy.
+//
+// If there is another ongoing Rotate RPC the UploadRequest must fail.
+//
+message UploadRequest {
+  // `version` contains versioning information that is controlled by
+  // the policy manager and reported as-is by the telemetry reporting system
+  // (ie, transparent to the target policy management service). Policy managers
+  // should choose version strings as discrete as possible to ease alert
+  // generation (eg, for policies sourced from a bundle, the timestamp of
+  // the bundle should be used but not the time when the policy is pushed to
+  // a particular switch). Also, such version string should be persisted by
+  // the device onto non-volatile memory for preservation across system
+  // reboots.
+  string version = 1;
+  // `created_on` contains information when the policy was created.
+  // This information is controlled by the policy manager and reported as-is
+  // by the telemetry reporting system (ie, transparent to the device policy
+  // management service). Policy manager should use the timestamp of the moment
+  // when policy was created, not the time when the policy is pushed to
+  // a particular switch).
+  // Also, this timestamp should be persisted by the device onto non-volatile
+  // memory for preservation across system reboots.
+  // `created_on` is a timestamp: the number of seconds since
+  // January 1st, 1970 00:00:00 GMT.
+  uint64 created_on = 2;
+
+  // The actual gRPC-level Authorization Policy.
+  // It is provided as a JSON formatted string whose structure is defined by
+  // gRPC.
+  string policy = 3;
+}
+
+message UploadResponse {
+}
+
+// ProbeRequest contains a single user name and the fully qualified name of the
+// gRPC call being attempted.
+message ProbeRequest {
+  // The user name to be used to perform the evaluation.
+  string user = 1;
+
+  // The gRPC RPC name to be used to perform the evaluation.
+  // It has to be a fully qualified name, like:
+  //    "/gnsi.ssh.Ssh/MutateHostCredentials"
+  string rpc = 2;
+}
+
+// ProbeResponse returns the ACK/NACK for a single user request
+// as evaluated against the current policy, along with the version of the policy
+// that the gRPC call/user were evaluated against.
+message ProbeResponse {
+  // Action is the defined action for an gRPC-level Authorization Policy.
+  enum Action {
+    ACTION_UNSPECIFIED = 0;
+    ACTION_DENY = 1;
+    ACTION_PERMIT = 2;
+  }
+
+  Action action = 1;
+  string version = 2;
+}
+
+// GetRequest used to request the gRPC-level Authorization Policy.
+message GetRequest {
+}
+
+// GetResponse returns the requested instance of the gRPC-level Authorization
+// Policy together with `version` and `created_on` information.
+message GetResponse {
+  // `version` contains versioning information that is controlled by
+  // the policy manager and reported as-is by the telemetry reporting system
+  // (ie, transparent to the target policy management service). Policy managers
+  // should choose version strings as discrete as possible to ease alert
+  // generation (eg, for policies sourced from a bundle, the timestamp of
+  // the bundle should be used but not the time when the policy is pushed to
+  // a particular switch). Also, such version string should be persisted by
+  // the device onto non-volatile memory for preservation across system
+  // reboots.
+  string version = 1;
+
+  // `created_on` contains information when the policy was created.
+  // This information is controlled by the policy manager and reported as-is
+  // by the telemetry reporting system (ie, transparent to the device policy
+  // management service). Policy manager should use the timestamp of the moment
+  // when policy was created, not the time when the policy is pushed to
+  // a particular switch).
+  // Also, this timestamp should be persisted by the device onto non-volatile
+  // memory for preservation across system reboots.
+  // `created_on` is a timestamp: the number of seconds since
+  // January 1st, 1970 00:00:00 GMT a.k.a. unix epoch.
+  uint64 created_on = 2;
+
+  // The actual gRPC-level Authorization Policy.
+  // It is provided as a JSON formatted string whose structure is defined by
+  // gRPC.
+  string policy = 3;
+}

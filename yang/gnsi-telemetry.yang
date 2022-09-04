@@ -1,0 +1,42 @@
+module gnsi-telemetry {
+    yang-version 1.1;
+    namespace "https://github.com/openconfig/gnsi/yang";
+    prefix gnsi;
+
+    import gnsi-authz {
+        prefix gnsi-authz;
+    }
+    import gnsi-cert {
+        prefix gnsi-cert;
+    }
+    import gnsi-console {
+        prefix gnsi-console;
+    }
+    import gnsi-pathz {
+        prefix gnsi-pathz;
+    }
+    import gnsi-ssh {
+        prefix gnsi-ssh;
+    }
+    organization
+        "Google LLC";
+
+    contact
+        "Google LLC";
+
+    description
+        "This module provides a data model for the metadata of credentials
+        installed on a networking device.";
+
+    revision 2022-02-10 {
+        description
+            "Split into sub-api files.";
+        reference "0.2.0";
+    }
+    revision 2022-01-07 {
+        description
+            "Initial revision.";
+        reference "0.1.0";
+    }
+
+}
