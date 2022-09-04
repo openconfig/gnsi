@@ -10,10 +10,7 @@ transport connection.
 ## Method of Operation
 
 Accounting Records are available at a gNMI origin:
-
-```
    gnmi.accounting
-```
 
 Records will be streamed to the receiver as individual Record
 messages as they are defined in the gnsi.accounting protocol buffer
