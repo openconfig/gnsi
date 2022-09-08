@@ -23,7 +23,7 @@ package gnsi.certificate;
 import "github.com/openconfig/gnoi/types/types.proto";
 
 option go_package = "github.com/openconfig/gnsi/cert";
-option (gnoi.types.gnoi_version) = "0.1.0";
+option (gnoi.types.gnoi_version) = "0.1.1";
 
 // The Certificate Management Service exported by targets.
 //
@@ -310,23 +310,24 @@ message InstallCertificateResponse {
 // the certificate and that the certificate should not be rolled back when
 // the RPC concludes. The certificate must be rolled back if the target returns
 // an error after receiving a Finalize message.
-message FinalizeRequest {}
+message FinalizeRequest {
+}
 
 // Types of certificates.
 enum CertificateType {
   // 1 - 500 for public use.
   // 501 onwards for private use.
-  CT_UNKNOWN = 0;
-  CT_X509 = 1;
+  CERTIFICATE_TYPE_UNSPECIFIED = 0;
+  CERTIFICATE_TYPE_X509 = 1;
 }
 
 enum CertificateEncoding {
   // 1 - 500 for public use.
   // 501 onwards for private use.
-  CE_UNKNOWN = 0;
-  CE_PEM = 1;
-  CE_DER = 2;
-  CE_CRT = 3;
+  CERTIFICATE_ENCODING_UNSPECIFIED = 0;
+  CERTIFICATE_ENCODING_PEM = 1;
+  CERTIFICATE_ENCODING_DER = 2;
+  CERTIFICATE_ENCODING_CRT = 3;
 }
 
 // A certificate.
@@ -347,7 +348,7 @@ message Certificate {
 }
 
 message CertificateBundle {
-  repeated Certificate certificate = 1;
+  repeated Certificate certificates = 1;
 }
 
 // A certificate revocation list (CRL)
@@ -367,7 +368,7 @@ message CertificateRevocationList {
 }
 
 message CertificateRevocationListBundle {
-  repeated CertificateRevocationList certificate_revocation_list = 1;
+  repeated CertificateRevocationList certificate_revocation_lists = 1;
 }
 // An entity.
 message Entity {
@@ -420,7 +421,8 @@ message Entity {
 // certificate is the last one. E.g.:
 // CertA, CertB, CertB-Root, CertC, CertC-Intermediate, CertC-Root
 message UploadRequest {
-  repeated Entity entity = 1;
+  repeated Entity entities = 1;
 }
 
-message UploadResponse {}
+message UploadResponse {
+}
