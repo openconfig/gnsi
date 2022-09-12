@@ -33,6 +33,8 @@ syntax = "proto3";
 
 package gnsi.accounting;
 
+import "google/protobuf/timestamp.proto";
+
 option go_package = "github.com/openconfig/gnsi/accounting";
 
 // Session identifier that identifies the context in which service
@@ -55,7 +57,7 @@ message SessionInfo {
 }
 
 // Details of authentication - for gRPC or shell/vendor-CLI.
-message AuthenDetail {
+message AuthDetail {
   // Identity string is used to identify the user that executed the
   // command. For instance, it could be spiffe-id in the case of gRPC or
   // unix-style user-name in the case of shell/vendor-CLI.
@@ -115,9 +117,9 @@ message GrpcService {
   // A string of bytes that are gRPC encoded. Best to decode using PROTO_ANY.
   repeated google.Protobuf.Any payloads = 3;
 
-  // config_meta_Data can be used to track all set requests that were to be
+  // config_metadata can be used to track all set requests that were to be
   // applied atomically.
-  string config_meta_data = 4;
+  string config_metadata = 4;
 }
 
 // An accounting record message is generated everytime the user types a
@@ -128,7 +130,7 @@ message Record {
 
   // The time when the system recorded this event. Recorded as nanoseconds
   // since epoch.
-  int64 event_epoch_ns = 2;
+  Timestamp timestamp = 2;
 
   // Service request details of the accounting record.
   oneof service_request {
@@ -148,7 +150,7 @@ message Record {
   string failure_cause = 6;
 
   // Authentication related details
-  AuthenDetail authen = 7;
+  AuthDetail authen = 7;
 
   // Optional repeated task_id that represent tasks that were used to
   // accomplish the request on the system.
