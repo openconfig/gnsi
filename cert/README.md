@@ -2,10 +2,10 @@
 
 ## `gnsi-cert.yang`
 
-An overview of the changes defined in the `gnsi-cert.yang ` file are shown
+An overview of the changes defined in the `gnsi-cert.yang` file are shown
 below.
 
-```
+```txt
 module: gnsi-cert
 
   augment /oc-sys:system:
@@ -34,12 +34,12 @@ module: gnsi-cert
 
 ## `openconfig-system` tree
 
-The  `openconfig-system` sub-tree after augments defined in the
+The  `openconfig-system` subtree after augments defined in the
 `gnsi-cert.yang` file is shown below.
 
 For interactive version click [here](gnsi-cert.html).
 
-```
+```txt
 module: openconfig-system
   +--rw system
      +--rw config

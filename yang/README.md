@@ -105,13 +105,13 @@ module: openconfig-system
      |  |  +--rw rate-limit?         uint16
      |  |  +--rw session-limit?      uint16
      |  +--ro state
-     |     +--ro enable?                                boolean
-     |     +--ro protocol-version?                      enumeration
-     |     +--ro timeout?                               uint16
-     |     +--ro rate-limit?                            uint16
-     |     +--ro session-limit?                         uint16
-     |     +--ro gnsi:active-trust-bundle-version?      version
-     |     +--ro gnsi:active-trust-bundle-created-on?   created-on
+     |     +--ro enable?                                      boolean
+     |     +--ro protocol-version?                            enumeration
+     |     +--ro timeout?                                     uint16
+     |     +--ro rate-limit?                                  uint16
+     |     +--ro session-limit?                               uint16
+     |     +--ro gnsi-credz:active-trust-bundle-version?      version
+     |     +--ro gnsi-credz:active-trust-bundle-created-on?   created-on
      +--rw telnet-server
      |  +--rw config
      |  |  +--rw enable?          boolean
@@ -181,16 +181,16 @@ module: openconfig-system
      |  |        |  +--rw username?   string
      |  |        |  +--rw role?       union
      |  |        +--ro state
-     |  |           +--ro username?                                string
-     |  |           +--ro password?                                string
-     |  |           +--ro password-hashed?                         oc-aaa-types:crypt-password-type
-     |  |           +--ro role?                                    union
-     |  |           +--ro gnsi:password-version?                   version
-     |  |           +--ro gnsi:password-created-on?                created-on
-     |  |           +--ro gnsi:authorized-users-list-version?      version
-     |  |           +--ro gnsi:authorized-users-list-created-on?   created-on
-     |  |           +--ro gnsi:authorized-keys-list-version?       version
-     |  |           +--ro gnsi:authorized-keys-list-created-on?    created-on
+     |  |           +--ro username?                                      string
+     |  |           +--ro password?                                      string
+     |  |           +--ro password-hashed?                               oc-aaa-types:crypt-password-type
+     |  |           +--ro role?                                          union
+     |  |           +--ro gnsi-credz:password-version?                   version
+     |  |           +--ro gnsi-credz:password-created-on?                created-on
+     |  |           +--ro gnsi-credz:authorized-users-list-version?      version
+     |  |           +--ro gnsi-credz:authorized-users-list-created-on?   created-on
+     |  |           +--ro gnsi-credz:authorized-keys-list-version?       version
+     |  |           +--ro gnsi-credz:authorized-keys-list-created-on?    created-on
      |  +--rw authorization
      |  |  +--rw config
      |  |  |  +--rw authorization-method*   union
@@ -198,6 +198,21 @@ module: openconfig-system
      |  |  |  +--ro authorization-method*                      union
      |  |  |  +--ro gnsi-authz:grpc-authz-policy-version?      version
      |  |  |  +--ro gnsi-authz:grpc-authz-policy-created-on?   created-on
+     |  |  |  +--ro gnsi-authz:authz-policy-counters
+     |  |  |     +--ro gnsi-authz:total-denied?      oc-yang:counter64
+     |  |  |     +--ro gnsi-authz:last-denied?       oc-types:timeticks64
+     |  |  |     +--ro gnsi-authz:total-permitted?   oc-yang:counter64
+     |  |  |     +--ro gnsi-authz:last-permitted?    oc-types:timeticks64
+     |  |  |     +--ro gnsi-authz:rpcs
+     |  |  |        +--ro gnsi-authz:rpc* [name]
+     |  |  |           +--ro gnsi-authz:name     string
+     |  |  |           +--ro gnsi-authz:users
+     |  |  |              +--ro gnsi-authz:user* [name]
+     |  |  |                 +--ro gnsi-authz:name               string
+     |  |  |                 +--ro gnsi-authz:total-denied?      oc-yang:counter64
+     |  |  |                 +--ro gnsi-authz:last-denied?       oc-types:timeticks64
+     |  |  |                 +--ro gnsi-authz:total-permitted?   oc-yang:counter64
+     |  |  |                 +--ro gnsi-authz:last-permitted?    oc-types:timeticks64
      |  |  +--rw events
      |  |     +--rw event* [event-type]
      |  |        +--rw event-type    -> ../config/event-type
@@ -449,6 +464,21 @@ module: openconfig-system
      |        +--ro gnsi:certificate-revocation-list-bundle-id?           string
      |        +--ro gnsi-pathz:gnmi-pathz-policy-version?                 version
      |        +--ro gnsi-pathz:gnmi-pathz-policy-created-on?              created-on
+     |        +--ro gnsi-pathz:gnmi-pathz-policy-counters
+     |           +--ro gnsi-pathz:total-denied?      oc-yang:counter64
+     |           +--ro gnsi-pathz:last-denied?       oc-types:timeticks64
+     |           +--ro gnsi-pathz:total-permitted?   oc-yang:counter64
+     |           +--ro gnsi-pathz:last-permitted?    oc-types:timeticks64
+     |           +--ro gnsi-pathz:paths
+     |              +--ro gnsi-pathz:path* [xpath]
+     |                 +--ro gnsi-pathz:xpath      string
+     |                 +--ro gnsi-pathz:actions
+     |                    +--ro gnsi-pathz:action* [action]
+     |                       +--ro gnsi-pathz:action             enumeration
+     |                       +--ro gnsi-pathz:total-denied?      oc-yang:counter64
+     |                       +--ro gnsi-pathz:last-denied?       oc-types:timeticks64
+     |                       +--ro gnsi-pathz:total-permitted?   oc-yang:counter64
+     |                       +--ro gnsi-pathz:last-permitted?    oc-types:timeticks64
      +--ro gnsi:grpc-credentials
      |  +--ro gnsi:entities
      |     +--ro gnsi:entity* [id]
