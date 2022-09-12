@@ -17,5 +17,5 @@ messages as they are defined in the gnsi.accounting protocol buffer
 definition.
 
 Each Record() message contains a timestamp element, this represents the
-timeat which the accounted event occured, local to the device which sends
+time at which the accounted event occured, local to the device which sends
 the message.
