@@ -12,6 +12,6 @@ services include:
   3. Certificate management
   4. Console access management
   5. Secure Shell (ssh) certificate/key management
-  6. Assocaited YANG models for telemetry collection of gNSI systems.
+  6. Associated YANG models for telemetry collection of gNSI systems.
 
 Code and documentation to follow.
