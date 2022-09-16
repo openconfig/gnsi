@@ -1,4 +1,4 @@
-// Accounting for gnXi operations.
+// Accounting for gNxI operations.
 //
 // Copyright 2022 Google LLC
 //
@@ -33,6 +33,7 @@ syntax = "proto3";
 
 package gnsi.accounting;
 
+import "google/protobuf/any.proto";
 import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/openconfig/gnsi/accounting";
@@ -115,7 +116,7 @@ message GrpcService {
   string rpc_name = 2;
 
   // A string of bytes that are gRPC encoded. Best to decode using PROTO_ANY.
-  repeated google.Protobuf.Any payloads = 3;
+  repeated google.protobuf.Any payloads = 3;
 
   // config_metadata can be used to track all set requests that were to be
   // applied atomically.
@@ -126,11 +127,11 @@ message GrpcService {
 // shell/vendorCLI command or sends a gNxI setRequest.
 message Record {
   // Session information
-  SessionInfo session_info = 5;
+  SessionInfo session_info = 1;
 
   // The time when the system recorded this event. Recorded as nanoseconds
   // since epoch.
-  Timestamp timestamp = 2;
+  google.protobuf.Timestamp timestamp = 2;
 
   // Service request details of the accounting record.
   oneof service_request {
