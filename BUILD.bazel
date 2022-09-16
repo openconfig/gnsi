@@ -19,13 +19,13 @@ alias(
 )
 
 alias(
-    name = "cert_cc",
-    actual = "//cert:cert_cc_proto",
+    name = "certz_cc",
+    actual = "//certz:certz_cc_proto",
 )
 
 alias(
-    name = "cert_go",
-    actual = "//cert:cert",
+    name = "certz_go",
+    actual = "//certz:certz",
 )
 
 alias(

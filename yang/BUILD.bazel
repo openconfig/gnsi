@@ -16,7 +16,7 @@ genrule(
     name = "oc_go",
     srcs = [
         "//authz:yang",
-        "//cert:yang",
+        "//certz:yang",
         "//credentialz:yang",
         "//pathz:yang",
         "@github_openconfig_yang//:release/models/acl/openconfig-acl.yang",

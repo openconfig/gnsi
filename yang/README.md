@@ -198,21 +198,6 @@ module: openconfig-system
      |  |  |  +--ro authorization-method*                      union
      |  |  |  +--ro gnsi-authz:grpc-authz-policy-version?      version
      |  |  |  +--ro gnsi-authz:grpc-authz-policy-created-on?   created-on
-     |  |  |  +--ro gnsi-authz:authz-policy-counters
-     |  |  |     +--ro gnsi-authz:total-denied?      oc-yang:counter64
-     |  |  |     +--ro gnsi-authz:last-denied?       oc-types:timeticks64
-     |  |  |     +--ro gnsi-authz:total-permitted?   oc-yang:counter64
-     |  |  |     +--ro gnsi-authz:last-permitted?    oc-types:timeticks64
-     |  |  |     +--ro gnsi-authz:rpcs
-     |  |  |        +--ro gnsi-authz:rpc* [name]
-     |  |  |           +--ro gnsi-authz:name     string
-     |  |  |           +--ro gnsi-authz:users
-     |  |  |              +--ro gnsi-authz:user* [name]
-     |  |  |                 +--ro gnsi-authz:name               string
-     |  |  |                 +--ro gnsi-authz:total-denied?      oc-yang:counter64
-     |  |  |                 +--ro gnsi-authz:last-denied?       oc-types:timeticks64
-     |  |  |                 +--ro gnsi-authz:total-permitted?   oc-yang:counter64
-     |  |  |                 +--ro gnsi-authz:last-permitted?    oc-types:timeticks64
      |  |  +--rw events
      |  |     +--rw event* [event-type]
      |  |        +--rw event-type    -> ../config/event-type
@@ -464,21 +449,6 @@ module: openconfig-system
      |        +--ro gnsi:certificate-revocation-list-bundle-id?           string
      |        +--ro gnsi-pathz:gnmi-pathz-policy-version?                 version
      |        +--ro gnsi-pathz:gnmi-pathz-policy-created-on?              created-on
-     |        +--ro gnsi-pathz:gnmi-pathz-policy-counters
-     |           +--ro gnsi-pathz:total-denied?      oc-yang:counter64
-     |           +--ro gnsi-pathz:last-denied?       oc-types:timeticks64
-     |           +--ro gnsi-pathz:total-permitted?   oc-yang:counter64
-     |           +--ro gnsi-pathz:last-permitted?    oc-types:timeticks64
-     |           +--ro gnsi-pathz:paths
-     |              +--ro gnsi-pathz:path* [xpath]
-     |                 +--ro gnsi-pathz:xpath      string
-     |                 +--ro gnsi-pathz:actions
-     |                    +--ro gnsi-pathz:action* [action]
-     |                       +--ro gnsi-pathz:action             enumeration
-     |                       +--ro gnsi-pathz:total-denied?      oc-yang:counter64
-     |                       +--ro gnsi-pathz:last-denied?       oc-types:timeticks64
-     |                       +--ro gnsi-pathz:total-permitted?   oc-yang:counter64
-     |                       +--ro gnsi-pathz:last-permitted?    oc-types:timeticks64
      +--ro gnsi:grpc-credentials
      |  +--ro gnsi:entities
      |     +--ro gnsi:entity* [id]

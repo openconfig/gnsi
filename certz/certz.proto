@@ -1,0 +1,409 @@
+//
+// Copyright 2022 Google Inc. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
+// This file defines the gNSI API to be used for certificate rotation.
+syntax = "proto3";
+
+package gnsi.certz;
+
+import "github.com/openconfig/gnoi/types/types.proto";
+
+option go_package = "github.com/openconfig/gnsi/cert";
+option (gnoi.types.gnoi_version) = "0.2.0";
+
+// The Certificate Management Service exported by targets.
+//
+// This service exports one RPCs, Rotate(), which is used to rotate an existing
+// certificate, an existing trust bundle and/or an existing certificate
+// revocation list bundle on a target.
+//
+// Note that for the sake of data consistency and API simplicity, only one RPC
+// may be in progress at a time. An attempt to initiate another RPC while
+// one is already in progress will be rejected with an error.
+//
+// The service makes an assumption that the certificates it manages are
+// organized in the following _logical_ topology.
+//
+// Target (as seen from gNSI.certificate microservice point of view)
+// |
+// +-+ certificate (used by all gRPC services)
+// | +- certificate (with public key)
+// | +- private key
+// |
+// +-+ trust bundle (Certificate Authority certificates)
+// | +- CA Root certificate
+// | +- CA Intermediate Certificate
+// |
+// +-+ Certificate Revocation List bundle
+//   +-+ Certificate Revocalion List A
+//   +-+ Certificate Revocalion List B
+//
+// The above shown topology implies that every operation performed using this
+// service changes a credential for all gRPC services at the same time.
+
+service Certz {
+  // Rotate will replace an existing device certificate and/or CA certificates
+  // (trust bundle) or/and a certificate revocation list bundle on the target.
+  // The new device certificate can be created from a target-generated or
+  // client-generated CSR. In the former case the client has to provide
+  // coresponding private key with the signed certificate.
+  // If the stream is broken or any of the steps fail the target must rollback
+  // to the original state, i.e. revert any changes to the certificate,
+  // CA certificates and the Certificate Revocation List bundle.
+  //
+  // The following describes a number of use cases each presenting the expected
+  // sequence of message exchange.
+  //
+  // Case 1: Client generates the CSR, gets it signed and then uploads it.
+  //
+  //   Step 1: Start the stream
+  //     Client <---- Rotate() RPC stream begin ------> Target
+  //
+  //   Step 2: CSR Generation and certificate signing
+  //     Client generates the CSR and gets the certificate signed by the CA.
+  //
+  //   Step 3: Send Certificate and optional content to the Target.
+  //     mandatory: signed certificate with private key
+  //     optional: trust bundle - Certificate Authority certificate chain
+  //     optional: certificate revocation list bundle
+  //     Client --> UploadRequest(certificate, [trust_bundle],
+  //                              [certificate_revocation_list]) ----> Target
+  //     Client <-- UploadResponse <--- Target
+  //
+  //   Step 4 (optional): Test/Validation by the client.
+  //     During this step client attempts to create a new connection to
+  //     the target using the new certificates and validates that
+  //     the certificates "work".
+  //     If the new connection cannot be completed the client will cancel the
+  //     RPC thereby forcing the target to rollback all the certificates.
+  //     If new certificate revocation list bundle has been uploaded in step 3,
+  //     during this step the client also attempts to establish a new connection
+  //     to the target using revoked certificate(s) - the attempt must fail
+  //     prooving that the certificates have been revoked.
+  //     Once verfied, the client then proceeds to finalize the rotation.
+  //
+  //   Step 5: Final commit.
+  //     Client ---> FinalizeRequest ----> Target
+  //
+  // Case 2: Target generates the CSR, client gets it signed and uploads it.
+  //
+  //   Step 1: Start the stream
+  //     Client <---- Rotate() RPC stream begin ------> Target
+  //
+  //   Step 2: CSR
+  //     Client -----> GenerateCSRRequest----> Target
+  //     Client <----- GenerateCSRResponse <--- Target
+  //
+  //   Step 3: Certificate Signing
+  //     Client gets the certificate signed by the CA.
+  //
+  //   Step 4: Send Certificate and optional content to the Target.
+  //     mandatory: signed certificate without private key
+  //     optional: trust bundle - Certificate Authority certificate chain
+  //     optional: certificate revocation list bundle
+  //     Client --> UploadRequest(certificate, [trust_bundle],
+  //                              [certificate_revocation_list]) ----> Target
+  //     Client <-- UploadResponse <--- Target
+  //
+  //   Step 5: Test/Validation by the client.
+  //     During this step client attempts to create a new connection to
+  //     the target using the new certificates and validates that
+  //     the certificates "work".
+  //     If the new connection cannot be completed the client will cancel the
+  //     RPC thereby forcing the target to rollback all the certificates.
+  //     If new certificate revocation list bundle has been uploaded in step 4,
+  //     during this step the client also attempts to establish a new connection
+  //     to the target using revoked certificate(s) - the attempt must fail
+  //     prooving that the certificates have been revoked.
+  //     Once verfied, the client then proceeds to finalize the rotation.
+  //
+  //   Step 6: Final commit.
+  //     Client ---> FinalizeRequest ----> Target
+  //
+  // Case 3: Client changes only trust bundle on the Target.
+  //
+  //   Step 1: Start the stream
+  //     Client <---- Rotate() RPC stream begin ------> Target
+  //
+  //   Step 2: Send CA Certificate Bundle to the Target.
+  //     mandatory: trust bundle - Certificate Authority chain
+  //     optional: certificate revocation list bundle
+  //     Client --> UploadRequest(trust_bundle,
+  //                              [certificate_revocation_list]) ----> Target
+  //     Client <-- UploadResponse <--- Target
+  //
+  //   Step 3 (optional): Test/Validation by the client.
+  //     During this step client attempts to create a new connection to
+  //     the target using a new certificate that can be validated using the new
+  //     trust bundle and validates that the CA certificates "work".
+  //     If the new connection cannot be completed the client will cancel the
+  //     RPC thereby forcing the target to rollback all the certificates.
+  //     If new certificate revocation list bundle has been uploaded in step 2,
+  //     during this step the client also attempts to establish a new connection
+  //     to the target using revoked certificate(s) - the attempt must fail
+  //     prooving that the certificates have been revoked.
+  //     Once verfied, the client then proceeds to finalize the rotation.
+  //
+  //   Step 4: Final commit.
+  //     Client ---> FinalizeRequest ----> Target
+  //
+  // Case 4: Client provides certificate revocation list bundle to the Target.
+  //
+  //   Step 1: Start the stream
+  //     Client <---- Rotate() RPC stream begin ------> Target
+  //
+  //   Step 2: Send certificate revocation list bundle to the target.
+  //     mandatory: certificate revocation list bundle
+  //     Client --> UploadRequest(certificate_revocation_list) ----> Target
+  //     Client <-- UploadResponse <--- Target
+  //
+  //   Step 3 (optional): Test/Validation by the client.
+  //     During this step the client attempts to establish a new connection
+  //     to the target using revoked certificate(s) - the attempt must fail
+  //     prooving that the certificates have been revoked.
+  //     If the new connection can be completed the client will cancel the
+  //     RPC thereby forcing the target to rollback all the certificates.
+  //     Once verfied, the client then proceeds to finalize the rotation.
+  //
+  //   Step 4: Final commit.
+  //     Client ---> FinalizeRequest ----> Target
+  //
+  //
+  rpc Rotate(stream RotateCertificateRequest)
+      returns (stream RotateCertificateResponse);
+
+  // An RPC to ask a target if it can generate a Certificate Signing Request.
+  rpc CanGenerateCSR(CanGenerateCSRRequest) returns (CanGenerateCSRResponse);
+}
+
+// Request messages to rotate existing certificates on the target.
+message RotateCertificateRequest {
+  // If set to `true` the requested operation will succeed even if the
+  // `version` is already in use (is not unique).
+  // If set to `false` the requested operation will fail and the streaming RPC
+  // will be closed with the `AlreadyExists` error if the `version` is already
+  // in use (is not unique).
+  // It is a no-op for the `finalize_rotation` request.
+  bool force_overwrite = 1;
+
+  // Request Messages.
+  oneof rotate_request {
+    GenerateCSRRequest generate_csr = 2;
+    UploadRequest certificates = 3;
+    FinalizeRequest finalize_rotation = 4;
+  }
+}
+
+// Response Messages from the target.
+message RotateCertificateResponse {
+  // Response messages.
+  oneof rotate_response {
+    GenerateCSRResponse generated_csr = 1;
+    UploadResponse certificates = 2;
+  }
+}
+
+// A Finalize message is sent to the target to confirm the Rotation of
+// the certificate and that the certificate should not be rolled back when
+// the RPC concludes. The certificate must be rolled back if the target returns
+// an error after receiving a Finalize message.
+message FinalizeRequest {
+}
+
+// A set of parameters a Certificate Signing Request.
+// Used to specify what type of CSR the client expects from the target.
+message CSRParams {
+  KeyType key_type = 1;
+  SignatureAlgorithm signature_algorithm_type = 2;
+  CertificateType certificate_type = 3;
+  uint32 key_size_bits = 4;
+}
+
+// A request to ask the target if it can generate key pairs.
+message CanGenerateCSRRequest {
+  CSRParams params = 1;
+}
+
+// Response from the target about whether it can generate a CSR with the given
+// parameters.
+message CanGenerateCSRResponse {
+  bool can_generate = 4;
+}
+
+// Types of certificates.
+enum CertificateType {
+  // 1 - 500 for public use.
+  // 501 onwards for private use.
+  CERTIFICATE_TYPE_UNSPECIFIED = 0;
+  CERTIFICATE_TYPE_X509 = 1;
+}
+
+enum CertificateEncoding {
+  // 1 - 500 for public use.
+  // 501 onwards for private use.
+  CERTIFICATE_ENCODING_UNSPECIFIED = 0;
+  CERTIFICATE_ENCODING_PEM = 1;
+  CERTIFICATE_ENCODING_DER = 2;
+  CERTIFICATE_ENCODING_CRT = 3;
+}
+
+// Algorithm to be used for generation of the key pair.
+enum KeyType {
+  // 1 - 500, for known types.
+  // 501 and onwards for private use.
+  KEY_TYPE_UNSPECIFIED = 0;
+  KEY_TYPE_RSA = 1;
+  KEY_TYPE_ECDSA = 2;
+  KEY_TYPE_EDDSA = 3;
+}
+
+enum SignatureAlgorithm {
+  // 1 - 500, for known types.
+  // 501 and onwards for private use.
+  SIGNATURE_ALGORITHM_UNSPECIFED = 0;
+  SIGNATURE_ALGORITHM_MD2_WITH_RSA = 1;
+  SIGNATURE_ALGORITHM_MD5_WITH_RSA = 2;
+  SIGNATURE_ALGORITHM_SHA1_WITH_RSA = 3;
+  SIGNATURE_ALGORITHM_SHA256_WITH_RSA = 4;
+  SIGNATURE_ALGORITHM_SHA384_WITH_RSA = 5;
+  SIGNATURE_ALGORITHM_SHA512_WITH_RSA = 6;
+  SIGNATURE_ALGORITHM_DSA_WITH_SHA1 = 7;
+  SIGNATURE_ALGORITHM_DSA_WITH_SHA256 = 8;
+  SIGNATURE_ALGORITHM_ECDSA_WITH_SHA1 = 9;
+  SIGNATURE_ALGORITHM_ECDSA_WITH_SHA256 = 10;
+  SIGNATURE_ALGORITHM_ECDSA_WITH_SHA384 = 11;
+  SIGNATURE_ALGORITHM_ECDSA_WITH_SHA512 = 12;
+  SIGNATURE_ALGORITHM_SHA256_WITH_RSAPSS = 13;
+  SIGNATURE_ALGORITHM_SHA384_WITH_RSAPSS = 14;
+  SIGNATURE_ALGORITHM_SHA512_WITH_RSAPSS = 15;
+  SIGNATURE_ALGORITHM_PURE_ED25519 = 16;
+}
+
+
+// A certificate.
+message Certificate {
+  // Type of certificate.
+  CertificateType type = 1;
+  // Certificate encoding type.
+  CertificateEncoding encoding = 2;
+
+  // Actual certificate.
+  // The exact encoding depends upon the type of certificate.
+  // for X509, this should be a PEM encoded Certificate.
+  bytes certificate = 3;
+
+  // Optional.
+  // Not needed if the device knows the private key or does not have to know it.
+  bytes private_key = 4;
+}
+
+message CertificateBundle {
+  repeated Certificate certificates = 1;
+}
+
+// A certificate revocation list (CRL)
+message CertificateRevocationList {
+  // Type of the CRL.
+  CertificateType type = 1;
+  // CRL encoding type.
+  CertificateEncoding encoding = 2;
+
+  // Actual CRL.
+  // The exact encoding depends upon the type of CRL.
+  // for X509, this should be a PEM encoded CRL.
+  bytes certificate_revocation_list = 3;
+
+  // ID of this CRL.
+  string id = 4;
+}
+
+message CertificateRevocationListBundle {
+  repeated CertificateRevocationList certificate_revocation_lists = 1;
+}
+
+// An entity.
+message Entity {
+  // `version` contains versioning information that is controlled by
+  // the credential manager and reported as-is by the telemetry reporting system
+  // (ie, transparent to the device credential service).  Credential managers
+  // should choose version strings as discrete as possible to ease alert
+  // generation (eg, for credentials sourced from a bundle, the timestamp of
+  // the bundle should be used but not the time when the credential is pushed to
+  // a particular switch).  Also, such version strings should be persisted by
+  // the devices onto non-volatile memory for preservation across system
+  // reboots.
+  string version = 1;
+  // `created_on` contains information when the credentials were created.
+  // This information is controlled by the credential manager and reported as-is
+  // by the telemetry reporting system (ie, transparent to the device credential
+  // service).  Credential managers should use the timestamp of the moment when
+  // credential was created, not the time when the credential is pushed to
+  // a particular switch).
+  // Also, this timestamp should be persisted by the devices onto non-volatile
+  // memory for preservation across system reboots.
+  // `created_on` is a timestamp: the number of seconds since
+  // January 1st, 1970 00:00:00 GMT.
+  uint64 created_on = 2;
+
+  oneof entity {
+    Certificate certificate = 3;
+    CertificateBundle trust_bundle = 4;
+    CertificateRevocationListBundle certificate_revocation_list_bundle = 5;
+  }
+}
+
+// UploadRequest instructs the target to store the given entities (certificte,
+// and/or trust bundle and certificate revocation list bundle).
+//
+// As the target does not generate the CSR, the public/private key pair is
+// generated externally and the target is provided with the private/public key
+// pair.
+//
+// The trust bundle (a chain of Certificate Authoritity certificates) can be
+// used to validate client's certificates.
+// To improve performance in the Target, certificates can be ordered.
+// Groups of chained certificates should be last, where within, the root
+// certificate is the last one. E.g.:
+// CertA, CertB, CertB-Root, CertC, CertC-Intermediate, CertC-Root
+message UploadRequest {
+  repeated Entity entities = 1;
+}
+
+message UploadResponse {
+}
+
+// A certificate signing request (CSR)
+message CertificateSigningRequest {
+  // Type of the CSR.
+  CertificateType type = 1;
+  // CSR encoding type.
+  CertificateEncoding encoding = 2;
+
+  // Actual CSR.
+  // The exact encoding depends upon the type of CSR.
+  // for X509, this should be a PEM encoded CSR.
+  bytes certificate_signing_request = 3;
+}
+
+// A message sent by a client requesting the target to generate a CSR with
+// the sepcified parameters.
+message GenerateCSRRequest {
+  CSRParams params = 1;
+}
+// A message sent by the target as response to the GenerateCSRRequest.
+message GenerateCSRResponse {
+  CertificateSigningRequest certificate_signing_request = 1;
+}
