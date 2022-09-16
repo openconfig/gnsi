@@ -55,7 +55,8 @@ go_repository(
     name = "com_github_openconfig_gnmi",
     build_directives = [
         "gazelle:proto_import_prefix github.com/openconfig/gnmi",
-    ],    build_file_generation = "on",
+    ],    
+    build_file_generation = "on",
     importpath = "github.com/openconfig/gnmi",
     sum = "h1:tv9HygDMXnoGyWuLmNCodMV2+PK6+uT/ndAxDVzsUUQ=",
     version = "v0.0.0-20220617175856-41246b1b3507",
