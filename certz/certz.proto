@@ -273,7 +273,7 @@ enum KeyType {
 enum SignatureAlgorithm {
   // 1 - 500, for known types.
   // 501 and onwards for private use.
-  SIGNATURE_ALGORITHM_UNSPECIFED = 0;
+  SIGNATURE_ALGORITHM_UNSPECIFIED = 0;
   SIGNATURE_ALGORITHM_MD2_WITH_RSA = 1;
   SIGNATURE_ALGORITHM_MD5_WITH_RSA = 2;
   SIGNATURE_ALGORITHM_SHA1_WITH_RSA = 3;
