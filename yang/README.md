@@ -198,21 +198,6 @@ module: openconfig-system
      |  |  |  +--ro authorization-method*                      union
      |  |  |  +--ro gnsi-authz:grpc-authz-policy-version?      version
      |  |  |  +--ro gnsi-authz:grpc-authz-policy-created-on?   created-on
-     |  |  |  +--ro gnsi-authz:authz-policy-counters
-     |  |  |     +--ro gnsi-authz:total-denied?      oc-yang:counter64
-     |  |  |     +--ro gnsi-authz:last-denied?       oc-types:timeticks64
-     |  |  |     +--ro gnsi-authz:total-permitted?   oc-yang:counter64
-     |  |  |     +--ro gnsi-authz:last-permitted?    oc-types:timeticks64
-     |  |  |     +--ro gnsi-authz:rpcs
-     |  |  |        +--ro gnsi-authz:rpc* [name]
-     |  |  |           +--ro gnsi-authz:name     string
-     |  |  |           +--ro gnsi-authz:users
-     |  |  |              +--ro gnsi-authz:user* [name]
-     |  |  |                 +--ro gnsi-authz:name               string
-     |  |  |                 +--ro gnsi-authz:total-denied?      oc-yang:counter64
-     |  |  |                 +--ro gnsi-authz:last-denied?       oc-types:timeticks64
-     |  |  |                 +--ro gnsi-authz:total-permitted?   oc-yang:counter64
-     |  |  |                 +--ro gnsi-authz:last-permitted?    oc-types:timeticks64
      |  |  +--rw events
      |  |     +--rw event* [event-type]
      |  |        +--rw event-type    -> ../config/event-type
@@ -433,61 +418,32 @@ module: openconfig-system
      |  +--rw oc-sys-grpc:grpc-server* [name]
      |     +--rw oc-sys-grpc:name      -> ../config/name
      |     +--rw oc-sys-grpc:config
-     |     |  +--rw oc-sys-grpc:name?                             string
-     |     |  +--rw oc-sys-grpc:services*                         identityref
-     |     |  +--rw oc-sys-grpc:enable?                           boolean
-     |     |  +--rw oc-sys-grpc:port?                             oc-inet:port-number
-     |     |  +--rw oc-sys-grpc:transport-security?               boolean
-     |     |  +--rw oc-sys-grpc:certificate-id?                   string
-     |     |  +--rw oc-sys-grpc:metadata-authentication?          boolean
-     |     |  +--rw oc-sys-grpc:listen-addresses*                 union
-     |     |  +--rw oc-sys-grpc:network-instance?                 oc-ni:network-instance-ref
-     |     |  +--rw gnsi:ca-trust-bundle-id?                      string
-     |     |  +--rw gnsi:certificate-revocation-list-bundle-id?   string
+     |     |  +--rw oc-sys-grpc:name?                      string
+     |     |  +--rw oc-sys-grpc:services*                  identityref
+     |     |  +--rw oc-sys-grpc:enable?                    boolean
+     |     |  +--rw oc-sys-grpc:port?                      oc-inet:port-number
+     |     |  +--rw oc-sys-grpc:transport-security?        boolean
+     |     |  +--rw oc-sys-grpc:metadata-authentication?   boolean
+     |     |  +--rw oc-sys-grpc:listen-addresses*          union
+     |     |  +--rw oc-sys-grpc:network-instance?          oc-ni:network-instance-ref
      |     +--ro oc-sys-grpc:state
-     |        +--ro oc-sys-grpc:name?                                     string
-     |        +--ro oc-sys-grpc:services*                                 identityref
-     |        +--ro oc-sys-grpc:enable?                                   boolean
-     |        +--ro oc-sys-grpc:port?                                     oc-inet:port-number
-     |        +--ro oc-sys-grpc:transport-security?                       boolean
-     |        +--ro oc-sys-grpc:certificate-id?                           string
-     |        +--ro oc-sys-grpc:metadata-authentication?                  boolean
-     |        +--ro oc-sys-grpc:listen-addresses*                         union
-     |        +--ro oc-sys-grpc:network-instance?                         oc-ni:network-instance-ref
-     |        +--ro gnsi:certificate-version?                             version
-     |        +--ro gnsi:certificate-created-on?                          created-on
-     |        +--ro gnsi:ca-trust-bundle-version?                         version
-     |        +--ro gnsi:ca-trust-bundle-created-on?                      created-on
-     |        +--ro gnsi:certificate-revocation-list-bundle-version?      version
-     |        +--ro gnsi:certificate-revocation-list-bundle-created-on?   created-on
-     |        +--ro gnsi:ca-trust-bundle-id?                              string
-     |        +--ro gnsi:certificate-revocation-list-bundle-id?           string
-     |        +--ro gnsi-pathz:gnmi-pathz-policy-version?                 version
-     |        +--ro gnsi-pathz:gnmi-pathz-policy-created-on?              created-on
-     |        +--ro gnsi-pathz:gnmi-pathz-policy-counters
-     |           +--ro gnsi-pathz:total-denied?      oc-yang:counter64
-     |           +--ro gnsi-pathz:last-denied?       oc-types:timeticks64
-     |           +--ro gnsi-pathz:total-permitted?   oc-yang:counter64
-     |           +--ro gnsi-pathz:last-permitted?    oc-types:timeticks64
-     |           +--ro gnsi-pathz:paths
-     |              +--ro gnsi-pathz:path* [xpath]
-     |                 +--ro gnsi-pathz:xpath      string
-     |                 +--ro gnsi-pathz:actions
-     |                    +--ro gnsi-pathz:action* [action]
-     |                       +--ro gnsi-pathz:action             enumeration
-     |                       +--ro gnsi-pathz:total-denied?      oc-yang:counter64
-     |                       +--ro gnsi-pathz:last-denied?       oc-types:timeticks64
-     |                       +--ro gnsi-pathz:total-permitted?   oc-yang:counter64
-     |                       +--ro gnsi-pathz:last-permitted?    oc-types:timeticks64
-     +--ro gnsi:grpc-credentials
-     |  +--ro gnsi:entities
-     |     +--ro gnsi:entity* [id]
-     |        +--ro gnsi:id       -> ../state/id
-     |        +--ro gnsi:state
-     |           +--ro gnsi:id?           string
-     |           +--ro gnsi:kind?         identityref
-     |           +--ro gnsi:version?      version
-     |           +--ro gnsi:created-on?   created-on
+     |        +--ro oc-sys-grpc:name?                                           string
+     |        +--ro oc-sys-grpc:services*                                       identityref
+     |        +--ro oc-sys-grpc:enable?                                         boolean
+     |        +--ro oc-sys-grpc:port?                                           oc-inet:port-number
+     |        +--ro oc-sys-grpc:transport-security?                             boolean
+     |        +--ro oc-sys-grpc:certificate-id?                                 string
+     |        +--ro oc-sys-grpc:metadata-authentication?                        boolean
+     |        +--ro oc-sys-grpc:listen-addresses*                               union
+     |        +--ro oc-sys-grpc:network-instance?                               oc-ni:network-instance-ref
+     |        +--ro gnsi-certz:certificate-version?                             version
+     |        +--ro gnsi-certz:certificate-created-on?                          created-on
+     |        +--ro gnsi-certz:ca-trust-bundle-version?                         version
+     |        +--ro gnsi-certz:ca-trust-bundle-created-on?                      created-on
+     |        +--ro gnsi-certz:certificate-revocation-list-bundle-version?      version
+     |        +--ro gnsi-certz:certificate-revocation-list-bundle-created-on?   created-on
+     |        +--ro gnsi-pathz:gnmi-pathz-policy-version?                       version
+     |        +--ro gnsi-pathz:gnmi-pathz-policy-created-on?                    created-on
      +--ro gnsi-pathz:gnmi-pathz-policies
         +--ro gnsi-pathz:policies
            +--ro gnsi-pathz:policy* [instance]

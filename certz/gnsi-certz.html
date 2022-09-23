@@ -1,4 +1,4 @@
-<head><title> openconfig-system openconfig-system-grpc gnsi-cert 
+<head><title> openconfig-system openconfig-system-grpc gnsi-certz 
 </title>
 <style type="text/css" media="all">
 
@@ -155,9 +155,9 @@ function expandAllRows() {
 <h1> Module: <font color=blue>openconfig-system-grpc</font>, Namespace:
                      <font color=blue>http://openconfig.net/yang/system-grpc</font>, Prefix:
                      <font color=blue>oc-sys-grpc</font></h1> 
-<h1> Module: <font color=blue>gnsi-cert</font>, Namespace:
+<h1> Module: <font color=blue>gnsi-certz</font>, Namespace:
                      <font color=blue>https://github.com/openconfig/gnsi/cert/yang</font>, Prefix:
-                     <font color=blue>gnsi</font></h1> 
+                     <font color=blue>gnsi-certz</font></h1> 
 
  <table width="100%">
 
@@ -8014,26 +8014,6 @@ are not supported, such as lab testing."> <em> oc-sys-grpc:transport-security </
             <td nowrap>
                <div id=9999 class=tier6>
                   <a class="leaf">&nbsp;</a>
-                  <attr title="Name of the certificate that is associated with the gRPC service. The
-certificate ID is provisioned through other interfaces to the device, such
-as the gNOI certificate management service."> <em> oc-sys-grpc:certificate-id </em></abbr>
-            
-               </div>
-            </td> 
-        <td nowrap>leaf</td>
-        <td nowrap><abbr title="string
-">string</abbr></td>
-                
-        <td nowrap>config</td>
-        <td>?</td>
-        <td>current</td>
-        <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:config/oc-sys-grpc:certificate-id</td>
-        </tr>
-        <tr id="1-1-16-42-64-74" class="a">
-        
-            <td nowrap>
-               <div id=9999 class=tier6>
-                  <a class="leaf">&nbsp;</a>
                   <attr title="When set to true, metadata authentication is enabled for the gRPC server.
 In this mode of operation, gRPC metadata is used to carry authentication
 credentials as per the specification in
@@ -8050,7 +8030,7 @@ https://github.com/openconfig/reference/blob/master/rpc/gnmi/gnmi-authentication
         <td>current</td>
         <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:config/oc-sys-grpc:metadata-authentication</td>
         </tr>
-        <tr id="1-1-16-42-64-75" class="a">
+        <tr id="1-1-16-42-64-74" class="a">
         
             <td nowrap>
                <div id=9999 class=tier6>
@@ -8069,7 +8049,7 @@ an IPv4 or an IPv6 address (or both).">  oc-sys-grpc:listen-addresses </abbr>
         <td>current</td>
         <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:config/oc-sys-grpc:listen-addresses</td>
         </tr>
-        <tr id="1-1-16-42-64-76" class="a">
+        <tr id="1-1-16-42-64-75" class="a">
         
             <td nowrap>
                <div id=9999 class=tier6>
@@ -8089,48 +8069,6 @@ leafref
         <td>current</td>
         <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:config/oc-sys-grpc:network-instance</td>
         </tr>
-        <tr id="1-1-16-42-64-77" class="a">
-        
-            <td nowrap>
-               <div id=9999 class=tier6>
-                  <a class="leaf">&nbsp;</a>
-                  <attr title="The ID of the Certificate Authority trust bundle that is
-used by this gRPC server. The CA trust bundle is provisioned
-through other interfaces to the device, such as the gNSI
-certificate management service."> <em> gnsi:ca-trust-bundle-id </em></abbr>
-            
-               </div>
-            </td> 
-        <td nowrap>leaf</td>
-        <td nowrap><abbr title="string
-">string</abbr></td>
-                
-        <td nowrap>config</td>
-        <td>?</td>
-        <td>current</td>
-        <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:config/gnsi:ca-trust-bundle-id</td>
-        </tr>
-        <tr id="1-1-16-42-64-78" class="a">
-        
-            <td nowrap>
-               <div id=9999 class=tier6>
-                  <a class="leaf">&nbsp;</a>
-                  <attr title="The ID of the Certificate Revocation List (CRL) bundle that is
-used by this gRPC server. The CRL is provisioned through other
-interfaces to the device, such as the gNSI certificate
-management service."> <em> gnsi:certificate-revocation-list-bundle-id </em></abbr>
-            
-               </div>
-            </td> 
-        <td nowrap>leaf</td>
-        <td nowrap><abbr title="string
-">string</abbr></td>
-                
-        <td nowrap>config</td>
-        <td>?</td>
-        <td>current</td>
-        <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:config/gnsi:certificate-revocation-list-bundle-id</td>
-        </tr>
         <tr id="1-1-16-42-65" class="a">
         
             <td nowrap id="p4000">
@@ -8149,7 +8087,7 @@ management service."> <em> gnsi:certificate-revocation-list-bundle-id </em></abb
         <td>current</td>
         <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state</td>
         </tr>
-        <tr id="1-1-16-42-65-79" class="a">
+        <tr id="1-1-16-42-65-76" class="a">
         
             <td nowrap>
                <div id=9999 class=tier6>
@@ -8168,7 +8106,7 @@ the local system."> <em> oc-sys-grpc:name </em></abbr>
         <td>current</td>
         <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/oc-sys-grpc:name</td>
         </tr>
-        <tr id="1-1-16-42-65-80" class="a">
+        <tr id="1-1-16-42-65-77" class="a">
         
             <td nowrap>
                <div id=9999 class=tier6>
@@ -8195,7 +8133,7 @@ device.">  oc-sys-grpc:services </abbr>
         <td>current</td>
         <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/oc-sys-grpc:services</td>
         </tr>
-        <tr id="1-1-16-42-65-81" class="a">
+        <tr id="1-1-16-42-65-78" class="a">
         
             <td nowrap>
                <div id=9999 class=tier6>
@@ -8214,7 +8152,7 @@ local device."> <em> oc-sys-grpc:enable </em></abbr>
         <td>current</td>
         <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/oc-sys-grpc:enable</td>
         </tr>
-        <tr id="1-1-16-42-65-82" class="a">
+        <tr id="1-1-16-42-65-79" class="a">
         
             <td nowrap>
                <div id=9999 class=tier6>
@@ -8233,7 +8171,7 @@ uint16
         <td>current</td>
         <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/oc-sys-grpc:port</td>
         </tr>
-        <tr id="1-1-16-42-65-83" class="a">
+        <tr id="1-1-16-42-65-80" class="a">
         
             <td nowrap>
                <div id=9999 class=tier6>
@@ -8253,7 +8191,7 @@ are not supported, such as lab testing."> <em> oc-sys-grpc:transport-security </
         <td>current</td>
         <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/oc-sys-grpc:transport-security</td>
         </tr>
-        <tr id="1-1-16-42-65-84" class="a">
+        <tr id="1-1-16-42-65-81" class="a">
         
             <td nowrap>
                <div id=9999 class=tier6>
@@ -8273,7 +8211,7 @@ as the gNOI certificate management service."> <em> oc-sys-grpc:certificate-id </
         <td>current</td>
         <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/oc-sys-grpc:certificate-id</td>
         </tr>
-        <tr id="1-1-16-42-65-85" class="a">
+        <tr id="1-1-16-42-65-82" class="a">
         
             <td nowrap>
                <div id=9999 class=tier6>
@@ -8294,7 +8232,7 @@ https://github.com/openconfig/reference/blob/master/rpc/gnmi/gnmi-authentication
         <td>current</td>
         <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/oc-sys-grpc:metadata-authentication</td>
         </tr>
-        <tr id="1-1-16-42-65-86" class="a">
+        <tr id="1-1-16-42-65-83" class="a">
         
             <td nowrap>
                <div id=9999 class=tier6>
@@ -8313,7 +8251,7 @@ an IPv4 or an IPv6 address (or both).">  oc-sys-grpc:listen-addresses </abbr>
         <td>current</td>
         <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/oc-sys-grpc:listen-addresses</td>
         </tr>
-        <tr id="1-1-16-42-65-87" class="a">
+        <tr id="1-1-16-42-65-84" class="a">
         
             <td nowrap>
                <div id=9999 class=tier6>
@@ -8333,13 +8271,13 @@ leafref
         <td>current</td>
         <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/oc-sys-grpc:network-instance</td>
         </tr>
-        <tr id="1-1-16-42-65-88" class="a">
+        <tr id="1-1-16-42-65-85" class="a">
         
             <td nowrap>
                <div id=9999 class=tier6>
                   <a class="leaf">&nbsp;</a>
                   <attr title="The version of the certificate (and associated
-private key) that is used by this gRPC server."> <em> gnsi:certificate-version </em></abbr>
+private key) that is used by this gRPC server."> <em> gnsi-certz:certificate-version </em></abbr>
             
                </div>
             </td> 
@@ -8351,16 +8289,16 @@ string
         <td nowrap>no config</td>
         <td>?</td>
         <td>current</td>
-        <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/gnsi:certificate-version</td>
+        <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/gnsi-certz:certificate-version</td>
         </tr>
-        <tr id="1-1-16-42-65-89" class="a">
+        <tr id="1-1-16-42-65-86" class="a">
         
             <td nowrap>
                <div id=9999 class=tier6>
                   <a class="leaf">&nbsp;</a>
                   <attr title="The timestamp of the moment when the certificate
 (and associated private key) that is currently used
-by this gRPC server was created."> <em> gnsi:certificate-created-on </em></abbr>
+by this gRPC server was created."> <em> gnsi-certz:certificate-created-on </em></abbr>
             
                </div>
             </td> 
@@ -8372,16 +8310,16 @@ oc-types:timeticks64
         <td nowrap>no config</td>
         <td>?</td>
         <td>current</td>
-        <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/gnsi:certificate-created-on</td>
+        <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/gnsi-certz:certificate-created-on</td>
         </tr>
-        <tr id="1-1-16-42-65-90" class="a">
+        <tr id="1-1-16-42-65-87" class="a">
         
             <td nowrap>
                <div id=9999 class=tier6>
                   <a class="leaf">&nbsp;</a>
                   <attr title="The version of the bundle of the Certificate
 Authority certificates a.k.a. trust bundle used by
-this gRPC server."> <em> gnsi:ca-trust-bundle-version </em></abbr>
+this gRPC server."> <em> gnsi-certz:ca-trust-bundle-version </em></abbr>
             
                </div>
             </td> 
@@ -8393,16 +8331,16 @@ string
         <td nowrap>no config</td>
         <td>?</td>
         <td>current</td>
-        <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/gnsi:ca-trust-bundle-version</td>
+        <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/gnsi-certz:ca-trust-bundle-version</td>
         </tr>
-        <tr id="1-1-16-42-65-91" class="a">
+        <tr id="1-1-16-42-65-88" class="a">
         
             <td nowrap>
                <div id=9999 class=tier6>
                   <a class="leaf">&nbsp;</a>
                   <attr title="The timestamp of the moment when the bundle of
 the Certificate Authority certificates (a.k.a.
-trust bundle) was created."> <em> gnsi:ca-trust-bundle-created-on </em></abbr>
+trust bundle) was created."> <em> gnsi-certz:ca-trust-bundle-created-on </em></abbr>
             
                </div>
             </td> 
@@ -8414,15 +8352,15 @@ oc-types:timeticks64
         <td nowrap>no config</td>
         <td>?</td>
         <td>current</td>
-        <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/gnsi:ca-trust-bundle-created-on</td>
+        <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/gnsi-certz:ca-trust-bundle-created-on</td>
         </tr>
-        <tr id="1-1-16-42-65-92" class="a">
+        <tr id="1-1-16-42-65-89" class="a">
         
             <td nowrap>
                <div id=9999 class=tier6>
                   <a class="leaf">&nbsp;</a>
                   <attr title="The version of the Certificate Revocation List bundle used by
-this gRPC server."> <em> gnsi:certificate-revocation-list-bundle-version </em></abbr>
+this gRPC server."> <em> gnsi-certz:certificate-revocation-list-bundle-version </em></abbr>
             
                </div>
             </td> 
@@ -8434,15 +8372,15 @@ string
         <td nowrap>no config</td>
         <td>?</td>
         <td>current</td>
-        <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/gnsi:certificate-revocation-list-bundle-version</td>
+        <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/gnsi-certz:certificate-revocation-list-bundle-version</td>
         </tr>
-        <tr id="1-1-16-42-65-93" class="a">
+        <tr id="1-1-16-42-65-90" class="a">
         
             <td nowrap>
                <div id=9999 class=tier6>
                   <a class="leaf">&nbsp;</a>
                   <attr title="The timestamp of the moment when the Certificate Revocation
-List bundle was created."> <em> gnsi:certificate-revocation-list-bundle-created-on </em></abbr>
+List bundle was created."> <em> gnsi-certz:certificate-revocation-list-bundle-created-on </em></abbr>
             
                </div>
             </td> 
@@ -8454,221 +8392,7 @@ oc-types:timeticks64
         <td nowrap>no config</td>
         <td>?</td>
         <td>current</td>
-        <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/gnsi:certificate-revocation-list-bundle-created-on</td>
-        </tr>
-        <tr id="1-1-16-42-65-94" class="a">
-        
-            <td nowrap>
-               <div id=9999 class=tier6>
-                  <a class="leaf">&nbsp;</a>
-                  <attr title="The ID of the Certificate Authority trust bundle that is
-used by this gRPC server. The CA trust bundle is provisioned
-through other interfaces to the device, such as the gNSI
-certificate management service."> <em> gnsi:ca-trust-bundle-id </em></abbr>
-            
-               </div>
-            </td> 
-        <td nowrap>leaf</td>
-        <td nowrap><abbr title="string
-">string</abbr></td>
-                
-        <td nowrap>no config</td>
-        <td>?</td>
-        <td>current</td>
-        <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/gnsi:ca-trust-bundle-id</td>
-        </tr>
-        <tr id="1-1-16-42-65-95" class="a">
-        
-            <td nowrap>
-               <div id=9999 class=tier6>
-                  <a class="leaf">&nbsp;</a>
-                  <attr title="The ID of the Certificate Revocation List (CRL) bundle that is
-used by this gRPC server. The CRL is provisioned through other
-interfaces to the device, such as the gNSI certificate
-management service."> <em> gnsi:certificate-revocation-list-bundle-id </em></abbr>
-            
-               </div>
-            </td> 
-        <td nowrap>leaf</td>
-        <td nowrap><abbr title="string
-">string</abbr></td>
-                
-        <td nowrap>no config</td>
-        <td>?</td>
-        <td>current</td>
-        <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/gnsi:certificate-revocation-list-bundle-id</td>
-        </tr>
-        <tr id="1-1-17" class="a">
-        
-            <td nowrap id="p4000">
-               <div id="p5000" class="tier3">
-                 <a href="#" id="p6000"
-                    onclick="toggleRows(this);return false"
-                    class="folder">&nbsp;
-                 </a>
-                 <abbr title="Collection of credentials that have been installed on
-the device using the gNSI certificate management service.
-Each credential listed here is identified by an ID and has its
-version and creation date/time listed.">gnsi:grpc-credentials</abbr>
-              </div>
-            </td>
-        <td nowrap>container</td>
-        <td nowrap></td>
-        <td nowrap>no config</td>
-        <td></td>
-        <td>current</td>
-        <td nowrap>/oc-sys:system/gnsi:grpc-credentials</td>
-        </tr>
-        <tr id="1-1-17-43" class="a">
-        
-            <td nowrap id="p4000">
-               <div id="p5000" class="tier4">
-                 <a href="#" id="p6000"
-                    onclick="toggleRows(this);return false"
-                    class="folder">&nbsp;
-                 </a>
-                 <abbr title="Information about freshness of an entity (certificate, CA trust
-bundle or Certificate Revocation List) that have been installed
-on the device using the gNSI certificate management service.">gnsi:entities</abbr>
-              </div>
-            </td>
-        <td nowrap>container</td>
-        <td nowrap></td>
-        <td nowrap>no config</td>
-        <td></td>
-        <td>current</td>
-        <td nowrap>/oc-sys:system/gnsi:grpc-credentials/gnsi:entities</td>
-        </tr>
-        <tr id="1-1-17-43-66" class="a">
-        
-            <td nowrap id="p4000">
-               <div id="p5000" class="tier5">
-                 <a href="#" id="p6000"
-                    onclick="toggleRows(this);return false"
-                    class="folder">&nbsp;
-                 </a>
-                 <abbr title="Information about the credential entity that is identified
-by the `id`.">gnsi:entity[id]</abbr>
-              </div>
-            </td>
-        <td nowrap>list</td>
-        <td nowrap></td>
-        <td nowrap>no config</td>
-        <td></td>
-        <td>current</td>
-        <td nowrap>/oc-sys:system/gnsi:grpc-credentials/gnsi:entities/gnsi:entity</td>
-        </tr>
-        <tr id="1-1-17-43-66-96" class="a">
-        
-            <td nowrap>
-               <div id=9999 class=tier6>
-                  <a class="leaf">&nbsp;</a>
-                  <attr title="The ID of the credential entity.">  gnsi:id </abbr>
-            
-               </div>
-            </td> 
-        <td nowrap>leaf</td>
-        <td nowrap><abbr title="leafref
- : ../state/id">leafref</abbr></td>
-                
-        <td nowrap>no config</td>
-        <td></td>
-        <td>current</td>
-        <td nowrap>/oc-sys:system/gnsi:grpc-credentials/gnsi:entities/gnsi:entity/gnsi:id</td>
-        </tr>
-        <tr id="1-1-17-43-66-97" class="a">
-        
-            <td nowrap id="p4000">
-               <div id="p5000" class="tier6">
-                 <a href="#" id="p6000"
-                    onclick="toggleRows(this);return false"
-                    class="folder">&nbsp;
-                 </a>
-                 <abbr title="Operational state data for an credential entity.">gnsi:state</abbr>
-              </div>
-            </td>
-        <td nowrap>container</td>
-        <td nowrap></td>
-        <td nowrap>no config</td>
-        <td></td>
-        <td>current</td>
-        <td nowrap>/oc-sys:system/gnsi:grpc-credentials/gnsi:entities/gnsi:entity/gnsi:state</td>
-        </tr>
-        <tr id="1-1-17-43-66-97-138" class="a">
-        
-            <td nowrap>
-               <div id=9999 class=tier7>
-                  <a class="leaf">&nbsp;</a>
-                  <attr title="The ID of the credential entity."> <em> gnsi:id </em></abbr>
-            
-               </div>
-            </td> 
-        <td nowrap>leaf</td>
-        <td nowrap><abbr title="string
-">string</abbr></td>
-                
-        <td nowrap>no config</td>
-        <td>?</td>
-        <td>current</td>
-        <td nowrap>/oc-sys:system/gnsi:grpc-credentials/gnsi:entities/gnsi:entity/gnsi:state/gnsi:id</td>
-        </tr>
-        <tr id="1-1-17-43-66-97-139" class="a">
-        
-            <td nowrap>
-               <div id=9999 class=tier7>
-                  <a class="leaf">&nbsp;</a>
-                  <attr title="The type of the credential entity (certificate, CA trust bundle
-or Certificate Revocation List bundle)."> <em> gnsi:kind </em></abbr>
-            
-               </div>
-            </td> 
-        <td nowrap>leaf</td>
-        <td nowrap><abbr title="identityref
- {grpc-credential-entity-kind}">identityref</abbr></td>
-                
-        <td nowrap>no config</td>
-        <td>?</td>
-        <td>current</td>
-        <td nowrap>/oc-sys:system/gnsi:grpc-credentials/gnsi:entities/gnsi:entity/gnsi:state/gnsi:kind</td>
-        </tr>
-        <tr id="1-1-17-43-66-97-140" class="a">
-        
-            <td nowrap>
-               <div id=9999 class=tier7>
-                  <a class="leaf">&nbsp;</a>
-                  <attr title="The version of the credential entity."> <em> gnsi:version </em></abbr>
-            
-               </div>
-            </td> 
-        <td nowrap>leaf</td>
-        <td nowrap><abbr title="version
-string
-">version</abbr></td>
-                
-        <td nowrap>no config</td>
-        <td>?</td>
-        <td>current</td>
-        <td nowrap>/oc-sys:system/gnsi:grpc-credentials/gnsi:entities/gnsi:entity/gnsi:state/gnsi:version</td>
-        </tr>
-        <tr id="1-1-17-43-66-97-141" class="a">
-        
-            <td nowrap>
-               <div id=9999 class=tier7>
-                  <a class="leaf">&nbsp;</a>
-                  <attr title="The timestamp of the moment when the credential entity was
-created."> <em> gnsi:created-on </em></abbr>
-            
-               </div>
-            </td> 
-        <td nowrap>leaf</td>
-        <td nowrap><abbr title="created-on
-oc-types:timeticks64
-">created-on</abbr></td>
-                
-        <td nowrap>no config</td>
-        <td>?</td>
-        <td>current</td>
-        <td nowrap>/oc-sys:system/gnsi:grpc-credentials/gnsi:entities/gnsi:entity/gnsi:state/gnsi:created-on</td>
+        <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/gnsi-certz:certificate-revocation-list-bundle-created-on</td>
         </tr>
 </table>
 </div>

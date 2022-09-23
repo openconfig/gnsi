@@ -6,8 +6,8 @@ module gnsi-telemetry {
     import gnsi-authz {
         prefix gnsi-authz;
     }
-    import gnsi-cert {
-        prefix gnsi-cert;
+    import gnsi-certz {
+        prefix gnsi-certz;
     }
     import gnsi-credentialz {
         prefix gnsi-credz;
@@ -25,6 +25,11 @@ module gnsi-telemetry {
         "This module provides a data model for the metadata of credentials
         installed on a networking device.";
 
+    revision 2022-09-20 {
+        description
+            "Updated to reflect change of gNSI.cert into gNSI.certz.";
+        reference "0.4.0";
+    }
     revision 2022-09-10 {
         description
             "Updated to reflect combination of gNSI.ssh and gNSI.console into

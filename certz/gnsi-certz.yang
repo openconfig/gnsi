@@ -1,0 +1,108 @@
+module gnsi-certz {
+    yang-version 1.1;
+    namespace "https://github.com/openconfig/gnsi/cert/yang";
+    prefix gnsi-certz;
+
+    import openconfig-system {
+        prefix oc-sys;
+    }
+    import openconfig-system-grpc {
+        prefix oc-sys-grpc;
+    }
+    import openconfig-types {
+        prefix oc-types;
+    }
+    organization
+        "Google LLC";
+
+    contact
+        "Google LLC";
+
+    description
+        "This module provides a data model for the metadata of gRPC credentials
+        installed on a networking device.";
+
+    revision 2022-09-20 {
+        description
+            "Initial revision.";
+        reference "0.1.0";
+    }
+
+    typedef version {
+        type string;
+        description
+            "The version ID of the credential as provided by the credential
+            manager when the credential was pushed. This leaf persists through
+            a reboot.";
+    }
+
+    typedef created-on {
+        type oc-types:timeticks64;
+        description
+            "The creation time of the credential as reported by the credential
+            manager when the credential was pushed to the device. This value is
+            reported as nanoseconds since epoch (January 1st, 1970 00:00:00 GMT).
+            This leaf persists through a reboot.";
+    }
+
+    // gRPC server related definitions.
+
+    grouping grpc-server-credentials-state {
+        description
+            "gRPC server credentials freshness-related data.";
+
+        leaf certificate-version {
+            type version;
+            description
+                "The version of the certificate (and associated
+                private key) that is used by this gRPC server.";
+        }
+        leaf certificate-created-on {
+            type created-on;
+            description
+                "The timestamp of the moment when the certificate
+                (and associated private key) that is currently used
+                by this gRPC server was created.";
+        }
+        leaf ca-trust-bundle-version {
+            type version;
+            description
+                "The version of the bundle of the Certificate
+                Authority certificates a.k.a. trust bundle used by
+                this gRPC server.";
+        }
+        leaf ca-trust-bundle-created-on {
+            type created-on;
+            description
+                "The timestamp of the moment when the bundle of
+                the Certificate Authority certificates (a.k.a.
+                trust bundle) was created.";
+        }
+        leaf certificate-revocation-list-bundle-version {
+            type version;
+            description
+                "The version of the Certificate Revocation List bundle used by
+                this gRPC server.";
+        }
+        leaf certificate-revocation-list-bundle-created-on {
+            type created-on;
+            description
+                "The timestamp of the moment when the Certificate Revocation
+                List bundle was created.";
+        }
+    }
+
+    // Augments section.
+
+    augment "/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/" +
+            "oc-sys-grpc:state" {
+        description
+            "A gRPC server credentials freshness information.";
+
+        uses grpc-server-credentials-state;
+    }
+    deviation "/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/" +
+            "oc-sys-grpc:config/oc-sys-grpc:certificate-id" {
+        deviate not-supported;
+    }
+}
