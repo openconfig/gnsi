@@ -326,7 +326,7 @@ message CertificateRevocationList {
   // for X509, this should be a PEM encoded CRL.
   bytes certificate_revocation_list = 3;
 
-  // ID of this CRL.
+  // ID of this CRL, which is the CRL file hash.
   string id = 4;
 }
 
