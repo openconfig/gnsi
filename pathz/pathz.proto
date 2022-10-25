@@ -22,7 +22,7 @@ package gnsi.pathz;
 
 import "github.com/openconfig/gnmi/proto/gnmi/gnmi.proto";
 import "github.com/openconfig/gnoi/types/types.proto";
-import "github.com/openconfig/gnsi/pathz/authorization.proto";
+import "pathz/authorization.proto";
 
 option go_package = "github.com/openconfig/gnsi/pathz";
 option (gnoi.types.gnoi_version) = "0.1.0";
