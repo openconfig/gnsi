@@ -41,6 +41,8 @@ package gnsi.pathz;
 
 import "github.com/openconfig/gnmi/proto/gnmi/gnmi.proto";
 
+option go_package = "github.com/openconfig/gnsi/pathz";
+
 // User is a singular username used only in the matching criteria.
 message User {
   string name = 1;
