@@ -58,7 +58,7 @@ service Certz {
   // Rotate will replace an existing device certificate and/or CA certificates
   // (trust bundle) or/and a certificate revocation list bundle on the target.
   // The new device certificate can be created from a target-generated or
-  // client-generated CSR. In the former case the client has to provide
+  // client-generated CSR. In the latter case the client has to provide
   // coresponding private key with the signed certificate.
   // If the stream is broken or any of the steps fail the target must rollback
   // to the original state, i.e. revert any changes to the certificate,
