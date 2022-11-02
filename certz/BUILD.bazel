@@ -2,6 +2,8 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library")
 load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
 load("@rules_proto//proto:defs.bzl", "proto_library")
 load("@rules_proto_grpc//cpp:defs.bzl", "cpp_grpc_library")
+load("//:common.bzl", "use_new_compilers")
+use_new_compilers()
 
 package(default_visibility = ["//visibility:public"])
 
@@ -34,7 +36,7 @@ cpp_grpc_library(
 
 go_proto_library(
     name = "certz_go_proto",
-    compilers = ["@io_bazel_rules_go//proto:go_grpc"],
+    compilers = ["go_protoc_gen_go", "go_protoc_gen_go_grpc"],
     importpath = "github.com/openconfig/gnsi/certz",
     proto = ":certz_proto",
     deps = ["@com_github_openconfig_gnoi//types"],
