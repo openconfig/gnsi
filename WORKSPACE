@@ -3,9 +3,24 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 ### Bazel rules for many languages to compile PROTO into gRPC libraries
 http_archive(
     name = "rules_proto_grpc",
-    sha256 = "507e38c8d95c7efa4f3b1c0595a8e8f139c885cb41a76cab7e20e4e67ae87731",
-    strip_prefix = "rules_proto_grpc-4.1.1",
-    urls = ["https://github.com/rules-proto-grpc/rules_proto_grpc/archive/4.1.1.tar.gz"],
+    sha256 = "bbe4db93499f5c9414926e46f9e35016999a4e9f6e3522482d3760dc61011070",
+    strip_prefix = "rules_proto_grpc-4.2.0",
+    urls = ["https://github.com/rules-proto-grpc/rules_proto_grpc/archive/4.2.0.tar.gz"],
+)
+
+# googleapis has not had a release since 2016 - take the master version as of 02-nov-22
+http_archive(
+    name = "com_google_googleapis",
+    sha256 = "d88c03a3e86fd35ed656b66cb013b1c8c3c3e9286e1a04276a8c5e2c05cc3030",
+    strip_prefix = "googleapis-77bdd3dd26ea10c1b4f1c190e776a2d3fe4b3e8d",
+    urls = ["https://github.com/googleapis/googleapis/archive/77bdd3dd26ea10c1b4f1c190e776a2d3fe4b3e8d.tar.gz"],
+)
+
+load("@com_google_googleapis//:repository_rules.bzl", "switched_rules_by_language")
+switched_rules_by_language(
+    name = "com_google_googleapis_imports",
+    cc = True,
+    go = True,
 )
 
 load(
@@ -55,7 +70,7 @@ go_repository(
     name = "com_github_openconfig_gnmi",
     build_directives = [
         "gazelle:proto_import_prefix github.com/openconfig/gnmi",
-    ],    
+    ],
     build_file_generation = "on",
     importpath = "github.com/openconfig/gnmi",
     sum = "h1:tv9HygDMXnoGyWuLmNCodMV2+PK6+uT/ndAxDVzsUUQ=",
@@ -86,11 +101,13 @@ go_repository(
     version = "v0.13.1",
 )
 
-gazelle_dependencies()
-
 load("@rules_proto_grpc//go:repositories.bzl", rules_proto_grpc_go_repos = "go_repos")
 
 rules_proto_grpc_go_repos()
+
+# Load gazelle_dependencies last, so that the newer version of org_golang_google_grpc is used.
+# see https://github.com/rules-proto-grpc/rules_proto_grpc/issues/160
+gazelle_dependencies()
 
 ### C++
 load("@rules_proto_grpc//cpp:repositories.bzl", rules_proto_grpc_cpp_repos = "cpp_repos")
