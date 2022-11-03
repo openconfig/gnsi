@@ -1,26 +1,88 @@
-# gNSI.cert Telemetry Extension
+# gNSI.certz
 
-## `gnsi-cert.yang`
+## gNSI certz Service Protobuf Definition
+**Contributors**: hines@google.com, morrowc@google.com, tmadejski@google.com
+**Last Updated**: 2022-09-20
 
-An overview of the changes defined in the `gnsi-cert.yang` file are shown
+### Background
+
+The certz service definition provides the API to be used for rotating and
+testing PKI primitives used on network systems.
+The `Rotate()` is bidirectional streaming RPC which permit
+mutating Certificates, Root Certificate Bundles and Certificate Revocation
+Lists. For `Rotate()` stream it is possible to mutate
+one or more of the elements, and to send a `Finalize` message once the
+in-flight change has been verified to be operational. Failure to send
+the `Finalize` message will result in the candidate element being discarded
+and the original element being used instead.
+
+### Motivation
+
+Management of the PKI elements for a network system should have
+a clear and direct method for installation and update.
+
+#### `Certz.Rotate()`
+
+`Certz.Rotate()` will permit rotation, and
+verification of function, of any of the PKI elements.
+The normal use-case would be to:
+
+* send an CertificateBundle to a network system as a
+`RotateCertificateRequest`.
+* verify that the services which will use the new certificate bundle
+continue to operate normally.
+* send a `FinalizeRequest` to finish the rotation process.
+
+### User Experiences
+
+#### A CertificateBundle is to be rotated or updated
+
+Create, and test, a new CertificateBundle.
+
+Send that policy to the target network system with a
+`certz.RotateCertificateRequest` to `certz.Rotate` RPC. The
+`RotateCertificateRequest`'s rotate_request will be a `certz.CertificateBundle`.
+
+Verify that the CertificateBundle newly rotated is used by services
+which require it.
+
+Send a `Finalize` message to the `certz.Rotate` RPC to close out the action.
+
+If the stream is disconnected prior to the `Finalize` message being
+sent, the proposed configuration is rolled back automatically.
+
+#### A Certificate is rotated, the session breaks before `Finalize`
+
+Create a new Certificate and Key.
+
+Send that certificate to the target network system with a
+`certz.RotateCertificateRequest` to the `certz.Rotate` RPC. The
+`RotateCertificateRequest`'s `rotate_request` will be a
+`certz.Certificate`.
+
+Verify that the certificate newly deployed is usable by the relevant
+services, that the services properly present the certificate upon
+new service connections.
+
+The connection to the network system is broken, there is no `Finalize` sent.
+
+The gNSI service rolls back the candidate and re-installs the original
+certificate and key.
+
+### Open Questions/Considerations
+
+None to date.
+
+## gNSI.cert Telemetry Extension
+
+### `gnsi-certz.yang`
+
+An overview of the changes defined in the `gnsi-certz.yang` file are shown
 below.
 
 ```txt
-module: gnsi-cert
+module: gnsi-certz
 
-  augment /oc-sys:system:
-    +--ro grpc-credentials
-       +--ro entities
-          +--ro entity* [id]
-             +--ro id       -> ../state/id
-             +--ro state
-                +--ro id?           string
-                +--ro kind?         identityref
-                +--ro version?      version
-                +--ro created-on?   created-on
-  augment /oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:config:
-    +--rw ca-trust-bundle-id?                      string
-    +--rw certificate-revocation-list-bundle-id?   string
   augment /oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state:
     +--ro certificate-version?                             version
     +--ro certificate-created-on?                          created-on
@@ -28,16 +90,14 @@ module: gnsi-cert
     +--ro ca-trust-bundle-created-on?                      created-on
     +--ro certificate-revocation-list-bundle-version?      version
     +--ro certificate-revocation-list-bundle-created-on?   created-on
-    +--ro ca-trust-bundle-id?                              string
-    +--ro certificate-revocation-list-bundle-id?           string
 ```
 
-## `openconfig-system` tree
+### `openconfig-system` tree
 
 The  `openconfig-system` subtree after augments defined in the
-`gnsi-cert.yang` file is shown below.
+`gnsi-certz.yang` file is shown below.
 
-For interactive version click [here](gnsi-cert.html).
+For interactive version click [here](gnsi-certz.html).
 
 ```txt
 module: openconfig-system
@@ -441,46 +501,32 @@ module: openconfig-system
      |           +--ro expired?           boolean
      |           +--ro valid?             boolean
      +--rw oc-sys-grpc:grpc-servers
-     |  +--rw oc-sys-grpc:grpc-server* [name]
-     |     +--rw oc-sys-grpc:name      -> ../config/name
-     |     +--rw oc-sys-grpc:config
-     |     |  +--rw oc-sys-grpc:name?                             string
-     |     |  +--rw oc-sys-grpc:services*                         identityref
-     |     |  +--rw oc-sys-grpc:enable?                           boolean
-     |     |  +--rw oc-sys-grpc:port?                             oc-inet:port-number
-     |     |  +--rw oc-sys-grpc:transport-security?               boolean
-     |     |  +--rw oc-sys-grpc:certificate-id?                   string
-     |     |  +--rw oc-sys-grpc:metadata-authentication?          boolean
-     |     |  +--rw oc-sys-grpc:listen-addresses*                 union
-     |     |  +--rw oc-sys-grpc:network-instance?                 oc-ni:network-instance-ref
-     |     |  +--rw gnsi:ca-trust-bundle-id?                      string
-     |     |  +--rw gnsi:certificate-revocation-list-bundle-id?   string
-     |     +--ro oc-sys-grpc:state
-     |        +--ro oc-sys-grpc:name?                                     string
-     |        +--ro oc-sys-grpc:services*                                 identityref
-     |        +--ro oc-sys-grpc:enable?                                   boolean
-     |        +--ro oc-sys-grpc:port?                                     oc-inet:port-number
-     |        +--ro oc-sys-grpc:transport-security?                       boolean
-     |        +--ro oc-sys-grpc:certificate-id?                           string
-     |        +--ro oc-sys-grpc:metadata-authentication?                  boolean
-     |        +--ro oc-sys-grpc:listen-addresses*                         union
-     |        +--ro oc-sys-grpc:network-instance?                         oc-ni:network-instance-ref
-     |        +--ro gnsi:certificate-version?                             version
-     |        +--ro gnsi:certificate-created-on?                          created-on
-     |        +--ro gnsi:ca-trust-bundle-version?                         version
-     |        +--ro gnsi:ca-trust-bundle-created-on?                      created-on
-     |        +--ro gnsi:certificate-revocation-list-bundle-version?      version
-     |        +--ro gnsi:certificate-revocation-list-bundle-created-on?   created-on
-     |        +--ro gnsi:ca-trust-bundle-id?                              string
-     |        +--ro gnsi:certificate-revocation-list-bundle-id?           string
-     +--ro gnsi:grpc-credentials
-        +--ro gnsi:entities
-           +--ro gnsi:entity* [id]
-              +--ro gnsi:id       -> ../state/id
-              +--ro gnsi:state
-                 +--ro gnsi:id?           string
-                 +--ro gnsi:kind?         identityref
-                 +--ro gnsi:version?      version
-                 +--ro gnsi:created-on?   created-on
+        +--rw oc-sys-grpc:grpc-server* [name]
+           +--rw oc-sys-grpc:name      -> ../config/name
+           +--rw oc-sys-grpc:config
+           |  +--rw oc-sys-grpc:name?                      string
+           |  +--rw oc-sys-grpc:services*                  identityref
+           |  +--rw oc-sys-grpc:enable?                    boolean
+           |  +--rw oc-sys-grpc:port?                      oc-inet:port-number
+           |  +--rw oc-sys-grpc:transport-security?        boolean
+           |  +--rw oc-sys-grpc:metadata-authentication?   boolean
+           |  +--rw oc-sys-grpc:listen-addresses*          union
+           |  +--rw oc-sys-grpc:network-instance?          oc-ni:network-instance-ref
+           +--ro oc-sys-grpc:state
+              +--ro oc-sys-grpc:name?                                           string
+              +--ro oc-sys-grpc:services*                                       identityref
+              +--ro oc-sys-grpc:enable?                                         boolean
+              +--ro oc-sys-grpc:port?                                           oc-inet:port-number
+              +--ro oc-sys-grpc:transport-security?                             boolean
+              +--ro oc-sys-grpc:certificate-id?                                 string
+              +--ro oc-sys-grpc:metadata-authentication?                        boolean
+              +--ro oc-sys-grpc:listen-addresses*                               union
+              +--ro oc-sys-grpc:network-instance?                               oc-ni:network-instance-ref
+              +--ro gnsi-certz:certificate-version?                             version
+              +--ro gnsi-certz:certificate-created-on?                          created-on
+              +--ro gnsi-certz:ca-trust-bundle-version?                         version
+              +--ro gnsi-certz:ca-trust-bundle-created-on?                      created-on
+              +--ro gnsi-certz:certificate-revocation-list-bundle-version?      version
+              +--ro gnsi-certz:certificate-revocation-list-bundle-created-on?   created-on
 
 ```

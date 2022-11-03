@@ -27,25 +27,14 @@ system, or in every gNMI service individually on the network system.
 It is expected that gNMI services enabled on a network system respect
 the AuthorizationPolicy installed, however.
 
-The pathz.Install and pathz.Rotate rpcs are bi-directional streaming
-rpcs, it's possible to send more than one policy change through an
+The pathz.Rotate rpc is a bi-directional streaming RPC, it's
+possible to send more than one policy change through an
 open stream checkpointing the policy with pathz.Finalize messages or
 replacing the candidate AuthorizationPolicy to verify functionality
 changes prior to the Finalize message. If the stream is closed prior
 to the Finalize message being received at the server, the candidate
 AuthorizationPolicy is discarded and the existing policy again becomes
 active.
-
-### Pathz.Install
-
-Pathz.Install will permit installation, and verification of function,
-of an AuthorizationPolicy. The normal use-case would be to:
-
-* send an AuthorizationPolicy to a network system as an
-InstallPathzRequest
-* verify access/authorization has changed to the desired state
-through existing gNMI methods, or with pathz.Probe requests.
-* send a FinalizeRequest to finish the installation process.
 
 ### Pathz.Rotate
 
