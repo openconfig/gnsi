@@ -23,6 +23,9 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CertzClient interface {
 	Rotate(ctx context.Context, opts ...grpc.CallOption) (Certz_RotateClient, error)
+	AddSSLProfile(ctx context.Context, in *AddSSLProfileRequest, opts ...grpc.CallOption) (*AddSSLProfileResponse, error)
+	DeleteSSLProfile(ctx context.Context, in *DeleteSSLProfileRequest, opts ...grpc.CallOption) (*DeleteSSLProfileResponse, error)
+	GetSSLProfileList(ctx context.Context, in *GetSSLProfileListRequest, opts ...grpc.CallOption) (*GetSSLProfileListResponse, error)
 	CanGenerateCSR(ctx context.Context, in *CanGenerateCSRRequest, opts ...grpc.CallOption) (*CanGenerateCSRResponse, error)
 }
 
@@ -65,6 +68,33 @@ func (x *certzRotateClient) Recv() (*RotateCertificateResponse, error) {
 	return m, nil
 }
 
+func (c *certzClient) AddSSLProfile(ctx context.Context, in *AddSSLProfileRequest, opts ...grpc.CallOption) (*AddSSLProfileResponse, error) {
+	out := new(AddSSLProfileResponse)
+	err := c.cc.Invoke(ctx, "/gnsi.certz.Certz/AddSSLProfile", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *certzClient) DeleteSSLProfile(ctx context.Context, in *DeleteSSLProfileRequest, opts ...grpc.CallOption) (*DeleteSSLProfileResponse, error) {
+	out := new(DeleteSSLProfileResponse)
+	err := c.cc.Invoke(ctx, "/gnsi.certz.Certz/DeleteSSLProfile", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *certzClient) GetSSLProfileList(ctx context.Context, in *GetSSLProfileListRequest, opts ...grpc.CallOption) (*GetSSLProfileListResponse, error) {
+	out := new(GetSSLProfileListResponse)
+	err := c.cc.Invoke(ctx, "/gnsi.certz.Certz/GetSSLProfileList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *certzClient) CanGenerateCSR(ctx context.Context, in *CanGenerateCSRRequest, opts ...grpc.CallOption) (*CanGenerateCSRResponse, error) {
 	out := new(CanGenerateCSRResponse)
 	err := c.cc.Invoke(ctx, "/gnsi.certz.Certz/CanGenerateCSR", in, out, opts...)
@@ -79,6 +109,9 @@ func (c *certzClient) CanGenerateCSR(ctx context.Context, in *CanGenerateCSRRequ
 // for forward compatibility
 type CertzServer interface {
 	Rotate(Certz_RotateServer) error
+	AddSSLProfile(context.Context, *AddSSLProfileRequest) (*AddSSLProfileResponse, error)
+	DeleteSSLProfile(context.Context, *DeleteSSLProfileRequest) (*DeleteSSLProfileResponse, error)
+	GetSSLProfileList(context.Context, *GetSSLProfileListRequest) (*GetSSLProfileListResponse, error)
 	CanGenerateCSR(context.Context, *CanGenerateCSRRequest) (*CanGenerateCSRResponse, error)
 	mustEmbedUnimplementedCertzServer()
 }
@@ -89,6 +122,15 @@ type UnimplementedCertzServer struct {
 
 func (UnimplementedCertzServer) Rotate(Certz_RotateServer) error {
 	return status.Errorf(codes.Unimplemented, "method Rotate not implemented")
+}
+func (UnimplementedCertzServer) AddSSLProfile(context.Context, *AddSSLProfileRequest) (*AddSSLProfileResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddSSLProfile not implemented")
+}
+func (UnimplementedCertzServer) DeleteSSLProfile(context.Context, *DeleteSSLProfileRequest) (*DeleteSSLProfileResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteSSLProfile not implemented")
+}
+func (UnimplementedCertzServer) GetSSLProfileList(context.Context, *GetSSLProfileListRequest) (*GetSSLProfileListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetSSLProfileList not implemented")
 }
 func (UnimplementedCertzServer) CanGenerateCSR(context.Context, *CanGenerateCSRRequest) (*CanGenerateCSRResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CanGenerateCSR not implemented")
@@ -132,6 +174,60 @@ func (x *certzRotateServer) Recv() (*RotateCertificateRequest, error) {
 	return m, nil
 }
 
+func _Certz_AddSSLProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddSSLProfileRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CertzServer).AddSSLProfile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/gnsi.certz.Certz/AddSSLProfile",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CertzServer).AddSSLProfile(ctx, req.(*AddSSLProfileRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Certz_DeleteSSLProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteSSLProfileRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CertzServer).DeleteSSLProfile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/gnsi.certz.Certz/DeleteSSLProfile",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CertzServer).DeleteSSLProfile(ctx, req.(*DeleteSSLProfileRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Certz_GetSSLProfileList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetSSLProfileListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CertzServer).GetSSLProfileList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/gnsi.certz.Certz/GetSSLProfileList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CertzServer).GetSSLProfileList(ctx, req.(*GetSSLProfileListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Certz_CanGenerateCSR_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CanGenerateCSRRequest)
 	if err := dec(in); err != nil {
@@ -157,6 +253,18 @@ var Certz_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "gnsi.certz.Certz",
 	HandlerType: (*CertzServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "AddSSLProfile",
+			Handler:    _Certz_AddSSLProfile_Handler,
+		},
+		{
+			MethodName: "DeleteSSLProfile",
+			Handler:    _Certz_DeleteSSLProfile_Handler,
+		},
+		{
+			MethodName: "GetSSLProfileList",
+			Handler:    _Certz_GetSSLProfileList_Handler,
+		},
 		{
 			MethodName: "CanGenerateCSR",
 			Handler:    _Certz_CanGenerateCSR_Handler,

@@ -26,33 +26,68 @@ option (gnoi.types.gnoi_version) = "0.2.0";
 
 // The Certificate Management Service exported by targets.
 //
-// This service exports one RPCs, Rotate(), which is used to rotate an existing
+// This service exports multiple RPCs. Three of them are used to manage SSL
+// profiles, one to check if the target has the capability to create a CSR and
+// one, Rotate(), which is used to rotate (i.e. updatde or replace) an existing
 // certificate, an existing trust bundle and/or an existing certificate
-// revocation list bundle on a target.
+// revocation list bundle that are part of a SSL profile on a target.
 //
 // Note that for the sake of data consistency and API simplicity, only one RPC
 // may be in progress at a time. An attempt to initiate another RPC while
 // one is already in progress will be rejected with an error.
 //
-// The service makes an assumption that the certificates it manages are
+// The service makes an assumption that the credentials it manages are
 // organized in the following _logical_ topology.
 //
 // Target (as seen from gNSI.certificate microservice point of view)
 // |
-// +-+ certificate (used by all gRPC services)
-// | +- certificate (with public key)
-// | +- private key
+// +-+ SSL profile for gNXI; always present; ssl_profile_id := "gNxI"
+// | |
+// | +-+ certificate
+// | | +- certificate (with public key)
+// | | +- private key
+// | |
+// | +-+ trust bundle (Certificate Authority certificates)
+// | | +- CA Root certificate
+// | | +- CA Intermediate Certificate
+// | |
+// | +-+ Certificate Revocation List bundle
+// |   +-+ Certificate Revocalion List A
+// |   +-+ Certificate Revocalion List B
 // |
-// +-+ trust bundle (Certificate Authority certificates)
-// | +- CA Root certificate
-// | +- CA Intermediate Certificate
-// |
-// +-+ Certificate Revocation List bundle
-//   +-+ Certificate Revocalion List A
-//   +-+ Certificate Revocalion List B
+// +-+ Another SSL profile used by another gRPC-based service
+//   |
+//   +-+ certificate
+//   | +- certificate (with public key)
+//   | +- private key
+//   |
+//   +-+ trust bundle (Certificate Authority certificates)
+//   | +- CA Root certificate
+//   | +- CA Intermediate Certificate
+//   |
+//   +-+ Certificate Revocation List bundle
+//     +-+ Certificate Revocalion List A
+//     +-+ Certificate Revocalion List B
 //
-// The above shown topology implies that every operation performed using this
-// service changes a credential for all gRPC services at the same time.
+// As shown above the gNSI.certz manages certificates (public and private keys),
+// trust bundles (Certificate Authority chain of certificates) and Certificate
+// Revocation List (CRL) bundles grouped into SSL profiles.
+// Each profile has a unique ID and consisits of exactly one certificate, one
+// CA trust bundle and one CRL bundle.
+// There is at least one SSL profile present on the target, the one that is used
+// by all gNxI microservices. It is created during the bootstrap phase and
+// cannot be removed.
+// Other services that require credentials _can_ use the same SSL profile as
+// the gNxI server or they can use a SSL profiles that is created using
+// the `AddSSLProfile()` RPC. In any case, the assignment of a SSL profile to
+// a service is done using modifying the `/oc-sys:system/
+//  oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:config/
+//  oc-sys-grpc:certificate-id` OpenConfig leaf.
+//
+// Note that the this architesture implies that every operation performed
+// on a credential that is part of a SSL profile specified in the request
+// changes the credential at the same time for all  services configured to use
+// this particular SSL profile.
 
 service Certz {
   // Rotate will replace an existing device certificate and/or CA certificates
@@ -185,6 +220,30 @@ service Certz {
   rpc Rotate(stream RotateCertificateRequest)
       returns (stream RotateCertificateResponse);
 
+  // AddSSLProfile is part of SSL profile management and allows for adding new
+  // SSL profile.
+  // When a SSL profile is added all its elements, i.e. certificat, CA trust
+  // bundle and a set of certificate revocation lists are created and they are
+  // empty, so before they can be used they have to be 'rotated' using
+  // the `Rotate()` RPC.
+  // Note that an attempt to add an already exisitng profile will be rejected
+  // with an error.
+  rpc AddSSLProfile(AddSSLProfileRequest) returns (AddSSLProfileResponse);
+
+  // DeleteSSLProfile is part of SSL profile management and allows for removing
+  // an existing SSL profile.
+  // Note that an attempt to remove a not exisiting exisitng profile will result
+  // in an error.
+  // Not also that the profile used by the gNxI server cannot be deleted and an
+  // attempt to remove it will rejected with an error.
+  rpc DeleteSSLProfile(DeleteSSLProfileRequest)
+      returns (DeleteSSLProfileResponse);
+
+  // GetSSLProfileList is part of SSL profile management and allows for
+  // retrieving a list of IDs of SSL profiles present on the target.
+  rpc GetSSLProfileList(GetSSLProfileListRequest)
+      returns (GetSSLProfileListResponse);
+
   // An RPC to ask a target if it can generate a Certificate Signing Request.
   rpc CanGenerateCSR(CanGenerateCSRRequest) returns (CanGenerateCSRResponse);
 }
@@ -199,11 +258,17 @@ message RotateCertificateRequest {
   // It is a no-op for the `finalize_rotation` request.
   bool force_overwrite = 1;
 
+  // An identifier for the specific SSL profile (collection of
+  // certs/bundles/CRLs) which is being rotated through this stream.
+  // Leaving this field blank means that this stream will rotate the SSL profile
+  // which is currently being used by the gNSI service.
+  string ssl_profile_id = 2;
+
   // Request Messages.
   oneof rotate_request {
-    GenerateCSRRequest generate_csr = 2;
-    UploadRequest certificates = 3;
-    FinalizeRequest finalize_rotation = 4;
+    GenerateCSRRequest generate_csr = 3;
+    UploadRequest certificates = 4;
+    FinalizeRequest finalize_rotation = 5;
   }
 }
 
@@ -221,6 +286,36 @@ message RotateCertificateResponse {
 // the RPC concludes. The certificate must be rolled back if the target returns
 // an error after receiving a Finalize message.
 message FinalizeRequest {
+}
+
+// A request to add one or more SSL profiles.
+message AddSSLProfileRequest {
+  // A list of IDs of SSL profiles to be created.
+  repeated string ssl_profile_ids = 1;
+}
+
+// A response to a request to add one or more SSL profiles.
+message AddSSLProfileResponse {
+}
+
+// A request to remove one or more SSL profiles.
+message DeleteSSLProfileRequest {
+  // A list of IDs of SSL profiles to be removed.
+  repeated string ssl_profile_ids = 1;
+}
+
+// A response to a request to remove one or more SSL profiles.
+message DeleteSSLProfileResponse {
+}
+
+// A request for a list of all SSL profiles present on the target.
+message GetSSLProfileListRequest {
+}
+
+// A response with the list of all SSL profiles present on the target.
+message GetSSLProfileListResponse {
+  // A list of IDs of SSL profiles that exist on the target.
+  repeated string ssl_profile_ids = 1;
 }
 
 // A set of parameters a Certificate Signing Request.
