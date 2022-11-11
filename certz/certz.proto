@@ -28,7 +28,7 @@ option (gnoi.types.gnoi_version) = "0.2.0";
 //
 // This service exports multiple RPCs. Three of them are used to manage SSL
 // profiles, one to check if the target has the capability to create a CSR and
-// one, Rotate(), which is used to rotate (i.e. updatde or replace) an existing
+// one, Rotate(), which is used to rotate (i.e. update or replace) an existing
 // certificate, an existing trust bundle and/or an existing certificate
 // revocation list bundle that are part of a SSL profile on a target.
 //
@@ -52,10 +52,10 @@ option (gnoi.types.gnoi_version) = "0.2.0";
 // | | +- CA Intermediate Certificate
 // | |
 // | +-+ Certificate Revocation List bundle
-// |   +-+ Certificate Revocalion List A
-// |   +-+ Certificate Revocalion List B
+// |   +-+ Certificate Revocation List A
+// |   +-+ Certificate Revocation List B
 // |
-// +-+ Another SSL profile used by another gRPC-based service
+// +-+ Another SSL profile used by another service
 //   |
 //   +-+ certificate
 //   | +- certificate (with public key)
@@ -66,27 +66,27 @@ option (gnoi.types.gnoi_version) = "0.2.0";
 //   | +- CA Intermediate Certificate
 //   |
 //   +-+ Certificate Revocation List bundle
-//     +-+ Certificate Revocalion List A
-//     +-+ Certificate Revocalion List B
+//     +-+ Certificate Revocation List A
+//     +-+ Certificate Revocation List B
 //
 // As shown above the gNSI.certz manages certificates (public and private keys),
 // trust bundles (Certificate Authority chain of certificates) and Certificate
 // Revocation List (CRL) bundles grouped into SSL profiles.
-// Each profile has a unique ID and consisits of exactly one certificate, one
+// Each profile has a unique ID and consists of exactly one certificate, one
 // CA trust bundle and one CRL bundle.
 // There is at least one SSL profile present on the target, the one that is used
 // by all gNxI microservices. It is created during the bootstrap phase and
 // cannot be removed.
 // Other services that require credentials _can_ use the same SSL profile as
 // the gNxI server or they can use a SSL profiles that is created using
-// the `AddSSLProfile()` RPC. In any case, the assignment of a SSL profile to
+// the `AddProfile()` RPC. In any case, the assignment of a SSL profile to
 // a service is done using modifying the `/oc-sys:system/
 //  oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:config/
 //  oc-sys-grpc:certificate-id` OpenConfig leaf.
 //
-// Note that the this architesture implies that every operation performed
+// Note that the this architecture implies that every operation performed
 // on a credential that is part of a SSL profile specified in the request
-// changes the credential at the same time for all  services configured to use
+// changes the credential at the same time for all services configured to use
 // this particular SSL profile.
 
 service Certz {
@@ -94,7 +94,7 @@ service Certz {
   // (trust bundle) or/and a certificate revocation list bundle on the target.
   // The new device certificate can be created from a target-generated or
   // client-generated CSR. In the latter case the client has to provide
-  // coresponding private key with the signed certificate.
+  // corresponding private key with the signed certificate.
   // If the stream is broken or any of the steps fail the target must rollback
   // to the original state, i.e. revert any changes to the certificate,
   // CA certificates and the Certificate Revocation List bundle.
@@ -127,8 +127,8 @@ service Certz {
   //     If new certificate revocation list bundle has been uploaded in step 3,
   //     during this step the client also attempts to establish a new connection
   //     to the target using revoked certificate(s) - the attempt must fail
-  //     prooving that the certificates have been revoked.
-  //     Once verfied, the client then proceeds to finalize the rotation.
+  //     proving that the certificates have been revoked.
+  //     Once verified, the client then proceeds to finalize the rotation.
   //
   //   Step 5: Final commit.
   //     Client ---> FinalizeRequest ----> Target
@@ -162,8 +162,8 @@ service Certz {
   //     If new certificate revocation list bundle has been uploaded in step 4,
   //     during this step the client also attempts to establish a new connection
   //     to the target using revoked certificate(s) - the attempt must fail
-  //     prooving that the certificates have been revoked.
-  //     Once verfied, the client then proceeds to finalize the rotation.
+  //     proving that the certificates have been revoked.
+  //     Once verified, the client then proceeds to finalize the rotation.
   //
   //   Step 6: Final commit.
   //     Client ---> FinalizeRequest ----> Target
@@ -189,8 +189,8 @@ service Certz {
   //     If new certificate revocation list bundle has been uploaded in step 2,
   //     during this step the client also attempts to establish a new connection
   //     to the target using revoked certificate(s) - the attempt must fail
-  //     prooving that the certificates have been revoked.
-  //     Once verfied, the client then proceeds to finalize the rotation.
+  //     proving that the certificates have been revoked.
+  //     Once verified, the client then proceeds to finalize the rotation.
   //
   //   Step 4: Final commit.
   //     Client ---> FinalizeRequest ----> Target
@@ -208,10 +208,10 @@ service Certz {
   //   Step 3 (optional): Test/Validation by the client.
   //     During this step the client attempts to establish a new connection
   //     to the target using revoked certificate(s) - the attempt must fail
-  //     prooving that the certificates have been revoked.
+  //     proving that the certificates have been revoked.
   //     If the new connection can be completed the client will cancel the
   //     RPC thereby forcing the target to rollback all the certificates.
-  //     Once verfied, the client then proceeds to finalize the rotation.
+  //     Once verified, the client then proceeds to finalize the rotation.
   //
   //   Step 4: Final commit.
   //     Client ---> FinalizeRequest ----> Target
@@ -220,29 +220,29 @@ service Certz {
   rpc Rotate(stream RotateCertificateRequest)
       returns (stream RotateCertificateResponse);
 
-  // AddSSLProfile is part of SSL profile management and allows for adding new
+  // AddProfile is part of SSL profile management and allows for adding new
   // SSL profile.
-  // When a SSL profile is added all its elements, i.e. certificat, CA trust
+  // When a SSL profile is added all its elements, i.e. certificate, CA trust
   // bundle and a set of certificate revocation lists are created and they are
   // empty, so before they can be used they have to be 'rotated' using
   // the `Rotate()` RPC.
-  // Note that an attempt to add an already exisitng profile will be rejected
+  // Note that an attempt to add an already existing profile will be rejected
   // with an error.
-  rpc AddSSLProfile(AddSSLProfileRequest) returns (AddSSLProfileResponse);
+  rpc AddProfile(AddProfileRequest) returns (AddProfileResponse);
 
-  // DeleteSSLProfile is part of SSL profile management and allows for removing
+  // DeleteProfile is part of SSL profile management and allows for removing
   // an existing SSL profile.
-  // Note that an attempt to remove a not exisiting exisitng profile will result
+  // Note that an attempt to remove a not existing profile will result
   // in an error.
   // Not also that the profile used by the gNxI server cannot be deleted and an
   // attempt to remove it will rejected with an error.
-  rpc DeleteSSLProfile(DeleteSSLProfileRequest)
-      returns (DeleteSSLProfileResponse);
+  rpc DeleteProfile(DeleteProfileRequest)
+      returns (DeleteProfileResponse);
 
-  // GetSSLProfileList is part of SSL profile management and allows for
+  // GetProfileList is part of SSL profile management and allows for
   // retrieving a list of IDs of SSL profiles present on the target.
-  rpc GetSSLProfileList(GetSSLProfileListRequest)
-      returns (GetSSLProfileListResponse);
+  rpc GetProfileList(GetProfileListRequest)
+      returns (GetProfileListResponse);
 
   // An RPC to ask a target if it can generate a Certificate Signing Request.
   rpc CanGenerateCSR(CanGenerateCSRRequest) returns (CanGenerateCSRResponse);
@@ -289,31 +289,31 @@ message FinalizeRequest {
 }
 
 // A request to add one or more SSL profiles.
-message AddSSLProfileRequest {
+message AddProfileRequest {
   // A list of IDs of SSL profiles to be created.
   repeated string ssl_profile_ids = 1;
 }
 
 // A response to a request to add one or more SSL profiles.
-message AddSSLProfileResponse {
+message AddProfileResponse {
 }
 
 // A request to remove one or more SSL profiles.
-message DeleteSSLProfileRequest {
+message DeleteProfileRequest {
   // A list of IDs of SSL profiles to be removed.
   repeated string ssl_profile_ids = 1;
 }
 
 // A response to a request to remove one or more SSL profiles.
-message DeleteSSLProfileResponse {
+message DeleteProfileResponse {
 }
 
 // A request for a list of all SSL profiles present on the target.
-message GetSSLProfileListRequest {
+message GetProfileListRequest {
 }
 
 // A response with the list of all SSL profiles present on the target.
-message GetSSLProfileListResponse {
+message GetProfileListResponse {
   // A list of IDs of SSL profiles that exist on the target.
   repeated string ssl_profile_ids = 1;
 }
@@ -460,14 +460,14 @@ message Entity {
   }
 }
 
-// UploadRequest instructs the target to store the given entities (certificte,
+// UploadRequest instructs the target to store the given entities (certificate,
 // and/or trust bundle and certificate revocation list bundle).
 //
 // As the target does not generate the CSR, the public/private key pair is
 // generated externally and the target is provided with the private/public key
 // pair.
 //
-// The trust bundle (a chain of Certificate Authoritity certificates) can be
+// The trust bundle (a chain of Certificate Authority certificates) can be
 // used to validate client's certificates.
 // To improve performance in the Target, certificates can be ordered.
 // Groups of chained certificates should be last, where within, the root
@@ -494,7 +494,7 @@ message CertificateSigningRequest {
 }
 
 // A message sent by a client requesting the target to generate a CSR with
-// the sepcified parameters.
+// the specified parameters.
 message GenerateCSRRequest {
   CSRParams params = 1;
 }

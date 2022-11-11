@@ -46,31 +46,31 @@ the gNxI server. Its ID is `gNxI` but when the `ssl_profile_id` field in the
 also refers this SSL profile.
 
 Profiles existing on a target can be discovered using the
-`Certz.GetSSLProfileList()` RPC.
+`Certz.GetProfileList()` RPC.
 
-A SSL profile can be added using the `Certz.AddSSLProfile()` RPC.
+A SSL profile can be added using the `Certz.AddProfile()` RPC.
 
 When no longer a profile is needed it can be removed from the target via
-`Certz.DeleteSSLProfile()` RPC. Note that the gNxI SSL profile cannot be
+`Certz.DeleteProfile()` RPC. Note that the gNxI SSL profile cannot be
 removed.
 
 ### User Experiences
 
 #### Create a SSL profile
 
-Call `Certz.AddSSLProfile` RPC with the `ssl_profile_id` field specifing the ID
+Call `Certz.AddProfile` RPC with the `ssl_profile_id` field specifing the ID
 of the new SSL profile. It is possible to create multiple SSL profiles using
-one `Certz.AddSSLProfile` RPC.
+one `Certz.AddProfile` RPC.
 
 #### Delete a SSL profile
 
-Call `Certz.DeleteSSLProfile` RPC with the `ssl_profile_id` field specifing the
+Call `Certz.DeleteProfile` RPC with the `ssl_profile_id` field specifing the
 ID of the SSL profile to be deleted. It is possible to remove multiple SSL
-profiles using one `Certz.DeleteSSLProfile` RPC.
+profiles using one `Certz.DeleteProfile` RPC.
 
 #### List exisitng SSL profiles
 
-Call `Certz.GetSSLProfileList` RPC. The response will list all exisitng
+Call `Certz.GetProfileList` RPC. The response will list all exisitng
 SSL profiles.
 
 #### A CertificateBundle is to be rotated or updated
