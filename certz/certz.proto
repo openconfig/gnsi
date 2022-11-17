@@ -80,11 +80,11 @@ option (gnoi.types.gnoi_version) = "0.2.0";
 // Other services that require credentials _can_ use the same SSL profile as
 // the gNxI server or they can use a SSL profiles that is created using
 // the `AddProfile()` RPC. In any case, the assignment of a SSL profile to
-// a service is done using modifying the `/oc-sys:system/
+// a service is done by modifying the `/oc-sys:system/
 //  oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:config/
 //  oc-sys-grpc:certificate-id` OpenConfig leaf.
 //
-// Note that the this architecture implies that every operation performed
+// Note that this architecture implies that every operation performed
 // on a credential that is part of a SSL profile specified in the request
 // changes the credential at the same time for all services configured to use
 // this particular SSL profile.
@@ -288,23 +288,23 @@ message RotateCertificateResponse {
 message FinalizeRequest {
 }
 
-// A request to add one or more SSL profiles.
+// A request to add a new SSL profile.
 message AddProfileRequest {
-  // A list of IDs of SSL profiles to be created.
-  repeated string ssl_profile_ids = 1;
+  // The ID of the SSL profile to be created.
+  string ssl_profile_id = 1;
 }
 
-// A response to a request to add one or more SSL profiles.
+// A response to a request to add a new SSL profile.
 message AddProfileResponse {
 }
 
-// A request to remove one or more SSL profiles.
+// A request to remove an existing SSL profile.
 message DeleteProfileRequest {
-  // A list of IDs of SSL profiles to be removed.
-  repeated string ssl_profile_ids = 1;
+  // The ID of the SSL profile to be removed.
+  string ssl_profile_id = 1;
 }
 
-// A response to a request to remove one or more SSL profiles.
+// A response to a request to remove an existing SSL profile.
 message DeleteProfileResponse {
 }
 

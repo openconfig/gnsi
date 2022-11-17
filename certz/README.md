@@ -58,19 +58,17 @@ removed.
 
 #### Create a SSL profile
 
-Call `Certz.AddProfile` RPC with the `ssl_profile_id` field specifing the ID
-of the new SSL profile. It is possible to create multiple SSL profiles using
-one `Certz.AddProfile` RPC.
+Call `Certz.AddProfile` RPC with the `ssl_profile_id` field specifying the ID
+of the new SSL profile.
 
 #### Delete a SSL profile
 
-Call `Certz.DeleteProfile` RPC with the `ssl_profile_id` field specifing the
-ID of the SSL profile to be deleted. It is possible to remove multiple SSL
-profiles using one `Certz.DeleteProfile` RPC.
+Call `Certz.DeleteProfile` RPC with the `ssl_profile_id` field specifying the
+ID of the SSL profile to be deleted.
 
-#### List exisitng SSL profiles
+#### List existing SSL profiles
 
-Call `Certz.GetProfileList` RPC. The response will list all exisitng
+Call `Certz.GetProfileList` RPC. The response will list all existing
 SSL profiles.
 
 #### A CertificateBundle is to be rotated or updated
