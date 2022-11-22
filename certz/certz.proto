@@ -226,7 +226,7 @@ message FinalizeRequest {
 // CipherSuite specifies the valid types of keys and digests that can be used
 // to generate CSRs
 enum CSRSuite {
-  CIPHER_UNSPECIFIED = 0;
+  CSRSUITE_CIPHER_UNSPECIFIED = 0;
 
   // format:
   // <certificate type>_<key type>_<signature algorithm>
