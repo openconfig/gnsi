@@ -223,7 +223,7 @@ message RotateCertificateResponse {
 message FinalizeRequest {
 }
 
-// CipherSuite specifies the valid types of keys and digests that can be used
+// CSRSuite specifies the valid types of keys and digests that can be used
 // to generate CSRs
 enum CSRSuite {
   CSRSUITE_CIPHER_UNSPECIFIED = 0;
