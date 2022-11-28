@@ -7,11 +7,12 @@
 package credentialz
 
 import (
+	reflect "reflect"
+	sync "sync"
+
 	_ "github.com/openconfig/gnoi/types"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	reflect "reflect"
-	sync "sync"
 )
 
 const (
@@ -74,6 +75,55 @@ func (x KeyType) Number() protoreflect.EnumNumber {
 // Deprecated: Use KeyType.Descriptor instead.
 func (KeyType) EnumDescriptor() ([]byte, []int) {
 	return file_github_com_openconfig_gnsi_credentialz_credentialz_proto_rawDescGZIP(), []int{0}
+}
+
+type HashType int32
+
+const (
+	HashType_HASH_TYPE_UNSPECIFIED     HashType = 0
+	HashType_HASH_TYPE_CRYPT_MD5       HashType = 1
+	HashType_HASH_TYPE_CRYPT_SHA_2_512 HashType = 2
+)
+
+// Enum value maps for HashType.
+var (
+	HashType_name = map[int32]string{
+		0: "HASH_TYPE_UNSPECIFIED",
+		1: "HASH_TYPE_CRYPT_MD5",
+		2: "HASH_TYPE_CRYPT_SHA_2_512",
+	}
+	HashType_value = map[string]int32{
+		"HASH_TYPE_UNSPECIFIED":     0,
+		"HASH_TYPE_CRYPT_MD5":       1,
+		"HASH_TYPE_CRYPT_SHA_2_512": 2,
+	}
+)
+
+func (x HashType) Enum() *HashType {
+	p := new(HashType)
+	*p = x
+	return p
+}
+
+func (x HashType) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (HashType) Descriptor() protoreflect.EnumDescriptor {
+	return file_github_com_openconfig_gnsi_credentialz_credentialz_proto_enumTypes[1].Descriptor()
+}
+
+func (HashType) Type() protoreflect.EnumType {
+	return &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_enumTypes[1]
+}
+
+func (x HashType) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use HashType.Descriptor instead.
+func (HashType) EnumDescriptor() ([]byte, []int) {
+	return file_github_com_openconfig_gnsi_credentialz_credentialz_proto_rawDescGZIP(), []int{1}
 }
 
 type Option_StandardOption int32
@@ -169,11 +219,11 @@ func (x Option_StandardOption) String() string {
 }
 
 func (Option_StandardOption) Descriptor() protoreflect.EnumDescriptor {
-	return file_github_com_openconfig_gnsi_credentialz_credentialz_proto_enumTypes[1].Descriptor()
+	return file_github_com_openconfig_gnsi_credentialz_credentialz_proto_enumTypes[2].Descriptor()
 }
 
 func (Option_StandardOption) Type() protoreflect.EnumType {
-	return &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_enumTypes[1]
+	return &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_enumTypes[2]
 }
 
 func (x Option_StandardOption) Number() protoreflect.EnumNumber {
@@ -215,11 +265,11 @@ func (x UserPolicy_AuthorizedPrincipalCheck_Tool) String() string {
 }
 
 func (UserPolicy_AuthorizedPrincipalCheck_Tool) Descriptor() protoreflect.EnumDescriptor {
-	return file_github_com_openconfig_gnsi_credentialz_credentialz_proto_enumTypes[2].Descriptor()
+	return file_github_com_openconfig_gnsi_credentialz_credentialz_proto_enumTypes[3].Descriptor()
 }
 
 func (UserPolicy_AuthorizedPrincipalCheck_Tool) Type() protoreflect.EnumType {
-	return &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_enumTypes[2]
+	return &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_enumTypes[3]
 }
 
 func (x UserPolicy_AuthorizedPrincipalCheck_Tool) Number() protoreflect.EnumNumber {
@@ -866,6 +916,61 @@ func (*AuthorizedUsersResponse) Descriptor() ([]byte, []int) {
 	return file_github_com_openconfig_gnsi_credentialz_credentialz_proto_rawDescGZIP(), []int{8}
 }
 
+type CryptoHash struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	HashType  HashType `protobuf:"varint,1,opt,name=hashType,proto3,enum=gnsi.credentialz.HashType" json:"hashType,omitempty"`
+	HashValue string   `protobuf:"bytes,2,opt,name=hashValue,proto3" json:"hashValue,omitempty"`
+}
+
+func (x *CryptoHash) Reset() {
+	*x = CryptoHash{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[9]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *CryptoHash) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CryptoHash) ProtoMessage() {}
+
+func (x *CryptoHash) ProtoReflect() protoreflect.Message {
+	mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[9]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CryptoHash.ProtoReflect.Descriptor instead.
+func (*CryptoHash) Descriptor() ([]byte, []int) {
+	return file_github_com_openconfig_gnsi_credentialz_credentialz_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *CryptoHash) GetHashType() HashType {
+	if x != nil {
+		return x.HashType
+	}
+	return HashType_HASH_TYPE_UNSPECIFIED
+}
+
+func (x *CryptoHash) GetHashValue() string {
+	if x != nil {
+		return x.HashValue
+	}
+	return ""
+}
+
 type PasswordRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -877,7 +982,7 @@ type PasswordRequest struct {
 func (x *PasswordRequest) Reset() {
 	*x = PasswordRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[9]
+		mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[10]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -890,7 +995,7 @@ func (x *PasswordRequest) String() string {
 func (*PasswordRequest) ProtoMessage() {}
 
 func (x *PasswordRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[9]
+	mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[10]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -903,7 +1008,7 @@ func (x *PasswordRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PasswordRequest.ProtoReflect.Descriptor instead.
 func (*PasswordRequest) Descriptor() ([]byte, []int) {
-	return file_github_com_openconfig_gnsi_credentialz_credentialz_proto_rawDescGZIP(), []int{9}
+	return file_github_com_openconfig_gnsi_credentialz_credentialz_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *PasswordRequest) GetAccounts() []*PasswordRequest_Account {
@@ -922,7 +1027,7 @@ type PasswordResponse struct {
 func (x *PasswordResponse) Reset() {
 	*x = PasswordResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[10]
+		mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[11]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -935,7 +1040,7 @@ func (x *PasswordResponse) String() string {
 func (*PasswordResponse) ProtoMessage() {}
 
 func (x *PasswordResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[10]
+	mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[11]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -948,7 +1053,7 @@ func (x *PasswordResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PasswordResponse.ProtoReflect.Descriptor instead.
 func (*PasswordResponse) Descriptor() ([]byte, []int) {
-	return file_github_com_openconfig_gnsi_credentialz_credentialz_proto_rawDescGZIP(), []int{10}
+	return file_github_com_openconfig_gnsi_credentialz_credentialz_proto_rawDescGZIP(), []int{11}
 }
 
 type RotateHostCredentialsRequest struct {
@@ -966,7 +1071,7 @@ type RotateHostCredentialsRequest struct {
 func (x *RotateHostCredentialsRequest) Reset() {
 	*x = RotateHostCredentialsRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[11]
+		mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[12]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -979,7 +1084,7 @@ func (x *RotateHostCredentialsRequest) String() string {
 func (*RotateHostCredentialsRequest) ProtoMessage() {}
 
 func (x *RotateHostCredentialsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[11]
+	mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[12]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -992,7 +1097,7 @@ func (x *RotateHostCredentialsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RotateHostCredentialsRequest.ProtoReflect.Descriptor instead.
 func (*RotateHostCredentialsRequest) Descriptor() ([]byte, []int) {
-	return file_github_com_openconfig_gnsi_credentialz_credentialz_proto_rawDescGZIP(), []int{11}
+	return file_github_com_openconfig_gnsi_credentialz_credentialz_proto_rawDescGZIP(), []int{12}
 }
 
 func (m *RotateHostCredentialsRequest) GetRequest() isRotateHostCredentialsRequest_Request {
@@ -1059,7 +1164,7 @@ type RotateHostCredentialsResponse struct {
 func (x *RotateHostCredentialsResponse) Reset() {
 	*x = RotateHostCredentialsResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[12]
+		mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[13]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1072,7 +1177,7 @@ func (x *RotateHostCredentialsResponse) String() string {
 func (*RotateHostCredentialsResponse) ProtoMessage() {}
 
 func (x *RotateHostCredentialsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[12]
+	mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[13]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1085,7 +1190,7 @@ func (x *RotateHostCredentialsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RotateHostCredentialsResponse.ProtoReflect.Descriptor instead.
 func (*RotateHostCredentialsResponse) Descriptor() ([]byte, []int) {
-	return file_github_com_openconfig_gnsi_credentialz_credentialz_proto_rawDescGZIP(), []int{12}
+	return file_github_com_openconfig_gnsi_credentialz_credentialz_proto_rawDescGZIP(), []int{13}
 }
 
 func (m *RotateHostCredentialsResponse) GetResponse() isRotateHostCredentialsResponse_Response {
@@ -1138,7 +1243,7 @@ type CaPublicKeyRequest struct {
 func (x *CaPublicKeyRequest) Reset() {
 	*x = CaPublicKeyRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[13]
+		mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[14]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1151,7 +1256,7 @@ func (x *CaPublicKeyRequest) String() string {
 func (*CaPublicKeyRequest) ProtoMessage() {}
 
 func (x *CaPublicKeyRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[13]
+	mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[14]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1164,7 +1269,7 @@ func (x *CaPublicKeyRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CaPublicKeyRequest.ProtoReflect.Descriptor instead.
 func (*CaPublicKeyRequest) Descriptor() ([]byte, []int) {
-	return file_github_com_openconfig_gnsi_credentialz_credentialz_proto_rawDescGZIP(), []int{13}
+	return file_github_com_openconfig_gnsi_credentialz_credentialz_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *CaPublicKeyRequest) GetSshCaPublicKeys() [][]byte {
@@ -1197,7 +1302,7 @@ type CaPublicKeyResponse struct {
 func (x *CaPublicKeyResponse) Reset() {
 	*x = CaPublicKeyResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[14]
+		mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[15]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1210,7 +1315,7 @@ func (x *CaPublicKeyResponse) String() string {
 func (*CaPublicKeyResponse) ProtoMessage() {}
 
 func (x *CaPublicKeyResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[14]
+	mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[15]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1223,7 +1328,7 @@ func (x *CaPublicKeyResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CaPublicKeyResponse.ProtoReflect.Descriptor instead.
 func (*CaPublicKeyResponse) Descriptor() ([]byte, []int) {
-	return file_github_com_openconfig_gnsi_credentialz_credentialz_proto_rawDescGZIP(), []int{14}
+	return file_github_com_openconfig_gnsi_credentialz_credentialz_proto_rawDescGZIP(), []int{15}
 }
 
 type ServerKeysRequest struct {
@@ -1243,7 +1348,7 @@ type ServerKeysRequest struct {
 func (x *ServerKeysRequest) Reset() {
 	*x = ServerKeysRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[15]
+		mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[16]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1256,7 +1361,7 @@ func (x *ServerKeysRequest) String() string {
 func (*ServerKeysRequest) ProtoMessage() {}
 
 func (x *ServerKeysRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[15]
+	mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[16]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1269,7 +1374,7 @@ func (x *ServerKeysRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ServerKeysRequest.ProtoReflect.Descriptor instead.
 func (*ServerKeysRequest) Descriptor() ([]byte, []int) {
-	return file_github_com_openconfig_gnsi_credentialz_credentialz_proto_rawDescGZIP(), []int{15}
+	return file_github_com_openconfig_gnsi_credentialz_credentialz_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *ServerKeysRequest) GetPublicKey() []byte {
@@ -1330,7 +1435,7 @@ type ServerKeysResponse struct {
 func (x *ServerKeysResponse) Reset() {
 	*x = ServerKeysResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[16]
+		mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[17]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1343,7 +1448,7 @@ func (x *ServerKeysResponse) String() string {
 func (*ServerKeysResponse) ProtoMessage() {}
 
 func (x *ServerKeysResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[16]
+	mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[17]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1356,7 +1461,7 @@ func (x *ServerKeysResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ServerKeysResponse.ProtoReflect.Descriptor instead.
 func (*ServerKeysResponse) Descriptor() ([]byte, []int) {
-	return file_github_com_openconfig_gnsi_credentialz_credentialz_proto_rawDescGZIP(), []int{16}
+	return file_github_com_openconfig_gnsi_credentialz_credentialz_proto_rawDescGZIP(), []int{17}
 }
 
 type FinalizeRequest struct {
@@ -1368,7 +1473,7 @@ type FinalizeRequest struct {
 func (x *FinalizeRequest) Reset() {
 	*x = FinalizeRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[17]
+		mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[18]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1381,7 +1486,7 @@ func (x *FinalizeRequest) String() string {
 func (*FinalizeRequest) ProtoMessage() {}
 
 func (x *FinalizeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[17]
+	mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[18]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1394,7 +1499,7 @@ func (x *FinalizeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FinalizeRequest.ProtoReflect.Descriptor instead.
 func (*FinalizeRequest) Descriptor() ([]byte, []int) {
-	return file_github_com_openconfig_gnsi_credentialz_credentialz_proto_rawDescGZIP(), []int{17}
+	return file_github_com_openconfig_gnsi_credentialz_credentialz_proto_rawDescGZIP(), []int{18}
 }
 
 type AccountCredentials_AuthorizedKey struct {
@@ -1411,7 +1516,7 @@ type AccountCredentials_AuthorizedKey struct {
 func (x *AccountCredentials_AuthorizedKey) Reset() {
 	*x = AccountCredentials_AuthorizedKey{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[18]
+		mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[19]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1424,7 +1529,7 @@ func (x *AccountCredentials_AuthorizedKey) String() string {
 func (*AccountCredentials_AuthorizedKey) ProtoMessage() {}
 
 func (x *AccountCredentials_AuthorizedKey) ProtoReflect() protoreflect.Message {
-	mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[18]
+	mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[19]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1479,7 +1584,7 @@ type UserPolicy_SshAuthorizedUsers struct {
 func (x *UserPolicy_SshAuthorizedUsers) Reset() {
 	*x = UserPolicy_SshAuthorizedUsers{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[19]
+		mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[20]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1492,7 +1597,7 @@ func (x *UserPolicy_SshAuthorizedUsers) String() string {
 func (*UserPolicy_SshAuthorizedUsers) ProtoMessage() {}
 
 func (x *UserPolicy_SshAuthorizedUsers) ProtoReflect() protoreflect.Message {
-	mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[19]
+	mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[20]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1527,7 +1632,7 @@ type UserPolicy_SshAuthorizedUser struct {
 func (x *UserPolicy_SshAuthorizedUser) Reset() {
 	*x = UserPolicy_SshAuthorizedUser{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[20]
+		mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[21]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1540,7 +1645,7 @@ func (x *UserPolicy_SshAuthorizedUser) String() string {
 func (*UserPolicy_SshAuthorizedUser) ProtoMessage() {}
 
 func (x *UserPolicy_SshAuthorizedUser) ProtoReflect() protoreflect.Message {
-	mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[20]
+	mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[21]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1582,7 +1687,7 @@ type UserPolicy_AuthorizedPrincipalCheck struct {
 func (x *UserPolicy_AuthorizedPrincipalCheck) Reset() {
 	*x = UserPolicy_AuthorizedPrincipalCheck{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[21]
+		mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[22]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1595,7 +1700,7 @@ func (x *UserPolicy_AuthorizedPrincipalCheck) String() string {
 func (*UserPolicy_AuthorizedPrincipalCheck) ProtoMessage() {}
 
 func (x *UserPolicy_AuthorizedPrincipalCheck) ProtoReflect() protoreflect.Message {
-	mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[21]
+	mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[22]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1632,14 +1737,14 @@ type PasswordRequest_Password struct {
 
 	// Types that are assignable to Value:
 	//	*PasswordRequest_Password_Plaintext
-	//	*PasswordRequest_Password_Encrypted
+	//	*PasswordRequest_Password_CryptoHash
 	Value isPasswordRequest_Password_Value `protobuf_oneof:"value"`
 }
 
 func (x *PasswordRequest_Password) Reset() {
 	*x = PasswordRequest_Password{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[22]
+		mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[23]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1652,7 +1757,7 @@ func (x *PasswordRequest_Password) String() string {
 func (*PasswordRequest_Password) ProtoMessage() {}
 
 func (x *PasswordRequest_Password) ProtoReflect() protoreflect.Message {
-	mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[22]
+	mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[23]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1665,7 +1770,7 @@ func (x *PasswordRequest_Password) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PasswordRequest_Password.ProtoReflect.Descriptor instead.
 func (*PasswordRequest_Password) Descriptor() ([]byte, []int) {
-	return file_github_com_openconfig_gnsi_credentialz_credentialz_proto_rawDescGZIP(), []int{9, 0}
+	return file_github_com_openconfig_gnsi_credentialz_credentialz_proto_rawDescGZIP(), []int{10, 0}
 }
 
 func (m *PasswordRequest_Password) GetValue() isPasswordRequest_Password_Value {
@@ -1682,11 +1787,11 @@ func (x *PasswordRequest_Password) GetPlaintext() string {
 	return ""
 }
 
-func (x *PasswordRequest_Password) GetEncrypted() string {
-	if x, ok := x.GetValue().(*PasswordRequest_Password_Encrypted); ok {
-		return x.Encrypted
+func (x *PasswordRequest_Password) GetCryptoHash() *CryptoHash {
+	if x, ok := x.GetValue().(*PasswordRequest_Password_CryptoHash); ok {
+		return x.CryptoHash
 	}
-	return ""
+	return nil
 }
 
 type isPasswordRequest_Password_Value interface {
@@ -1697,13 +1802,13 @@ type PasswordRequest_Password_Plaintext struct {
 	Plaintext string `protobuf:"bytes,1,opt,name=plaintext,proto3,oneof"`
 }
 
-type PasswordRequest_Password_Encrypted struct {
-	Encrypted string `protobuf:"bytes,2,opt,name=encrypted,proto3,oneof"`
+type PasswordRequest_Password_CryptoHash struct {
+	CryptoHash *CryptoHash `protobuf:"bytes,2,opt,name=cryptoHash,proto3,oneof"`
 }
 
 func (*PasswordRequest_Password_Plaintext) isPasswordRequest_Password_Value() {}
 
-func (*PasswordRequest_Password_Encrypted) isPasswordRequest_Password_Value() {}
+func (*PasswordRequest_Password_CryptoHash) isPasswordRequest_Password_Value() {}
 
 type PasswordRequest_Account struct {
 	state         protoimpl.MessageState
@@ -1719,7 +1824,7 @@ type PasswordRequest_Account struct {
 func (x *PasswordRequest_Account) Reset() {
 	*x = PasswordRequest_Account{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[23]
+		mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[24]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1732,7 +1837,7 @@ func (x *PasswordRequest_Account) String() string {
 func (*PasswordRequest_Account) ProtoMessage() {}
 
 func (x *PasswordRequest_Account) ProtoReflect() protoreflect.Message {
-	mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[23]
+	mi := &file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[24]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1745,7 +1850,7 @@ func (x *PasswordRequest_Account) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PasswordRequest_Account.ProtoReflect.Descriptor instead.
 func (*PasswordRequest_Account) Descriptor() ([]byte, []int) {
-	return file_github_com_openconfig_gnsi_credentialz_credentialz_proto_rawDescGZIP(), []int{9, 1}
+	return file_github_com_openconfig_gnsi_credentialz_credentialz_proto_rawDescGZIP(), []int{10, 1}
 }
 
 func (x *PasswordRequest_Account) GetAccount() string {
@@ -1965,25 +2070,71 @@ var file_github_com_openconfig_gnsi_credentialz_credentialz_proto_rawDesc = []by
 	0x0a, 0x12, 0x75, 0x73, 0x65, 0x72, 0x5f, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x7a, 0x61,
 	0x74, 0x69, 0x6f, 0x6e, 0x22, 0x19, 0x0a, 0x17, 0x41, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x7a,
 	0x65, 0x64, 0x55, 0x73, 0x65, 0x72, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22,
-	0xd4, 0x02, 0x0a, 0x0f, 0x50, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x52, 0x65, 0x71, 0x75,
-	0x65, 0x73, 0x74, 0x12, 0x45, 0x0a, 0x08, 0x61, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x73, 0x18,
-	0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x29, 0x2e, 0x67, 0x6e, 0x73, 0x69, 0x2e, 0x63, 0x72, 0x65,
-	0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x7a, 0x2e, 0x50, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72,
-	0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x2e, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74,
-	0x52, 0x08, 0x61, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x73, 0x1a, 0x53, 0x0a, 0x08, 0x50, 0x61,
-	0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x12, 0x1e, 0x0a, 0x09, 0x70, 0x6c, 0x61, 0x69, 0x6e, 0x74,
-	0x65, 0x78, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x48, 0x00, 0x52, 0x09, 0x70, 0x6c, 0x61,
-	0x69, 0x6e, 0x74, 0x65, 0x78, 0x74, 0x12, 0x1e, 0x0a, 0x09, 0x65, 0x6e, 0x63, 0x72, 0x79, 0x70,
-	0x74, 0x65, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x48, 0x00, 0x52, 0x09, 0x65, 0x6e, 0x63,
-	0x72, 0x79, 0x70, 0x74, 0x65, 0x64, 0x42, 0x07, 0x0a, 0x05, 0x76, 0x61, 0x6c, 0x75, 0x65, 0x1a,
-	0xa4, 0x01, 0x0a, 0x07, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x18, 0x0a, 0x07, 0x61,
-	0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x61, 0x63,
-	0x63, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x46, 0x0a, 0x08, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72,
-	0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x67, 0x6e, 0x73, 0x69, 0x2e, 0x63,
-	0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x7a, 0x2e, 0x50, 0x61, 0x73, 0x73, 0x77,
-	0x6f, 0x72, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x2e, 0x50, 0x61, 0x73, 0x73, 0x77,
-	0x6f, 0x72, 0x64, 0x52, 0x08, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x12, 0x18, 0x0a,
-	0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07,
+	0x62, 0x0a, 0x0a, 0x43, 0x72, 0x79, 0x70, 0x74, 0x6f, 0x48, 0x61, 0x73, 0x68, 0x12, 0x36, 0x0a,
+	0x08, 0x68, 0x61, 0x73, 0x68, 0x54, 0x79, 0x70, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0e, 0x32,
+	0x1a, 0x2e, 0x67, 0x6e, 0x73, 0x69, 0x2e, 0x63, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61,
+	0x6c, 0x7a, 0x2e, 0x48, 0x61, 0x73, 0x68, 0x54, 0x79, 0x70, 0x65, 0x52, 0x08, 0x68, 0x61, 0x73,
+	0x68, 0x54, 0x79, 0x70, 0x65, 0x12, 0x1c, 0x0a, 0x09, 0x68, 0x61, 0x73, 0x68, 0x56, 0x61, 0x6c,
+	0x75, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x09, 0x68, 0x61, 0x73, 0x68, 0x56, 0x61,
+	0x6c, 0x75, 0x65, 0x22, 0xf4, 0x02, 0x0a, 0x0f, 0x50, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x45, 0x0a, 0x08, 0x61, 0x63, 0x63, 0x6f, 0x75,
+	0x6e, 0x74, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x29, 0x2e, 0x67, 0x6e, 0x73, 0x69,
+	0x2e, 0x63, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x7a, 0x2e, 0x50, 0x61, 0x73,
+	0x73, 0x77, 0x6f, 0x72, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x2e, 0x41, 0x63, 0x63,
+	0x6f, 0x75, 0x6e, 0x74, 0x52, 0x08, 0x61, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x73, 0x1a, 0x73,
+	0x0a, 0x08, 0x50, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x12, 0x1e, 0x0a, 0x09, 0x70, 0x6c,
+	0x61, 0x69, 0x6e, 0x74, 0x65, 0x78, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x48, 0x00, 0x52,
+	0x09, 0x70, 0x6c, 0x61, 0x69, 0x6e, 0x74, 0x65, 0x78, 0x74, 0x12, 0x3e, 0x0a, 0x0a, 0x63, 0x72,
+	0x79, 0x70, 0x74, 0x6f, 0x48, 0x61, 0x73, 0x68, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1c,
+	0x2e, 0x67, 0x6e, 0x73, 0x69, 0x2e, 0x63, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c,
+	0x7a, 0x2e, 0x43, 0x72, 0x79, 0x70, 0x74, 0x6f, 0x48, 0x61, 0x73, 0x68, 0x48, 0x00, 0x52, 0x0a,
+	0x63, 0x72, 0x79, 0x70, 0x74, 0x6f, 0x48, 0x61, 0x73, 0x68, 0x42, 0x07, 0x0a, 0x05, 0x76, 0x61,
+	0x6c, 0x75, 0x65, 0x1a, 0xa4, 0x01, 0x0a, 0x07, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x12,
+	0x18, 0x0a, 0x07, 0x61, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
+	0x52, 0x07, 0x61, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x46, 0x0a, 0x08, 0x70, 0x61, 0x73,
+	0x73, 0x77, 0x6f, 0x72, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x2a, 0x2e, 0x67, 0x6e,
+	0x73, 0x69, 0x2e, 0x63, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x7a, 0x2e, 0x50,
+	0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x2e, 0x50,
+	0x61, 0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x52, 0x08, 0x70, 0x61, 0x73, 0x73, 0x77, 0x6f, 0x72,
+	0x64, 0x12, 0x18, 0x0a, 0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x18, 0x03, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x1d, 0x0a, 0x0a, 0x63,
+	0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x5f, 0x6f, 0x6e, 0x18, 0x04, 0x20, 0x01, 0x28, 0x04, 0x52,
+	0x09, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x4f, 0x6e, 0x22, 0x12, 0x0a, 0x10, 0x50, 0x61,
+	0x73, 0x73, 0x77, 0x6f, 0x72, 0x64, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x85,
+	0x02, 0x0a, 0x1c, 0x52, 0x6f, 0x74, 0x61, 0x74, 0x65, 0x48, 0x6f, 0x73, 0x74, 0x43, 0x72, 0x65,
+	0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12,
+	0x51, 0x0a, 0x11, 0x73, 0x73, 0x68, 0x5f, 0x63, 0x61, 0x5f, 0x70, 0x75, 0x62, 0x6c, 0x69, 0x63,
+	0x5f, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x24, 0x2e, 0x67, 0x6e, 0x73,
+	0x69, 0x2e, 0x63, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x7a, 0x2e, 0x43, 0x61,
+	0x50, 0x75, 0x62, 0x6c, 0x69, 0x63, 0x4b, 0x65, 0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x48, 0x00, 0x52, 0x0e, 0x73, 0x73, 0x68, 0x43, 0x61, 0x50, 0x75, 0x62, 0x6c, 0x69, 0x63, 0x4b,
+	0x65, 0x79, 0x12, 0x46, 0x0a, 0x0b, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x5f, 0x6b, 0x65, 0x79,
+	0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x23, 0x2e, 0x67, 0x6e, 0x73, 0x69, 0x2e, 0x63,
+	0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x7a, 0x2e, 0x53, 0x65, 0x72, 0x76, 0x65,
+	0x72, 0x4b, 0x65, 0x79, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x48, 0x00, 0x52, 0x0a,
+	0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x4b, 0x65, 0x79, 0x73, 0x12, 0x3f, 0x0a, 0x08, 0x66, 0x69,
+	0x6e, 0x61, 0x6c, 0x69, 0x7a, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x21, 0x2e, 0x67,
+	0x6e, 0x73, 0x69, 0x2e, 0x63, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x7a, 0x2e,
+	0x46, 0x69, 0x6e, 0x61, 0x6c, 0x69, 0x7a, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x48,
+	0x00, 0x52, 0x08, 0x66, 0x69, 0x6e, 0x61, 0x6c, 0x69, 0x7a, 0x65, 0x42, 0x09, 0x0a, 0x07, 0x72,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0xc1, 0x01, 0x0a, 0x1d, 0x52, 0x6f, 0x74, 0x61, 0x74,
+	0x65, 0x48, 0x6f, 0x73, 0x74, 0x43, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x73,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x4b, 0x0a, 0x0d, 0x63, 0x61, 0x5f, 0x70,
+	0x75, 0x62, 0x6c, 0x69, 0x63, 0x5f, 0x6b, 0x65, 0x79, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32,
+	0x25, 0x2e, 0x67, 0x6e, 0x73, 0x69, 0x2e, 0x63, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61,
+	0x6c, 0x7a, 0x2e, 0x43, 0x61, 0x50, 0x75, 0x62, 0x6c, 0x69, 0x63, 0x4b, 0x65, 0x79, 0x52, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x48, 0x00, 0x52, 0x0b, 0x63, 0x61, 0x50, 0x75, 0x62, 0x6c,
+	0x69, 0x63, 0x4b, 0x65, 0x79, 0x12, 0x47, 0x0a, 0x0b, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x5f,
+	0x6b, 0x65, 0x79, 0x73, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x24, 0x2e, 0x67, 0x6e, 0x73,
+	0x69, 0x2e, 0x63, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x7a, 0x2e, 0x53, 0x65,
+	0x72, 0x76, 0x65, 0x72, 0x4b, 0x65, 0x79, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x48, 0x00, 0x52, 0x0a, 0x73, 0x65, 0x72, 0x76, 0x65, 0x72, 0x4b, 0x65, 0x79, 0x73, 0x42, 0x0a,
+	0x0a, 0x08, 0x72, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x7a, 0x0a, 0x12, 0x43, 0x61,
+	0x50, 0x75, 0x62, 0x6c, 0x69, 0x63, 0x4b, 0x65, 0x79, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x12, 0x2b, 0x0a, 0x12, 0x73, 0x73, 0x68, 0x5f, 0x63, 0x61, 0x5f, 0x70, 0x75, 0x62, 0x6c, 0x69,
+	0x63, 0x5f, 0x6b, 0x65, 0x79, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0c, 0x52, 0x0f, 0x73, 0x73,
+	0x68, 0x43, 0x61, 0x50, 0x75, 0x62, 0x6c, 0x69, 0x63, 0x4b, 0x65, 0x79, 0x73, 0x12, 0x18, 0x0a,
+	0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07,
 	0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x1d, 0x0a, 0x0a, 0x63, 0x72, 0x65, 0x61, 0x74,
 	0x65, 0x64, 0x5f, 0x6f, 0x6e, 0x18, 0x04, 0x20, 0x01, 0x28, 0x04, 0x52, 0x09, 0x63, 0x72, 0x65,
 	0x61, 0x74, 0x65, 0x64, 0x4f, 0x6e, 0x22, 0x12, 0x0a, 0x10, 0x50, 0x61, 0x73, 0x73, 0x77, 0x6f,
@@ -2063,19 +2214,23 @@ var file_github_com_openconfig_gnsi_credentialz_credentialz_proto_rawDesc = []by
 	0x6e, 0x74, 0x69, 0x61, 0x6c, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x32, 0x2e,
 	0x67, 0x6e, 0x73, 0x69, 0x2e, 0x63, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x7a,
 	0x2e, 0x52, 0x6f, 0x74, 0x61, 0x74, 0x65, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x43, 0x72,
-	0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
-	0x65, 0x28, 0x01, 0x30, 0x01, 0x12, 0x7e, 0x0a, 0x15, 0x52, 0x6f, 0x74, 0x61, 0x74, 0x65, 0x48,
-	0x6f, 0x73, 0x74, 0x43, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x73, 0x12, 0x2e,
-	0x2e, 0x67, 0x6e, 0x73, 0x69, 0x2e, 0x63, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c,
-	0x7a, 0x2e, 0x52, 0x6f, 0x74, 0x61, 0x74, 0x65, 0x48, 0x6f, 0x73, 0x74, 0x43, 0x72, 0x65, 0x64,
-	0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x2f,
-	0x2e, 0x67, 0x6e, 0x73, 0x69, 0x2e, 0x63, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c,
-	0x7a, 0x2e, 0x52, 0x6f, 0x74, 0x61, 0x74, 0x65, 0x48, 0x6f, 0x73, 0x74, 0x43, 0x72, 0x65, 0x64,
-	0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22,
-	0x00, 0x28, 0x01, 0x30, 0x01, 0x42, 0x30, 0x5a, 0x26, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e,
-	0x63, 0x6f, 0x6d, 0x2f, 0x6f, 0x70, 0x65, 0x6e, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x2f, 0x67,
-	0x6e, 0x73, 0x69, 0x2f, 0x63, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x7a, 0xd2,
-	0x3e, 0x05, 0x30, 0x2e, 0x31, 0x2e, 0x30, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x1a, 0x32, 0x2e, 0x67, 0x6e, 0x73, 0x69, 0x2e, 0x63, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69,
+	0x61, 0x6c, 0x7a, 0x2e, 0x52, 0x6f, 0x74, 0x61, 0x74, 0x65, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e,
+	0x74, 0x43, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x73, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x28, 0x01, 0x30, 0x01, 0x12, 0x7e, 0x0a, 0x15, 0x52, 0x6f, 0x74, 0x61,
+	0x74, 0x65, 0x48, 0x6f, 0x73, 0x74, 0x43, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c,
+	0x73, 0x12, 0x2e, 0x2e, 0x67, 0x6e, 0x73, 0x69, 0x2e, 0x63, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74,
+	0x69, 0x61, 0x6c, 0x7a, 0x2e, 0x52, 0x6f, 0x74, 0x61, 0x74, 0x65, 0x48, 0x6f, 0x73, 0x74, 0x43,
+	0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x1a, 0x2f, 0x2e, 0x67, 0x6e, 0x73, 0x69, 0x2e, 0x63, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74,
+	0x69, 0x61, 0x6c, 0x7a, 0x2e, 0x52, 0x6f, 0x74, 0x61, 0x74, 0x65, 0x48, 0x6f, 0x73, 0x74, 0x43,
+	0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61, 0x6c, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x73, 0x65, 0x22, 0x00, 0x28, 0x01, 0x30, 0x01, 0x42, 0x30, 0x5a, 0x26, 0x67, 0x69, 0x74, 0x68,
+	0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x6f, 0x70, 0x65, 0x6e, 0x63, 0x6f, 0x6e, 0x66, 0x69,
+	0x67, 0x2f, 0x67, 0x6e, 0x73, 0x69, 0x2f, 0x63, 0x72, 0x65, 0x64, 0x65, 0x6e, 0x74, 0x69, 0x61,
+	0x6c, 0x7a, 0xd2, 0x3e, 0x05, 0x30, 0x2e, 0x31, 0x2e, 0x30, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x33,
 }
 
 var (
@@ -2090,74 +2245,78 @@ func file_github_com_openconfig_gnsi_credentialz_credentialz_proto_rawDescGZIP()
 	return file_github_com_openconfig_gnsi_credentialz_credentialz_proto_rawDescData
 }
 
-var file_github_com_openconfig_gnsi_credentialz_credentialz_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
-var file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes = make([]protoimpl.MessageInfo, 24)
+var file_github_com_openconfig_gnsi_credentialz_credentialz_proto_enumTypes = make([]protoimpl.EnumInfo, 4)
+var file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes = make([]protoimpl.MessageInfo, 25)
 var file_github_com_openconfig_gnsi_credentialz_credentialz_proto_goTypes = []interface{}{
 	(KeyType)(0),               // 0: gnsi.credentialz.KeyType
-	(Option_StandardOption)(0), // 1: gnsi.credentialz.Option.StandardOption
-	(UserPolicy_AuthorizedPrincipalCheck_Tool)(0), // 2: gnsi.credentialz.UserPolicy.AuthorizedPrincipalCheck.Tool
-	(*RotateAccountCredentialsRequest)(nil),       // 3: gnsi.credentialz.RotateAccountCredentialsRequest
-	(*RotateAccountCredentialsResponse)(nil),      // 4: gnsi.credentialz.RotateAccountCredentialsResponse
-	(*AuthorizedKeysRequest)(nil),                 // 5: gnsi.credentialz.AuthorizedKeysRequest
-	(*Option)(nil),                                // 6: gnsi.credentialz.Option
-	(*AccountCredentials)(nil),                    // 7: gnsi.credentialz.AccountCredentials
-	(*AuthorizedKeysResponse)(nil),                // 8: gnsi.credentialz.AuthorizedKeysResponse
-	(*AuthorizedUsersRequest)(nil),                // 9: gnsi.credentialz.AuthorizedUsersRequest
-	(*UserPolicy)(nil),                            // 10: gnsi.credentialz.UserPolicy
-	(*AuthorizedUsersResponse)(nil),               // 11: gnsi.credentialz.AuthorizedUsersResponse
-	(*PasswordRequest)(nil),                       // 12: gnsi.credentialz.PasswordRequest
-	(*PasswordResponse)(nil),                      // 13: gnsi.credentialz.PasswordResponse
-	(*RotateHostCredentialsRequest)(nil),          // 14: gnsi.credentialz.RotateHostCredentialsRequest
-	(*RotateHostCredentialsResponse)(nil),         // 15: gnsi.credentialz.RotateHostCredentialsResponse
-	(*CaPublicKeyRequest)(nil),                    // 16: gnsi.credentialz.CaPublicKeyRequest
-	(*CaPublicKeyResponse)(nil),                   // 17: gnsi.credentialz.CaPublicKeyResponse
-	(*ServerKeysRequest)(nil),                     // 18: gnsi.credentialz.ServerKeysRequest
-	(*ServerKeysResponse)(nil),                    // 19: gnsi.credentialz.ServerKeysResponse
-	(*FinalizeRequest)(nil),                       // 20: gnsi.credentialz.FinalizeRequest
-	(*AccountCredentials_AuthorizedKey)(nil),      // 21: gnsi.credentialz.AccountCredentials.AuthorizedKey
-	(*UserPolicy_SshAuthorizedUsers)(nil),         // 22: gnsi.credentialz.UserPolicy.SshAuthorizedUsers
-	(*UserPolicy_SshAuthorizedUser)(nil),          // 23: gnsi.credentialz.UserPolicy.SshAuthorizedUser
-	(*UserPolicy_AuthorizedPrincipalCheck)(nil),   // 24: gnsi.credentialz.UserPolicy.AuthorizedPrincipalCheck
-	(*PasswordRequest_Password)(nil),              // 25: gnsi.credentialz.PasswordRequest.Password
-	(*PasswordRequest_Account)(nil),               // 26: gnsi.credentialz.PasswordRequest.Account
+	(HashType)(0),              // 1: gnsi.credentialz.HashType
+	(Option_StandardOption)(0), // 2: gnsi.credentialz.Option.StandardOption
+	(UserPolicy_AuthorizedPrincipalCheck_Tool)(0), // 3: gnsi.credentialz.UserPolicy.AuthorizedPrincipalCheck.Tool
+	(*RotateAccountCredentialsRequest)(nil),       // 4: gnsi.credentialz.RotateAccountCredentialsRequest
+	(*RotateAccountCredentialsResponse)(nil),      // 5: gnsi.credentialz.RotateAccountCredentialsResponse
+	(*AuthorizedKeysRequest)(nil),                 // 6: gnsi.credentialz.AuthorizedKeysRequest
+	(*Option)(nil),                                // 7: gnsi.credentialz.Option
+	(*AccountCredentials)(nil),                    // 8: gnsi.credentialz.AccountCredentials
+	(*AuthorizedKeysResponse)(nil),                // 9: gnsi.credentialz.AuthorizedKeysResponse
+	(*AuthorizedUsersRequest)(nil),                // 10: gnsi.credentialz.AuthorizedUsersRequest
+	(*UserPolicy)(nil),                            // 11: gnsi.credentialz.UserPolicy
+	(*AuthorizedUsersResponse)(nil),               // 12: gnsi.credentialz.AuthorizedUsersResponse
+	(*CryptoHash)(nil),                            // 13: gnsi.credentialz.CryptoHash
+	(*PasswordRequest)(nil),                       // 14: gnsi.credentialz.PasswordRequest
+	(*PasswordResponse)(nil),                      // 15: gnsi.credentialz.PasswordResponse
+	(*RotateHostCredentialsRequest)(nil),          // 16: gnsi.credentialz.RotateHostCredentialsRequest
+	(*RotateHostCredentialsResponse)(nil),         // 17: gnsi.credentialz.RotateHostCredentialsResponse
+	(*CaPublicKeyRequest)(nil),                    // 18: gnsi.credentialz.CaPublicKeyRequest
+	(*CaPublicKeyResponse)(nil),                   // 19: gnsi.credentialz.CaPublicKeyResponse
+	(*ServerKeysRequest)(nil),                     // 20: gnsi.credentialz.ServerKeysRequest
+	(*ServerKeysResponse)(nil),                    // 21: gnsi.credentialz.ServerKeysResponse
+	(*FinalizeRequest)(nil),                       // 22: gnsi.credentialz.FinalizeRequest
+	(*AccountCredentials_AuthorizedKey)(nil),      // 23: gnsi.credentialz.AccountCredentials.AuthorizedKey
+	(*UserPolicy_SshAuthorizedUsers)(nil),         // 24: gnsi.credentialz.UserPolicy.SshAuthorizedUsers
+	(*UserPolicy_SshAuthorizedUser)(nil),          // 25: gnsi.credentialz.UserPolicy.SshAuthorizedUser
+	(*UserPolicy_AuthorizedPrincipalCheck)(nil),   // 26: gnsi.credentialz.UserPolicy.AuthorizedPrincipalCheck
+	(*PasswordRequest_Password)(nil),              // 27: gnsi.credentialz.PasswordRequest.Password
+	(*PasswordRequest_Account)(nil),               // 28: gnsi.credentialz.PasswordRequest.Account
 }
 var file_github_com_openconfig_gnsi_credentialz_credentialz_proto_depIdxs = []int32{
-	5,  // 0: gnsi.credentialz.RotateAccountCredentialsRequest.credential:type_name -> gnsi.credentialz.AuthorizedKeysRequest
-	9,  // 1: gnsi.credentialz.RotateAccountCredentialsRequest.user:type_name -> gnsi.credentialz.AuthorizedUsersRequest
-	12, // 2: gnsi.credentialz.RotateAccountCredentialsRequest.password:type_name -> gnsi.credentialz.PasswordRequest
-	20, // 3: gnsi.credentialz.RotateAccountCredentialsRequest.finalize:type_name -> gnsi.credentialz.FinalizeRequest
-	8,  // 4: gnsi.credentialz.RotateAccountCredentialsResponse.credential:type_name -> gnsi.credentialz.AuthorizedKeysResponse
-	11, // 5: gnsi.credentialz.RotateAccountCredentialsResponse.user:type_name -> gnsi.credentialz.AuthorizedUsersResponse
-	13, // 6: gnsi.credentialz.RotateAccountCredentialsResponse.password:type_name -> gnsi.credentialz.PasswordResponse
-	7,  // 7: gnsi.credentialz.AuthorizedKeysRequest.credentials:type_name -> gnsi.credentialz.AccountCredentials
-	1,  // 8: gnsi.credentialz.Option.id:type_name -> gnsi.credentialz.Option.StandardOption
-	21, // 9: gnsi.credentialz.AccountCredentials.authorized_keys:type_name -> gnsi.credentialz.AccountCredentials.AuthorizedKey
-	10, // 10: gnsi.credentialz.AuthorizedUsersRequest.policies:type_name -> gnsi.credentialz.UserPolicy
-	22, // 11: gnsi.credentialz.UserPolicy.authorized_users:type_name -> gnsi.credentialz.UserPolicy.SshAuthorizedUsers
-	24, // 12: gnsi.credentialz.UserPolicy.principal_check:type_name -> gnsi.credentialz.UserPolicy.AuthorizedPrincipalCheck
-	26, // 13: gnsi.credentialz.PasswordRequest.accounts:type_name -> gnsi.credentialz.PasswordRequest.Account
-	16, // 14: gnsi.credentialz.RotateHostCredentialsRequest.ssh_ca_public_key:type_name -> gnsi.credentialz.CaPublicKeyRequest
-	18, // 15: gnsi.credentialz.RotateHostCredentialsRequest.server_keys:type_name -> gnsi.credentialz.ServerKeysRequest
-	20, // 16: gnsi.credentialz.RotateHostCredentialsRequest.finalize:type_name -> gnsi.credentialz.FinalizeRequest
-	17, // 17: gnsi.credentialz.RotateHostCredentialsResponse.ca_public_key:type_name -> gnsi.credentialz.CaPublicKeyResponse
-	19, // 18: gnsi.credentialz.RotateHostCredentialsResponse.server_keys:type_name -> gnsi.credentialz.ServerKeysResponse
-	0,  // 19: gnsi.credentialz.ServerKeysRequest.public_key_type:type_name -> gnsi.credentialz.KeyType
-	6,  // 20: gnsi.credentialz.AccountCredentials.AuthorizedKey.options:type_name -> gnsi.credentialz.Option
-	0,  // 21: gnsi.credentialz.AccountCredentials.AuthorizedKey.key_type:type_name -> gnsi.credentialz.KeyType
-	23, // 22: gnsi.credentialz.UserPolicy.SshAuthorizedUsers.authorized_users:type_name -> gnsi.credentialz.UserPolicy.SshAuthorizedUser
-	6,  // 23: gnsi.credentialz.UserPolicy.SshAuthorizedUser.options:type_name -> gnsi.credentialz.Option
-	2,  // 24: gnsi.credentialz.UserPolicy.AuthorizedPrincipalCheck.tool:type_name -> gnsi.credentialz.UserPolicy.AuthorizedPrincipalCheck.Tool
-	6,  // 25: gnsi.credentialz.UserPolicy.AuthorizedPrincipalCheck.options:type_name -> gnsi.credentialz.Option
-	25, // 26: gnsi.credentialz.PasswordRequest.Account.password:type_name -> gnsi.credentialz.PasswordRequest.Password
-	3,  // 27: gnsi.credentialz.Credentialz.RotateAccountCredentials:input_type -> gnsi.credentialz.RotateAccountCredentialsRequest
-	14, // 28: gnsi.credentialz.Credentialz.RotateHostCredentials:input_type -> gnsi.credentialz.RotateHostCredentialsRequest
-	4,  // 29: gnsi.credentialz.Credentialz.RotateAccountCredentials:output_type -> gnsi.credentialz.RotateAccountCredentialsResponse
-	15, // 30: gnsi.credentialz.Credentialz.RotateHostCredentials:output_type -> gnsi.credentialz.RotateHostCredentialsResponse
-	29, // [29:31] is the sub-list for method output_type
-	27, // [27:29] is the sub-list for method input_type
-	27, // [27:27] is the sub-list for extension type_name
-	27, // [27:27] is the sub-list for extension extendee
-	0,  // [0:27] is the sub-list for field type_name
+	6,  // 0: gnsi.credentialz.RotateAccountCredentialsRequest.credential:type_name -> gnsi.credentialz.AuthorizedKeysRequest
+	10, // 1: gnsi.credentialz.RotateAccountCredentialsRequest.user:type_name -> gnsi.credentialz.AuthorizedUsersRequest
+	14, // 2: gnsi.credentialz.RotateAccountCredentialsRequest.password:type_name -> gnsi.credentialz.PasswordRequest
+	22, // 3: gnsi.credentialz.RotateAccountCredentialsRequest.finalize:type_name -> gnsi.credentialz.FinalizeRequest
+	9,  // 4: gnsi.credentialz.RotateAccountCredentialsResponse.credential:type_name -> gnsi.credentialz.AuthorizedKeysResponse
+	12, // 5: gnsi.credentialz.RotateAccountCredentialsResponse.user:type_name -> gnsi.credentialz.AuthorizedUsersResponse
+	15, // 6: gnsi.credentialz.RotateAccountCredentialsResponse.password:type_name -> gnsi.credentialz.PasswordResponse
+	8,  // 7: gnsi.credentialz.AuthorizedKeysRequest.credentials:type_name -> gnsi.credentialz.AccountCredentials
+	2,  // 8: gnsi.credentialz.Option.id:type_name -> gnsi.credentialz.Option.StandardOption
+	23, // 9: gnsi.credentialz.AccountCredentials.authorized_keys:type_name -> gnsi.credentialz.AccountCredentials.AuthorizedKey
+	11, // 10: gnsi.credentialz.AuthorizedUsersRequest.policies:type_name -> gnsi.credentialz.UserPolicy
+	24, // 11: gnsi.credentialz.UserPolicy.authorized_users:type_name -> gnsi.credentialz.UserPolicy.SshAuthorizedUsers
+	26, // 12: gnsi.credentialz.UserPolicy.principal_check:type_name -> gnsi.credentialz.UserPolicy.AuthorizedPrincipalCheck
+	1,  // 13: gnsi.credentialz.CryptoHash.hashType:type_name -> gnsi.credentialz.HashType
+	28, // 14: gnsi.credentialz.PasswordRequest.accounts:type_name -> gnsi.credentialz.PasswordRequest.Account
+	18, // 15: gnsi.credentialz.RotateHostCredentialsRequest.ssh_ca_public_key:type_name -> gnsi.credentialz.CaPublicKeyRequest
+	20, // 16: gnsi.credentialz.RotateHostCredentialsRequest.server_keys:type_name -> gnsi.credentialz.ServerKeysRequest
+	22, // 17: gnsi.credentialz.RotateHostCredentialsRequest.finalize:type_name -> gnsi.credentialz.FinalizeRequest
+	19, // 18: gnsi.credentialz.RotateHostCredentialsResponse.ca_public_key:type_name -> gnsi.credentialz.CaPublicKeyResponse
+	21, // 19: gnsi.credentialz.RotateHostCredentialsResponse.server_keys:type_name -> gnsi.credentialz.ServerKeysResponse
+	0,  // 20: gnsi.credentialz.ServerKeysRequest.public_key_type:type_name -> gnsi.credentialz.KeyType
+	7,  // 21: gnsi.credentialz.AccountCredentials.AuthorizedKey.options:type_name -> gnsi.credentialz.Option
+	0,  // 22: gnsi.credentialz.AccountCredentials.AuthorizedKey.key_type:type_name -> gnsi.credentialz.KeyType
+	25, // 23: gnsi.credentialz.UserPolicy.SshAuthorizedUsers.authorized_users:type_name -> gnsi.credentialz.UserPolicy.SshAuthorizedUser
+	7,  // 24: gnsi.credentialz.UserPolicy.SshAuthorizedUser.options:type_name -> gnsi.credentialz.Option
+	3,  // 25: gnsi.credentialz.UserPolicy.AuthorizedPrincipalCheck.tool:type_name -> gnsi.credentialz.UserPolicy.AuthorizedPrincipalCheck.Tool
+	7,  // 26: gnsi.credentialz.UserPolicy.AuthorizedPrincipalCheck.options:type_name -> gnsi.credentialz.Option
+	13, // 27: gnsi.credentialz.PasswordRequest.Password.cryptoHash:type_name -> gnsi.credentialz.CryptoHash
+	27, // 28: gnsi.credentialz.PasswordRequest.Account.password:type_name -> gnsi.credentialz.PasswordRequest.Password
+	4,  // 29: gnsi.credentialz.Credentialz.RotateAccountCredentials:input_type -> gnsi.credentialz.RotateAccountCredentialsRequest
+	16, // 30: gnsi.credentialz.Credentialz.RotateHostCredentials:input_type -> gnsi.credentialz.RotateHostCredentialsRequest
+	5,  // 31: gnsi.credentialz.Credentialz.RotateAccountCredentials:output_type -> gnsi.credentialz.RotateAccountCredentialsResponse
+	17, // 32: gnsi.credentialz.Credentialz.RotateHostCredentials:output_type -> gnsi.credentialz.RotateHostCredentialsResponse
+	31, // [31:33] is the sub-list for method output_type
+	29, // [29:31] is the sub-list for method input_type
+	29, // [29:29] is the sub-list for extension type_name
+	29, // [29:29] is the sub-list for extension extendee
+	0,  // [0:29] is the sub-list for field type_name
 }
 
 func init() { file_github_com_openconfig_gnsi_credentialz_credentialz_proto_init() }
@@ -2275,7 +2434,7 @@ func file_github_com_openconfig_gnsi_credentialz_credentialz_proto_init() {
 			}
 		}
 		file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PasswordRequest); i {
+			switch v := v.(*CryptoHash); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2287,7 +2446,7 @@ func file_github_com_openconfig_gnsi_credentialz_credentialz_proto_init() {
 			}
 		}
 		file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PasswordResponse); i {
+			switch v := v.(*PasswordRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2299,7 +2458,7 @@ func file_github_com_openconfig_gnsi_credentialz_credentialz_proto_init() {
 			}
 		}
 		file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*RotateHostCredentialsRequest); i {
+			switch v := v.(*PasswordResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2311,7 +2470,7 @@ func file_github_com_openconfig_gnsi_credentialz_credentialz_proto_init() {
 			}
 		}
 		file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*RotateHostCredentialsResponse); i {
+			switch v := v.(*RotateHostCredentialsRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2323,7 +2482,7 @@ func file_github_com_openconfig_gnsi_credentialz_credentialz_proto_init() {
 			}
 		}
 		file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[13].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CaPublicKeyRequest); i {
+			switch v := v.(*RotateHostCredentialsResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2335,7 +2494,7 @@ func file_github_com_openconfig_gnsi_credentialz_credentialz_proto_init() {
 			}
 		}
 		file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[14].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*CaPublicKeyResponse); i {
+			switch v := v.(*CaPublicKeyRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2347,7 +2506,7 @@ func file_github_com_openconfig_gnsi_credentialz_credentialz_proto_init() {
 			}
 		}
 		file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[15].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ServerKeysRequest); i {
+			switch v := v.(*CaPublicKeyResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2359,7 +2518,7 @@ func file_github_com_openconfig_gnsi_credentialz_credentialz_proto_init() {
 			}
 		}
 		file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[16].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ServerKeysResponse); i {
+			switch v := v.(*ServerKeysRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2371,7 +2530,7 @@ func file_github_com_openconfig_gnsi_credentialz_credentialz_proto_init() {
 			}
 		}
 		file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[17].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*FinalizeRequest); i {
+			switch v := v.(*ServerKeysResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2383,7 +2542,7 @@ func file_github_com_openconfig_gnsi_credentialz_credentialz_proto_init() {
 			}
 		}
 		file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[18].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*AccountCredentials_AuthorizedKey); i {
+			switch v := v.(*FinalizeRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2395,7 +2554,7 @@ func file_github_com_openconfig_gnsi_credentialz_credentialz_proto_init() {
 			}
 		}
 		file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[19].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UserPolicy_SshAuthorizedUsers); i {
+			switch v := v.(*AccountCredentials_AuthorizedKey); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2407,7 +2566,7 @@ func file_github_com_openconfig_gnsi_credentialz_credentialz_proto_init() {
 			}
 		}
 		file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[20].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UserPolicy_SshAuthorizedUser); i {
+			switch v := v.(*UserPolicy_SshAuthorizedUsers); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2419,7 +2578,7 @@ func file_github_com_openconfig_gnsi_credentialz_credentialz_proto_init() {
 			}
 		}
 		file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[21].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UserPolicy_AuthorizedPrincipalCheck); i {
+			switch v := v.(*UserPolicy_SshAuthorizedUser); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2431,7 +2590,7 @@ func file_github_com_openconfig_gnsi_credentialz_credentialz_proto_init() {
 			}
 		}
 		file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[22].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*PasswordRequest_Password); i {
+			switch v := v.(*UserPolicy_AuthorizedPrincipalCheck); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2443,6 +2602,18 @@ func file_github_com_openconfig_gnsi_credentialz_credentialz_proto_init() {
 			}
 		}
 		file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[23].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*PasswordRequest_Password); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[24].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*PasswordRequest_Account); i {
 			case 0:
 				return &v.state
@@ -2474,26 +2645,26 @@ func file_github_com_openconfig_gnsi_credentialz_credentialz_proto_init() {
 		(*UserPolicy_AuthorizedUsers)(nil),
 		(*UserPolicy_PrincipalCheck)(nil),
 	}
-	file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[11].OneofWrappers = []interface{}{
+	file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[12].OneofWrappers = []interface{}{
 		(*RotateHostCredentialsRequest_SshCaPublicKey)(nil),
 		(*RotateHostCredentialsRequest_ServerKeys)(nil),
 		(*RotateHostCredentialsRequest_Finalize)(nil),
 	}
-	file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[12].OneofWrappers = []interface{}{
+	file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[13].OneofWrappers = []interface{}{
 		(*RotateHostCredentialsResponse_CaPublicKey)(nil),
 		(*RotateHostCredentialsResponse_ServerKeys)(nil),
 	}
-	file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[22].OneofWrappers = []interface{}{
+	file_github_com_openconfig_gnsi_credentialz_credentialz_proto_msgTypes[23].OneofWrappers = []interface{}{
 		(*PasswordRequest_Password_Plaintext)(nil),
-		(*PasswordRequest_Password_Encrypted)(nil),
+		(*PasswordRequest_Password_CryptoHash)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_github_com_openconfig_gnsi_credentialz_credentialz_proto_rawDesc,
-			NumEnums:      3,
-			NumMessages:   24,
+			NumEnums:      4,
+			NumMessages:   25,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
