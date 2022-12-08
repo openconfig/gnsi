@@ -97,6 +97,7 @@ message Request {
 message Rule {
   // Required. The name of an authorization rule.
   // It is mainly for monitoring and error message generation.
+  // This name must be unique within the list of deny (or allow) rules. 
   string name = 1;
 
   // Optional. If not set, no checks will be performed against the source. An
