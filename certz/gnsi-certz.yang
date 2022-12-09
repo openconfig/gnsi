@@ -101,8 +101,4 @@ module gnsi-certz {
 
         uses grpc-server-credentials-state;
     }
-    deviation "/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/" +
-            "oc-sys-grpc:config/oc-sys-grpc:certificate-id" {
-        deviate not-supported;
-    }
 }

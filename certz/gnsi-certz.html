@@ -8014,6 +8014,26 @@ are not supported, such as lab testing."> <em> oc-sys-grpc:transport-security </
             <td nowrap>
                <div id=9999 class=tier6>
                   <a class="leaf">&nbsp;</a>
+                  <attr title="Name of the certificate that is associated with the gRPC service. The
+certificate ID is provisioned through other interfaces to the device, such
+as the gNOI certificate management service."> <em> oc-sys-grpc:certificate-id </em></abbr>
+            
+               </div>
+            </td> 
+        <td nowrap>leaf</td>
+        <td nowrap><abbr title="string
+">string</abbr></td>
+                
+        <td nowrap>config</td>
+        <td>?</td>
+        <td>current</td>
+        <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:config/oc-sys-grpc:certificate-id</td>
+        </tr>
+        <tr id="1-1-16-42-64-74" class="a">
+        
+            <td nowrap>
+               <div id=9999 class=tier6>
+                  <a class="leaf">&nbsp;</a>
                   <attr title="When set to true, metadata authentication is enabled for the gRPC server.
 In this mode of operation, gRPC metadata is used to carry authentication
 credentials as per the specification in
@@ -8030,7 +8050,7 @@ https://github.com/openconfig/reference/blob/master/rpc/gnmi/gnmi-authentication
         <td>current</td>
         <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:config/oc-sys-grpc:metadata-authentication</td>
         </tr>
-        <tr id="1-1-16-42-64-74" class="a">
+        <tr id="1-1-16-42-64-75" class="a">
         
             <td nowrap>
                <div id=9999 class=tier6>
@@ -8049,7 +8069,7 @@ an IPv4 or an IPv6 address (or both).">  oc-sys-grpc:listen-addresses </abbr>
         <td>current</td>
         <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:config/oc-sys-grpc:listen-addresses</td>
         </tr>
-        <tr id="1-1-16-42-64-75" class="a">
+        <tr id="1-1-16-42-64-76" class="a">
         
             <td nowrap>
                <div id=9999 class=tier6>
@@ -8087,7 +8107,7 @@ leafref
         <td>current</td>
         <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state</td>
         </tr>
-        <tr id="1-1-16-42-65-76" class="a">
+        <tr id="1-1-16-42-65-77" class="a">
         
             <td nowrap>
                <div id=9999 class=tier6>
@@ -8106,7 +8126,7 @@ the local system."> <em> oc-sys-grpc:name </em></abbr>
         <td>current</td>
         <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/oc-sys-grpc:name</td>
         </tr>
-        <tr id="1-1-16-42-65-77" class="a">
+        <tr id="1-1-16-42-65-78" class="a">
         
             <td nowrap>
                <div id=9999 class=tier6>
@@ -8133,7 +8153,7 @@ device.">  oc-sys-grpc:services </abbr>
         <td>current</td>
         <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/oc-sys-grpc:services</td>
         </tr>
-        <tr id="1-1-16-42-65-78" class="a">
+        <tr id="1-1-16-42-65-79" class="a">
         
             <td nowrap>
                <div id=9999 class=tier6>
@@ -8152,7 +8172,7 @@ local device."> <em> oc-sys-grpc:enable </em></abbr>
         <td>current</td>
         <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/oc-sys-grpc:enable</td>
         </tr>
-        <tr id="1-1-16-42-65-79" class="a">
+        <tr id="1-1-16-42-65-80" class="a">
         
             <td nowrap>
                <div id=9999 class=tier6>
@@ -8171,7 +8191,7 @@ uint16
         <td>current</td>
         <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/oc-sys-grpc:port</td>
         </tr>
-        <tr id="1-1-16-42-65-80" class="a">
+        <tr id="1-1-16-42-65-81" class="a">
         
             <td nowrap>
                <div id=9999 class=tier6>
@@ -8191,7 +8211,7 @@ are not supported, such as lab testing."> <em> oc-sys-grpc:transport-security </
         <td>current</td>
         <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/oc-sys-grpc:transport-security</td>
         </tr>
-        <tr id="1-1-16-42-65-81" class="a">
+        <tr id="1-1-16-42-65-82" class="a">
         
             <td nowrap>
                <div id=9999 class=tier6>
@@ -8211,7 +8231,7 @@ as the gNOI certificate management service."> <em> oc-sys-grpc:certificate-id </
         <td>current</td>
         <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/oc-sys-grpc:certificate-id</td>
         </tr>
-        <tr id="1-1-16-42-65-82" class="a">
+        <tr id="1-1-16-42-65-83" class="a">
         
             <td nowrap>
                <div id=9999 class=tier6>
@@ -8232,7 +8252,7 @@ https://github.com/openconfig/reference/blob/master/rpc/gnmi/gnmi-authentication
         <td>current</td>
         <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/oc-sys-grpc:metadata-authentication</td>
         </tr>
-        <tr id="1-1-16-42-65-83" class="a">
+        <tr id="1-1-16-42-65-84" class="a">
         
             <td nowrap>
                <div id=9999 class=tier6>
@@ -8251,7 +8271,7 @@ an IPv4 or an IPv6 address (or both).">  oc-sys-grpc:listen-addresses </abbr>
         <td>current</td>
         <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/oc-sys-grpc:listen-addresses</td>
         </tr>
-        <tr id="1-1-16-42-65-84" class="a">
+        <tr id="1-1-16-42-65-85" class="a">
         
             <td nowrap>
                <div id=9999 class=tier6>
@@ -8271,7 +8291,7 @@ leafref
         <td>current</td>
         <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/oc-sys-grpc:network-instance</td>
         </tr>
-        <tr id="1-1-16-42-65-85" class="a">
+        <tr id="1-1-16-42-65-86" class="a">
         
             <td nowrap>
                <div id=9999 class=tier6>
@@ -8291,7 +8311,7 @@ string
         <td>current</td>
         <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/gnsi-certz:certificate-version</td>
         </tr>
-        <tr id="1-1-16-42-65-86" class="a">
+        <tr id="1-1-16-42-65-87" class="a">
         
             <td nowrap>
                <div id=9999 class=tier6>
@@ -8312,7 +8332,7 @@ oc-types:timeticks64
         <td>current</td>
         <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/gnsi-certz:certificate-created-on</td>
         </tr>
-        <tr id="1-1-16-42-65-87" class="a">
+        <tr id="1-1-16-42-65-88" class="a">
         
             <td nowrap>
                <div id=9999 class=tier6>
@@ -8333,7 +8353,7 @@ string
         <td>current</td>
         <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/gnsi-certz:ca-trust-bundle-version</td>
         </tr>
-        <tr id="1-1-16-42-65-88" class="a">
+        <tr id="1-1-16-42-65-89" class="a">
         
             <td nowrap>
                <div id=9999 class=tier6>
@@ -8354,7 +8374,7 @@ oc-types:timeticks64
         <td>current</td>
         <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/gnsi-certz:ca-trust-bundle-created-on</td>
         </tr>
-        <tr id="1-1-16-42-65-89" class="a">
+        <tr id="1-1-16-42-65-90" class="a">
         
             <td nowrap>
                <div id=9999 class=tier6>
@@ -8374,7 +8394,7 @@ string
         <td>current</td>
         <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/gnsi-certz:certificate-revocation-list-bundle-version</td>
         </tr>
-        <tr id="1-1-16-42-65-90" class="a">
+        <tr id="1-1-16-42-65-91" class="a">
         
             <td nowrap>
                <div id=9999 class=tier6>
