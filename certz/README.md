@@ -2,7 +2,7 @@
 
 ## gNSI certz Service Protobuf Definition
 **Contributors**: hines@google.com, morrowc@google.com, tmadejski@google.com
-**Last Updated**: 2022-09-20
+**Last Updated**: 2022-11-10
 
 ### Background
 
@@ -33,20 +33,56 @@ The normal use-case would be to:
 continue to operate normally.
 * send a `FinalizeRequest` to finish the rotation process.
 
+#### SSL profiles
+
+SSL profiles logically group a certificate (private and public keys),
+Certificate Authority chain of certificates (a.k.a. a CA trust bundle) and
+a set of Certificate Revocation Lists into a set that then can be assigned
+as a whole to a gRPC server.
+
+There is at least one profile present on a target - the one that is used by
+the gNxI server. Its ID is `gNxI` but when the `ssl_profile_id` field in the
+`RotateCertificateRequest` message is not set (or set to an empty string) it
+also refers this SSL profile.
+
+Profiles existing on a target can be discovered using the
+`Certz.GetProfileList()` RPC.
+
+A SSL profile can be added using the `Certz.AddProfile()` RPC.
+
+When no longer a profile is needed it can be removed from the target via
+`Certz.DeleteProfile()` RPC. Note that the gNxI SSL profile cannot be
+removed.
+
 ### User Experiences
+
+#### Create a SSL profile
+
+Call `Certz.AddProfile` RPC with the `ssl_profile_id` field specifying the ID
+of the new SSL profile.
+
+#### Delete a SSL profile
+
+Call `Certz.DeleteProfile` RPC with the `ssl_profile_id` field specifying the
+ID of the SSL profile to be deleted.
+
+#### List existing SSL profiles
+
+Call `Certz.GetProfileList` RPC. The response will list all existing
+SSL profiles.
 
 #### A CertificateBundle is to be rotated or updated
 
 Create, and test, a new CertificateBundle.
 
 Send that policy to the target network system with a
-`certz.RotateCertificateRequest` to `certz.Rotate` RPC. The
-`RotateCertificateRequest`'s rotate_request will be a `certz.CertificateBundle`.
+`Certz.RotateCertificateRequest` to `Certz.Rotate` RPC. The
+`RotateCertificateRequest`'s rotate_request will be a `Certz.CertificateBundle`.
 
 Verify that the CertificateBundle newly rotated is used by services
 which require it.
 
-Send a `Finalize` message to the `certz.Rotate` RPC to close out the action.
+Send a `Finalize` message to the `Certz.Rotate` RPC to close out the action.
 
 If the stream is disconnected prior to the `Finalize` message being
 sent, the proposed configuration is rolled back automatically.
@@ -56,9 +92,9 @@ sent, the proposed configuration is rolled back automatically.
 Create a new Certificate and Key.
 
 Send that certificate to the target network system with a
-`certz.RotateCertificateRequest` to the `certz.Rotate` RPC. The
+`Certz.RotateCertificateRequest` to the `Certz.Rotate` RPC. The
 `RotateCertificateRequest`'s `rotate_request` will be a
-`certz.Certificate`.
+`Certz.Certificate`.
 
 Verify that the certificate newly deployed is usable by the relevant
 services, that the services properly present the certificate upon
@@ -509,6 +545,7 @@ module: openconfig-system
            |  +--rw oc-sys-grpc:enable?                    boolean
            |  +--rw oc-sys-grpc:port?                      oc-inet:port-number
            |  +--rw oc-sys-grpc:transport-security?        boolean
+           |  +--rw oc-sys-grpc:certificate-id?            string
            |  +--rw oc-sys-grpc:metadata-authentication?   boolean
            |  +--rw oc-sys-grpc:listen-addresses*          union
            |  +--rw oc-sys-grpc:network-instance?          oc-ni:network-instance-ref
