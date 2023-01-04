@@ -9,7 +9,7 @@ http_archive(
     urls = ["https://github.com/rules-proto-grpc/rules_proto_grpc/archive/4.3.0.tar.gz"],
 )
 
-# googleapis has not had a release since 2016 - take the master version as of 4-jan-22
+# googleapis has not had a release since 2016 - take the master version as of 4-jan-23
 http_archive(
     name = "com_google_googleapis",
     sha256 = "9fc03150d86501d7da35eefa989d5553bdd77a95cfe4373cdafe8eee92f6bfb1",
