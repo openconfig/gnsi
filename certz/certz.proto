@@ -356,6 +356,16 @@ enum CSRSuite {
 // Used to specify what type of CSR the client expects from the target.
 message CSRParams {
   CSRSuite csr_suite = 1;
+
+  // --- common set of parameters applicable for any type of certificate --- //
+  string common_name = 2;           // e.g "device.corp.google.com"
+  string country = 3;               // e.g "US"
+  string state = 4;                 // e.g "CA"
+  string city = 5;                  // e.g "Mountain View"
+  string organization = 6;          // e.g "Google"
+  string organizational_unit = 7;   // e.g "Security"
+  string ip_address = 8;
+  string email_id = 9;
 }
 
 // A request to ask the target if it can generate key pairs.
