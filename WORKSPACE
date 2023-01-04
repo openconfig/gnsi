@@ -1,19 +1,20 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 ### Bazel rules for many languages to compile PROTO into gRPC libraries
+# Note: any version of this which is less than 4.3.0 requires bazel version 5.4.0 (set in .bazelversion file)
 http_archive(
     name = "rules_proto_grpc",
-    sha256 = "bbe4db93499f5c9414926e46f9e35016999a4e9f6e3522482d3760dc61011070",
-    strip_prefix = "rules_proto_grpc-4.2.0",
-    urls = ["https://github.com/rules-proto-grpc/rules_proto_grpc/archive/4.2.0.tar.gz"],
+    sha256 = "fb7fc7a3c19a92b2f15ed7c4ffb2983e956625c1436f57a3430b897ba9864059",
+    strip_prefix = "rules_proto_grpc-4.3.0",
+    urls = ["https://github.com/rules-proto-grpc/rules_proto_grpc/archive/4.3.0.tar.gz"],
 )
 
-# googleapis has not had a release since 2016 - take the master version as of 02-nov-22
+# googleapis has not had a release since 2016 - take the master version as of 4-jan-23
 http_archive(
     name = "com_google_googleapis",
-    sha256 = "d88c03a3e86fd35ed656b66cb013b1c8c3c3e9286e1a04276a8c5e2c05cc3030",
-    strip_prefix = "googleapis-77bdd3dd26ea10c1b4f1c190e776a2d3fe4b3e8d",
-    urls = ["https://github.com/googleapis/googleapis/archive/77bdd3dd26ea10c1b4f1c190e776a2d3fe4b3e8d.tar.gz"],
+    sha256 = "9fc03150d86501d7da35eefa989d5553bdd77a95cfe4373cdafe8eee92f6bfb1",
+    strip_prefix = "googleapis-870a5ed7e141b4faf70e2a0858854e9b5bb18612",
+    urls = ["https://github.com/googleapis/googleapis/archive/870a5ed7e141b4faf70e2a0858854e9b5bb18612.tar.gz"],
 )
 
 load("@com_google_googleapis//:repository_rules.bzl", "switched_rules_by_language")
