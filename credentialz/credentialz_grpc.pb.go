@@ -24,6 +24,7 @@ const _ = grpc.SupportPackageIsVersion7
 type CredentialzClient interface {
 	RotateAccountCredentials(ctx context.Context, opts ...grpc.CallOption) (Credentialz_RotateAccountCredentialsClient, error)
 	RotateHostCredentials(ctx context.Context, opts ...grpc.CallOption) (Credentialz_RotateHostCredentialsClient, error)
+	CanGenerateKey(ctx context.Context, in *CanGenerateKeyRequest, opts ...grpc.CallOption) (*CanGenerateKeyResponse, error)
 }
 
 type credentialzClient struct {
@@ -96,12 +97,22 @@ func (x *credentialzRotateHostCredentialsClient) Recv() (*RotateHostCredentialsR
 	return m, nil
 }
 
+func (c *credentialzClient) CanGenerateKey(ctx context.Context, in *CanGenerateKeyRequest, opts ...grpc.CallOption) (*CanGenerateKeyResponse, error) {
+	out := new(CanGenerateKeyResponse)
+	err := c.cc.Invoke(ctx, "/gnsi.credentialz.Credentialz/CanGenerateKey", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CredentialzServer is the server API for Credentialz service.
 // All implementations must embed UnimplementedCredentialzServer
 // for forward compatibility
 type CredentialzServer interface {
 	RotateAccountCredentials(Credentialz_RotateAccountCredentialsServer) error
 	RotateHostCredentials(Credentialz_RotateHostCredentialsServer) error
+	CanGenerateKey(context.Context, *CanGenerateKeyRequest) (*CanGenerateKeyResponse, error)
 	mustEmbedUnimplementedCredentialzServer()
 }
 
@@ -114,6 +125,9 @@ func (UnimplementedCredentialzServer) RotateAccountCredentials(Credentialz_Rotat
 }
 func (UnimplementedCredentialzServer) RotateHostCredentials(Credentialz_RotateHostCredentialsServer) error {
 	return status.Errorf(codes.Unimplemented, "method RotateHostCredentials not implemented")
+}
+func (UnimplementedCredentialzServer) CanGenerateKey(context.Context, *CanGenerateKeyRequest) (*CanGenerateKeyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CanGenerateKey not implemented")
 }
 func (UnimplementedCredentialzServer) mustEmbedUnimplementedCredentialzServer() {}
 
@@ -180,13 +194,36 @@ func (x *credentialzRotateHostCredentialsServer) Recv() (*RotateHostCredentialsR
 	return m, nil
 }
 
+func _Credentialz_CanGenerateKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CanGenerateKeyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CredentialzServer).CanGenerateKey(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/gnsi.credentialz.Credentialz/CanGenerateKey",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CredentialzServer).CanGenerateKey(ctx, req.(*CanGenerateKeyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Credentialz_ServiceDesc is the grpc.ServiceDesc for Credentialz service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Credentialz_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "gnsi.credentialz.Credentialz",
 	HandlerType: (*CredentialzServer)(nil),
-	Methods:     []grpc.MethodDesc{},
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "CanGenerateKey",
+			Handler:    _Credentialz_CanGenerateKey_Handler,
+		},
+	},
 	Streams: []grpc.StreamDesc{
 		{
 			StreamName:    "RotateAccountCredentials",
