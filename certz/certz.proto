@@ -401,10 +401,10 @@ message Certificate {
   // Optional.
   // Not needed if the device knows the private key or does not have to know it.
   bytes private_key = 4;
-}
 
-message CertificateBundle {
-  repeated Certificate certificates = 1;
+  // parent is the certificate which was used to sign the current certificate.
+  // It is nil in the case of the root cert.
+  Certificate parent = 5;
 }
 
 // A certificate revocation list (CRL)
@@ -453,8 +453,7 @@ message Entity {
 
   oneof entity {
     Certificate certificate = 3;
-    CertificateBundle trust_bundle = 4;
-    CertificateRevocationListBundle certificate_revocation_list_bundle = 5;
+    CertificateRevocationListBundle certificate_revocation_list_bundle = 4;
   }
 }
 
