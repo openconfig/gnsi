@@ -353,11 +353,11 @@ enum CSRSuite {
 }
 
 // A message type specifying the Subject Alternative Name for use as an x509 certificate extension
-message v3ExtensionSAN {
+message V3ExtensionSAN {
   repeated string dns = 1;    // DNS names for use in SAN
-  repeated string email = 2;  // Email addresses for use in SAN
-  repeated string ip = 3;     // IP addresses for use in SAN
-  repeated string uri = 4;    // URIs for use in SAN
+  repeated string emails = 2;  // Email addresses for use in SAN
+  repeated string ips = 3;     // IP addresses for use in SAN
+  repeated string uris = 4;    // URIs for use in SAN
 }
 
 // A set of parameters a Certificate Signing Request.
@@ -376,7 +376,7 @@ message CSRParams {
   string organizational_unit = 7;   // e.g "Security"
   string ip_address = 8;
   string email_id = 9;
-  v3ExtensionSAN SAN = 10;          // Subject Alternative Name
+  V3ExtensionSAN san = 10;          // Subject Alternative Name
 }
 
 // A request to ask the target if it can generate key pairs.
