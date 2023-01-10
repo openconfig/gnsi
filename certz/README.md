@@ -9,7 +9,7 @@
 The certz service definition provides the API to be used for rotating and
 testing PKI primitives used on network systems.
 The `Rotate()` is bidirectional streaming RPC which permit
-mutating Certificates (including the Root Certificate bundle) and Certificate Revocation
+mutating Certificates, Root Certificate Bundles and Certificate Revocation
 Lists. For `Rotate()` stream it is possible to mutate
 one or more of the elements, and to send a `Finalize` message once the
 in-flight change has been verified to be operational. Failure to send
@@ -27,10 +27,10 @@ a clear and direct method for installation and update.
 verification of function, of any of the PKI elements.
 The normal use-case would be to:
 
-* send a certificate chain to a network system as a `Certificate` in a
-`RotateCertificateRequest`.
+* send an CertificateBundle to a network system as a
+  `RotateCertificateRequest`.
 * verify that the services which will use the new certificate bundle
-continue to operate normally.
+  continue to operate normally.
 * send a `FinalizeRequest` to finish the rotation process.
 
 #### SSL profiles
@@ -71,18 +71,15 @@ ID of the SSL profile to be deleted.
 Call `Certz.GetProfileList` RPC. The response will list all existing
 SSL profiles.
 
-#### A Certificate chain is to be rotated or updated
+#### A CertificateBundle is to be rotated or updated
 
-Create, and test, a new Certificate chain.
+Create, and test, a new CertificateBundle.
 
 Send that policy to the target network system with a
 `Certz.RotateCertificateRequest` to `Certz.Rotate` RPC. The
-`RotateCertificateRequest`'s rotate_request will be a `Certz.Certificate`,
-where each `Certz.Certificate` message type will have a reference to its 
-parent certificate on the chain, up to the root certificate 
-(which will not reference any parent).  
+`RotateCertificateRequest`'s rotate_request will be a `Certz.CertificateBundle`.
 
-Verify that the Certificate newly rotated is used by services
+Verify that the CertificateBundle newly rotated is used by services
 which require it.
 
 Send a `Finalize` message to the `Certz.Rotate` RPC to close out the action.
