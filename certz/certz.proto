@@ -352,11 +352,13 @@ enum CSRSuite {
   CSRSUITE_X509_KEY_TYPE_EDDSA_ED25519 = 19;
 }
 
-// A message type specifying the Subject Alternative Name for use as an x509 certificate extension
+// A message type specifying the Subject Alternative Name for
+// use as an x509 certificate extension
 message V3ExtensionSAN {
-  repeated string dns = 1;    // DNS names for use in SAN
+  repeated string dns = 1;     // DNS names for use in SAN
   repeated string emails = 2;  // Email addresses for use in SAN
   repeated string ips = 3;     // IP addresses for use in SAN
+  // protolint:disable:next REPEATED_FIELD_NAMES_PLURALIZED
   repeated string uris = 4;    // URIs for use in SAN
 }
 
