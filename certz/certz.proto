@@ -410,10 +410,6 @@ message Certificate {
   bytes private_key = 4;
 }
 
-message CertificateBundle {
-  repeated Certificate certificates = 1;
-}
-
 // A certificate revocation list (CRL)
 message CertificateRevocationList {
   // Type of the CRL.
@@ -460,7 +456,7 @@ message Entity {
 
   oneof entity {
     CertificateChain certificate_chain = 3;
-    CertificateBundle trust_bundle = 4;
+    CertificateChain trust_bundle = 4;
     CertificateRevocationListBundle certificate_revocation_list_bundle = 5;
   }
 }
