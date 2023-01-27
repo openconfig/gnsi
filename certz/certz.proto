@@ -386,6 +386,13 @@ enum CertificateEncoding {
   CERTIFICATE_ENCODING_CRT = 3;
 }
 
+message CertificateChain {
+  Certificate certificate = 1;
+  // parent is the certificate which was used to sign the current certificate.
+  // It is nil in the case of the root cert.
+  CertificateChain parent = 2;
+}
+
 // A certificate.
 message Certificate {
   // Type of certificate.
@@ -401,10 +408,6 @@ message Certificate {
   // Optional.
   // Not needed if the device knows the private key or does not have to know it.
   bytes private_key = 4;
-}
-
-message CertificateBundle {
-  repeated Certificate certificates = 1;
 }
 
 // A certificate revocation list (CRL)
@@ -452,8 +455,8 @@ message Entity {
   uint64 created_on = 2;
 
   oneof entity {
-    Certificate certificate = 3;
-    CertificateBundle trust_bundle = 4;
+    CertificateChain certificate_chain = 3;
+    CertificateChain trust_bundle = 4;
     CertificateRevocationListBundle certificate_revocation_list_bundle = 5;
   }
 }

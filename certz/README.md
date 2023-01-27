@@ -28,9 +28,9 @@ verification of function, of any of the PKI elements.
 The normal use-case would be to:
 
 * send an CertificateBundle to a network system as a
-`RotateCertificateRequest`.
+  `RotateCertificateRequest`.
 * verify that the services which will use the new certificate bundle
-continue to operate normally.
+  continue to operate normally.
 * send a `FinalizeRequest` to finish the rotation process.
 
 #### SSL profiles
