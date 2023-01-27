@@ -352,10 +352,33 @@ enum CSRSuite {
   CSRSUITE_X509_KEY_TYPE_EDDSA_ED25519 = 19;
 }
 
+// A message type specifying the Subject Alternative Name for
+// use as an x509 certificate extension
+message V3ExtensionSAN {
+  repeated string dns = 1;     // DNS names for use in SAN
+  repeated string emails = 2;  // Email addresses for use in SAN
+  repeated string ips = 3;     // IP addresses for use in SAN
+  // protolint:disable:next REPEATED_FIELD_NAMES_PLURALIZED
+  repeated string uris = 4;    // URIs for use in SAN
+}
+
 // A set of parameters a Certificate Signing Request.
 // Used to specify what type of CSR the client expects from the target.
 message CSRParams {
   CSRSuite csr_suite = 1;
+
+  // Required field for any type of certificate
+  string common_name = 2;           // e.g "device.corp.google.com"
+
+  // Optional fields for any type of certificate
+  string country = 3;               // e.g "US"
+  string state = 4;                 // e.g "CA"
+  string city = 5;                  // e.g "Mountain View"
+  string organization = 6;          // e.g "Google"
+  string organizational_unit = 7;   // e.g "Security"
+  string ip_address = 8;
+  string email_id = 9;
+  V3ExtensionSAN san = 10;          // Subject Alternative Name
 }
 
 // A request to ask the target if it can generate key pairs.
