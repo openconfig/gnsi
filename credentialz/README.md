@@ -351,9 +351,27 @@ shown below.
 ```txt
 module: gnsi-credentialz
 
+  augment /oc-sys:system:
+    +--rw console
+       +--rw config
+       +--ro state
+          +--ro counters
+             +--ro access-rejects?       oc-yang:counter64
+             +--ro last-access-reject?   oc-types:timeticks64
+             +--ro access-accepts?       oc-yang:counter64
+             +--ro last-access-accept?   oc-types:timeticks64
   augment /oc-sys:system/oc-sys:ssh-server/oc-sys:state:
-    +--ro active-trust-bundle-version?      version
-    +--ro active-trust-bundle-created-on?   created-on
+    +--ro active-trusted-user-ca-keys-version?      version
+    +--ro active-trusted-user-ca-keys-created-on?   created-on
+    +--ro active-host-certificate-version?          version
+    +--ro active-host-certificate-created-on?       created-on
+    +--ro active-host-key-version?                  version
+    +--ro active-host-key-version-created-on?       created-on
+    +--ro counters
+       +--ro access-rejects?       oc-yang:counter64
+       +--ro last-access-reject?   oc-types:timeticks64
+       +--ro access-accepts?       oc-yang:counter64
+       +--ro last-access-accept?   oc-types:timeticks64
   augment /oc-sys:system/oc-sys:aaa/oc-sys:authentication/oc-sys:users/oc-sys:user/oc-sys:state:
     +--ro password-version?                   version
     +--ro password-created-on?                created-on
@@ -473,13 +491,22 @@ module: openconfig-system
      |  |  +--rw rate-limit?         uint16
      |  |  +--rw session-limit?      uint16
      |  +--ro state
-     |     +--ro enable?                                      boolean
-     |     +--ro protocol-version?                            enumeration
-     |     +--ro timeout?                                     uint16
-     |     +--ro rate-limit?                                  uint16
-     |     +--ro session-limit?                               uint16
-     |     +--ro gnsi-credz:active-trust-bundle-version?      version
-     |     +--ro gnsi-credz:active-trust-bundle-created-on?   created-on
+     |     +--ro enable?                                              boolean
+     |     +--ro protocol-version?                                    enumeration
+     |     +--ro timeout?                                             uint16
+     |     +--ro rate-limit?                                          uint16
+     |     +--ro session-limit?                                       uint16
+     |     +--ro gnsi-credz:active-trusted-user-ca-keys-version?      version
+     |     +--ro gnsi-credz:active-trusted-user-ca-keys-created-on?   created-on
+     |     +--ro gnsi-credz:active-host-certificate-version?          version
+     |     +--ro gnsi-credz:active-host-certificate-created-on?       created-on
+     |     +--ro gnsi-credz:active-host-key-version?                  version
+     |     +--ro gnsi-credz:active-host-key-version-created-on?       created-on
+     |     +--ro gnsi-credz:counters
+     |        +--ro gnsi-credz:access-rejects?       oc-yang:counter64
+     |        +--ro gnsi-credz:last-access-reject?   oc-types:timeticks64
+     |        +--ro gnsi-credz:access-accepts?       oc-yang:counter64
+     |        +--ro gnsi-credz:last-access-accept?   oc-types:timeticks64
      +--rw telnet-server
      |  +--rw config
      |  |  +--rw enable?          boolean
@@ -781,28 +808,36 @@ module: openconfig-system
      |           +--ro expired?           boolean
      |           +--ro valid?             boolean
      +--rw oc-sys-grpc:grpc-servers
-        +--rw oc-sys-grpc:grpc-server* [name]
-           +--rw oc-sys-grpc:name      -> ../config/name
-           +--rw oc-sys-grpc:config
-           |  +--rw oc-sys-grpc:name?                      string
-           |  +--rw oc-sys-grpc:services*                  identityref
-           |  +--rw oc-sys-grpc:enable?                    boolean
-           |  +--rw oc-sys-grpc:port?                      oc-inet:port-number
-           |  +--rw oc-sys-grpc:transport-security?        boolean
-           |  +--rw oc-sys-grpc:certificate-id?            string
-           |  +--rw oc-sys-grpc:metadata-authentication?   boolean
-           |  +--rw oc-sys-grpc:listen-addresses*          union
-           |  +--rw oc-sys-grpc:network-instance?          oc-ni:network-instance-ref
-           +--ro oc-sys-grpc:state
-              +--ro oc-sys-grpc:name?                      string
-              +--ro oc-sys-grpc:services*                  identityref
-              +--ro oc-sys-grpc:enable?                    boolean
-              +--ro oc-sys-grpc:port?                      oc-inet:port-number
-              +--ro oc-sys-grpc:transport-security?        boolean
-              +--ro oc-sys-grpc:certificate-id?            string
-              +--ro oc-sys-grpc:metadata-authentication?   boolean
-              +--ro oc-sys-grpc:listen-addresses*          union
-              +--ro oc-sys-grpc:network-instance?          oc-ni:network-instance-ref
+     |  +--rw oc-sys-grpc:grpc-server* [name]
+     |     +--rw oc-sys-grpc:name      -> ../config/name
+     |     +--rw oc-sys-grpc:config
+     |     |  +--rw oc-sys-grpc:name?                      string
+     |     |  +--rw oc-sys-grpc:services*                  identityref
+     |     |  +--rw oc-sys-grpc:enable?                    boolean
+     |     |  +--rw oc-sys-grpc:port?                      oc-inet:port-number
+     |     |  +--rw oc-sys-grpc:transport-security?        boolean
+     |     |  +--rw oc-sys-grpc:certificate-id?            string
+     |     |  +--rw oc-sys-grpc:metadata-authentication?   boolean
+     |     |  +--rw oc-sys-grpc:listen-addresses*          union
+     |     |  +--rw oc-sys-grpc:network-instance?          oc-ni:network-instance-ref
+     |     +--ro oc-sys-grpc:state
+     |        +--ro oc-sys-grpc:name?                      string
+     |        +--ro oc-sys-grpc:services*                  identityref
+     |        +--ro oc-sys-grpc:enable?                    boolean
+     |        +--ro oc-sys-grpc:port?                      oc-inet:port-number
+     |        +--ro oc-sys-grpc:transport-security?        boolean
+     |        +--ro oc-sys-grpc:certificate-id?            string
+     |        +--ro oc-sys-grpc:metadata-authentication?   boolean
+     |        +--ro oc-sys-grpc:listen-addresses*          union
+     |        +--ro oc-sys-grpc:network-instance?          oc-ni:network-instance-ref
+     +--rw gnsi-credz:console
+        +--rw gnsi-credz:config
+        +--ro gnsi-credz:state
+           +--ro gnsi-credz:counters
+              +--ro gnsi-credz:access-rejects?       oc-yang:counter64
+              +--ro gnsi-credz:last-access-reject?   oc-types:timeticks64
+              +--ro gnsi-credz:access-accepts?       oc-yang:counter64
+              +--ro gnsi-credz:last-access-accept?   oc-types:timeticks64
 
 ```
 </details>

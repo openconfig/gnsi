@@ -1,6 +1,6 @@
 module gnsi-certz {
     yang-version 1.1;
-    namespace "https://github.com/openconfig/gnsi/cert/yang";
+    namespace "https://github.com/openconfig/gnsi/certz/yang";
     prefix gnsi-certz;
 
     import openconfig-system {
@@ -12,6 +12,9 @@ module gnsi-certz {
     import openconfig-types {
         prefix oc-types;
     }
+    import openconfig-yang-types {
+        prefix oc-yang;
+    }
     organization
         "Google LLC";
 
@@ -21,6 +24,12 @@ module gnsi-certz {
     description
         "This module provides a data model for the metadata of gRPC credentials
         installed on a networking device.";
+
+    revision 2022-10-30 {
+        description
+            "Adds success/failure counters.";
+        reference "0.2.0";
+    }
 
     revision 2022-09-20 {
         description
@@ -44,8 +53,44 @@ module gnsi-certz {
             reported as nanoseconds since epoch (January 1st, 1970 00:00:00 GMT).
             This leaf persists through a reboot.";
     }
-
     // gRPC server related definitions.
+    // Success/failure counters.
+    grouping counters {
+        description
+            "A collection of counters that were collected while evaluating
+            access to the gRPC server.";
+
+        container counters {
+            config false;
+            description
+            "A collection of counters that were collected by the gRPC during
+            the authentication process.";
+
+            leaf access-rejects {
+                type oc-yang:counter64;
+                description
+                "The total number of times the gRPC denied access to the server.";
+            }
+            leaf last-access-reject {
+                type oc-types:timeticks64;
+                description
+                "A timestamp of the last time the gRPC denied access to
+                the server.";
+            }
+            leaf access-accepts {
+                type oc-yang:counter64;
+                description
+                "The total number of times the gPRC allowed access to
+                the server.";
+            }
+            leaf last-access-accept {
+                type oc-types:timeticks64;
+                description
+                "A timestamp of the last time the gRPC allowed access to
+                the server.";
+            }
+        }
+    }
 
     grouping grpc-server-credentials-state {
         description
@@ -100,5 +145,6 @@ module gnsi-certz {
             "A gRPC server credentials freshness information.";
 
         uses grpc-server-credentials-state;
+        uses counters;
     }
 }

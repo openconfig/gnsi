@@ -25,6 +25,23 @@ module: gnsi-pathz
   augment /oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state:
     +--ro gnmi-pathz-policy-version?      version
     +--ro gnmi-pathz-policy-created-on?   created-on
+  augment /oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server:
+    +--ro gnmi-pathz-policy-counters
+       +--ro paths
+          +--ro path* [xpath]
+             +--ro xpath    -> ../state/xpath
+             +--ro state
+                +--ro xpath?    string
+                +--ro reads
+                |  +--ro access-rejects?       oc-yang:counter64
+                |  +--ro last-access-reject?   oc-types:timeticks64
+                |  +--ro access-accepts?       oc-yang:counter64
+                |  +--ro last-access-accept?   oc-types:timeticks64
+                +--ro writes
+                   +--ro access-rejects?       oc-yang:counter64
+                   +--ro last-access-reject?   oc-types:timeticks64
+                   +--ro access-accepts?       oc-yang:counter64
+                   +--ro last-access-accept?   oc-types:timeticks64
 ```
 </details>
 
@@ -441,7 +458,7 @@ module: openconfig-system
      |           +--ro valid?             boolean
      +--rw oc-sys-grpc:grpc-servers
      |  +--rw oc-sys-grpc:grpc-server* [name]
-     |     +--rw oc-sys-grpc:name      -> ../config/name
+     |     +--rw oc-sys-grpc:name                         -> ../config/name
      |     +--rw oc-sys-grpc:config
      |     |  +--rw oc-sys-grpc:name?                      string
      |     |  +--rw oc-sys-grpc:services*                  identityref
@@ -453,17 +470,33 @@ module: openconfig-system
      |     |  +--rw oc-sys-grpc:listen-addresses*          union
      |     |  +--rw oc-sys-grpc:network-instance?          oc-ni:network-instance-ref
      |     +--ro oc-sys-grpc:state
-     |        +--ro oc-sys-grpc:name?                          string
-     |        +--ro oc-sys-grpc:services*                      identityref
-     |        +--ro oc-sys-grpc:enable?                        boolean
-     |        +--ro oc-sys-grpc:port?                          oc-inet:port-number
-     |        +--ro oc-sys-grpc:transport-security?            boolean
-     |        +--ro oc-sys-grpc:certificate-id?                string
-     |        +--ro oc-sys-grpc:metadata-authentication?       boolean
-     |        +--ro oc-sys-grpc:listen-addresses*              union
-     |        +--ro oc-sys-grpc:network-instance?              oc-ni:network-instance-ref
-     |        +--ro gnsi-pathz:gnmi-pathz-policy-version?      version
-     |        +--ro gnsi-pathz:gnmi-pathz-policy-created-on?   created-on
+     |     |  +--ro oc-sys-grpc:name?                          string
+     |     |  +--ro oc-sys-grpc:services*                      identityref
+     |     |  +--ro oc-sys-grpc:enable?                        boolean
+     |     |  +--ro oc-sys-grpc:port?                          oc-inet:port-number
+     |     |  +--ro oc-sys-grpc:transport-security?            boolean
+     |     |  +--ro oc-sys-grpc:certificate-id?                string
+     |     |  +--ro oc-sys-grpc:metadata-authentication?       boolean
+     |     |  +--ro oc-sys-grpc:listen-addresses*              union
+     |     |  +--ro oc-sys-grpc:network-instance?              oc-ni:network-instance-ref
+     |     |  +--ro gnsi-pathz:gnmi-pathz-policy-version?      version
+     |     |  +--ro gnsi-pathz:gnmi-pathz-policy-created-on?   created-on
+     |     +--ro gnsi-pathz:gnmi-pathz-policy-counters
+     |        +--ro gnsi-pathz:paths
+     |           +--ro gnsi-pathz:path* [xpath]
+     |              +--ro gnsi-pathz:xpath    -> ../state/xpath
+     |              +--ro gnsi-pathz:state
+     |                 +--ro gnsi-pathz:xpath?    string
+     |                 +--ro gnsi-pathz:reads
+     |                 |  +--ro gnsi-pathz:access-rejects?       oc-yang:counter64
+     |                 |  +--ro gnsi-pathz:last-access-reject?   oc-types:timeticks64
+     |                 |  +--ro gnsi-pathz:access-accepts?       oc-yang:counter64
+     |                 |  +--ro gnsi-pathz:last-access-accept?   oc-types:timeticks64
+     |                 +--ro gnsi-pathz:writes
+     |                    +--ro gnsi-pathz:access-rejects?       oc-yang:counter64
+     |                    +--ro gnsi-pathz:last-access-reject?   oc-types:timeticks64
+     |                    +--ro gnsi-pathz:access-accepts?       oc-yang:counter64
+     |                    +--ro gnsi-pathz:last-access-accept?   oc-types:timeticks64
      +--ro gnsi-pathz:gnmi-pathz-policies
         +--ro gnsi-pathz:policies
            +--ro gnsi-pathz:policy* [instance]

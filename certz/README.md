@@ -126,6 +126,11 @@ module: gnsi-certz
     +--ro ca-trust-bundle-created-on?                      created-on
     +--ro certificate-revocation-list-bundle-version?      version
     +--ro certificate-revocation-list-bundle-created-on?   created-on
+    +--ro counters
+       +--ro access-rejects?       oc-yang:counter64
+       +--ro last-access-reject?   oc-types:timeticks64
+       +--ro access-accepts?       oc-yang:counter64
+       +--ro last-access-accept?   oc-types:timeticks64
 ```
 
 ### `openconfig-system` tree
@@ -565,5 +570,10 @@ module: openconfig-system
               +--ro gnsi-certz:ca-trust-bundle-created-on?                      created-on
               +--ro gnsi-certz:certificate-revocation-list-bundle-version?      version
               +--ro gnsi-certz:certificate-revocation-list-bundle-created-on?   created-on
+              +--ro gnsi-certz:counters
+                 +--ro gnsi-certz:access-rejects?       oc-yang:counter64
+                 +--ro gnsi-certz:last-access-reject?   oc-types:timeticks64
+                 +--ro gnsi-certz:access-accepts?       oc-yang:counter64
+                 +--ro gnsi-certz:last-access-accept?   oc-types:timeticks64
 
 ```
