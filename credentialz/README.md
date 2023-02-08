@@ -135,10 +135,10 @@ stream.Send(
             credentials: AccountCredentials {
                 account: "user",
                 authorized_keys: AuthorizedKey {
-                    authorized_key: "AAAAB3NzaC1yc2EAAAABJQAAAIBmhLUTJiP....==",
+                    authorized_key: "A....=",
                 },
                 authorized_keys: AuthorizedKey {
-                    authorized_key: "AAAAB3JlHJKJSdsoosaAJlOIhhsdKhaiPsa....==",
+                    authorized_key: "A....=",
                 },
                 version: "v1.0",
                 created_on: 3214451134,
@@ -222,8 +222,8 @@ stream := RotateHostCredentials()
 stream.Send(
     RotateHostCredentialsRequest {
         server_keys: ServerKeysRequest {
-            public_key: "AAAAB3JlHJKJSdsoosaAJlOIhhsdKhaiPsa....==",
-            private_key: "AAAAB3NzaC1yc2EAAAABJQAAAIBmhLUTJiP....==",
+            public_key: "A....=",
+            private_key: "A....=",
             version: "v1.0",
             created_on: 3214451134,
         }
@@ -280,7 +280,7 @@ stream := RotateHostCredentials()
 stream.Send(
     RotateHostCredentialsRequest {
         ssh_ca_public_key: CaPublicKeyRequest {
-            ssh_ca_public_keys: "AAAAB3JlHJklasjdKSAFDLKSADjldaLKJDS....==",
+            ssh_ca_public_keys: "A....=",
             version: "v1.0",
             created_on: 3214451134,
         }
@@ -317,9 +317,9 @@ stream := RotateHostCredentials()
 stream.Send(
     RotateHostCredentialsRequest {
         server_keys: ServerKeysRequest {
-            certificate: "AAAAB3JlHJklasjdKSAFDLKSADjldaLKJDS....==",
-            public_key: "AAAAB3JlHJKJSdsoosaAJlOIhhsdKhaiPsa....==",
-            private_key: "AAAAB3NzaC1yc2EAAAABJQAAAIBmhLUTJiP....==",
+            certificate: "A....=",
+            public_key: "A....=",
+            private_key: "A....=",
             version: "v1.0",
             created_on: 3214451134,
         }
