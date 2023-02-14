@@ -12,6 +12,10 @@ module gnsi-pathz {
     import openconfig-types {
         prefix oc-types;
     }
+    import openconfig-yang-types {
+        prefix oc-yang;
+    }
+
     organization
         "Google LLC";
 
@@ -22,6 +26,12 @@ module gnsi-pathz {
         "This module provides a data model for the metadata of
         OpenConfig-path-based authorization policies installed on a networking
         device.";
+
+    revision 2022-10-30 {
+        description
+            "Adds success/failure counters.";
+        reference "0.2.0";
+    }
 
     revision 2022-01-17 {
         description
@@ -49,6 +59,91 @@ module gnsi-pathz {
     }
 
     // gRPC server related definitions.
+    grouping counters {
+        description
+            "A collection of counters that were collected by the gNSI.pathz
+            module while evaluating access to an OpenConfig path.";
+
+        leaf access-rejects {
+            type oc-yang:counter64;
+            description
+                "The total number of times the gNSI.pathz module denied access
+                to an OpenConfig path.";
+        }
+        leaf last-access-reject {
+            type oc-types:timeticks64;
+            description
+                "A timestamp of the last time the gNSI.pathz denied access to
+                an OpenConfig path";
+        }
+        leaf access-accepts {
+            type oc-yang:counter64;
+            description
+                "The total number of times the gNSI.pathz module allowed access
+                to an OpenConfig path.";
+        }
+        leaf last-access-accept {
+            type oc-types:timeticks64;
+            description
+                "A timestamp of the last time the gNSI.pathz allowed access to
+                an OpenConfig path";
+        }
+    }
+
+    grouping gnmi-pathz-policy-success-failure-counters {
+        description
+          "A collection of counters collected by the gNSI.pathz module.";
+
+        container gnmi-pathz-policy-counters {
+            config false;
+
+            uses gnmi-pathz-policy-xpath-success-failure-counters;
+        }
+    }
+
+    grouping gnmi-pathz-policy-xpath-success-failure-counters {
+        description
+            "A collection of per-OpenConfig path counters.";
+
+        container paths {
+            description
+                "A collection of per-OpenConfig path counters.";
+
+            list path {
+                key xpath;
+                leaf xpath {
+                    type leafref {
+                        path "../state/xpath";
+                    }
+                    description
+                        "A OpenConfig schema path (xpath) the counter were
+                        collected for.";
+                }
+                container state {
+                    leaf xpath {
+                        type string;
+                        description
+                            "A OpenConfig schema path (xpath) the counter were
+                            collected for.";
+                    }
+                    container reads {
+                        description
+                            "The counter were collected while
+                            performing a read operation on the
+                            `xpath`.";
+                        uses counters;
+                    }
+                    container writes {
+                        description
+                            "The counter were collected while
+                            performing a write operation on the
+                            `xpath`.";
+                        uses counters;
+                    }
+                }
+            }
+        }
+    }
 
     grouping grpc-server-gnmi-pathz-policy-state {
         description
@@ -192,5 +287,12 @@ module gnsi-pathz {
             information.";
 
         uses grpc-server-gnmi-pathz-policy-state;
+    }
+    augment "/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server" {
+        description
+            "A gNMI server OpenConfig-path-based authorization policy
+             success/failure counters.";
+
+            uses gnmi-pathz-policy-success-failure-counters;
     }
 }

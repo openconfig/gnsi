@@ -8331,6 +8331,197 @@ leafref
         <td>current</td>
         <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/oc-sys-grpc:network-instance</td>
         </tr>
+        <tr id="1-1-16-42-66" class="a">
+        
+            <td nowrap id="p4000">
+               <div id="p5000" class="tier5">
+                 <a href="#" id="p6000"
+                    onclick="toggleRows(this);return false"
+                    class="folder">&nbsp;
+                 </a>
+                 <abbr title="A collection of counters collected by the gNSI.authz module.">gnsi-authz:authz-policy-counters</abbr>
+              </div>
+            </td>
+        <td nowrap>container</td>
+        <td nowrap></td>
+        <td nowrap>no config</td>
+        <td></td>
+        <td>current</td>
+        <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/gnsi-authz:authz-policy-counters</td>
+        </tr>
+        <tr id="1-1-16-42-66-88" class="a">
+        
+            <td nowrap id="p4000">
+               <div id="p5000" class="tier6">
+                 <a href="#" id="p6000"
+                    onclick="toggleRows(this);return false"
+                    class="folder">&nbsp;
+                 </a>
+                 <abbr title="A collection of counters collected by the gNSI.authz module
+for each RPC separately.">gnsi-authz:rpcs</abbr>
+              </div>
+            </td>
+        <td nowrap>container</td>
+        <td nowrap></td>
+        <td nowrap>no config</td>
+        <td></td>
+        <td>current</td>
+        <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/gnsi-authz:authz-policy-counters/gnsi-authz:rpcs</td>
+        </tr>
+        <tr id="1-1-16-42-66-88-138" class="a">
+        
+            <td nowrap id="p4000">
+               <div id="p5000" class="tier7">
+                 <a href="#" id="p6000"
+                    onclick="toggleRows(this);return false"
+                    class="folder">&nbsp;
+                 </a>
+                 <abbr title="A collection of counters collected by the gNSI.authz module
+for a RPC identified by the `name`.">gnsi-authz:rpc[name]</abbr>
+              </div>
+            </td>
+        <td nowrap>list</td>
+        <td nowrap></td>
+        <td nowrap>no config</td>
+        <td></td>
+        <td>current</td>
+        <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/gnsi-authz:authz-policy-counters/gnsi-authz:rpcs/gnsi-authz:rpc</td>
+        </tr>
+        <tr id="1-1-16-42-66-88-138-30" class="a">
+        
+            <td nowrap>
+               <div id=9999 class=tier8>
+                  <a class="leaf">&nbsp;</a>
+                  <attr title="The name of the RPC the counters were collected for.">  gnsi-authz:name </abbr>
+            
+               </div>
+            </td> 
+        <td nowrap>leaf</td>
+        <td nowrap><abbr title="leafref
+ : ../state/name">leafref</abbr></td>
+                
+        <td nowrap>no config</td>
+        <td></td>
+        <td>current</td>
+        <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/gnsi-authz:authz-policy-counters/gnsi-authz:rpcs/gnsi-authz:rpc/gnsi-authz:name</td>
+        </tr>
+        <tr id="1-1-16-42-66-88-138-31" class="a">
+        
+            <td nowrap id="p4000">
+               <div id="p5000" class="tier8">
+                 <a href="#" id="p6000"
+                    onclick="toggleRows(this);return false"
+                    class="folder">&nbsp;
+                 </a>
+                 <abbr title="No description">gnsi-authz:state</abbr>
+              </div>
+            </td>
+        <td nowrap>container</td>
+        <td nowrap></td>
+        <td nowrap>no config</td>
+        <td></td>
+        <td>current</td>
+        <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/gnsi-authz:authz-policy-counters/gnsi-authz:rpcs/gnsi-authz:rpc/gnsi-authz:state</td>
+        </tr>
+        <tr id="1-1-16-42-66-88-138-31-23" class="a">
+        
+            <td nowrap>
+               <div id=9999 class=tier9>
+                  <a class="leaf">&nbsp;</a>
+                  <attr title="The name of the RPC the counters were collected
+for."> <em> gnsi-authz:name </em></abbr>
+            
+               </div>
+            </td> 
+        <td nowrap>leaf</td>
+        <td nowrap><abbr title="string
+">string</abbr></td>
+                
+        <td nowrap>no config</td>
+        <td>?</td>
+        <td>current</td>
+        <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/gnsi-authz:authz-policy-counters/gnsi-authz:rpcs/gnsi-authz:rpc/gnsi-authz:state/gnsi-authz:name</td>
+        </tr>
+        <tr id="1-1-16-42-66-88-138-31-24" class="a">
+        
+            <td nowrap>
+               <div id=9999 class=tier9>
+                  <a class="leaf">&nbsp;</a>
+                  <attr title="The total number of times the gNSI.authz module denied access
+to a RPC."> <em> gnsi-authz:access-rejects </em></abbr>
+            
+               </div>
+            </td> 
+        <td nowrap>leaf</td>
+        <td nowrap><abbr title="oc-yang:counter64
+uint64
+">oc-yang:counter64</abbr></td>
+                
+        <td nowrap>no config</td>
+        <td>?</td>
+        <td>current</td>
+        <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/gnsi-authz:authz-policy-counters/gnsi-authz:rpcs/gnsi-authz:rpc/gnsi-authz:state/gnsi-authz:access-rejects</td>
+        </tr>
+        <tr id="1-1-16-42-66-88-138-31-25" class="a">
+        
+            <td nowrap>
+               <div id=9999 class=tier9>
+                  <a class="leaf">&nbsp;</a>
+                  <attr title="A timestamp of the last time the gNSI.authz denied access to
+a RPC."> <em> gnsi-authz:last-access-reject </em></abbr>
+            
+               </div>
+            </td> 
+        <td nowrap>leaf</td>
+        <td nowrap><abbr title="oc-types:timeticks64
+uint64
+">oc-types:timeticks64</abbr></td>
+                
+        <td nowrap>no config</td>
+        <td>?</td>
+        <td>current</td>
+        <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/gnsi-authz:authz-policy-counters/gnsi-authz:rpcs/gnsi-authz:rpc/gnsi-authz:state/gnsi-authz:last-access-reject</td>
+        </tr>
+        <tr id="1-1-16-42-66-88-138-31-26" class="a">
+        
+            <td nowrap>
+               <div id=9999 class=tier9>
+                  <a class="leaf">&nbsp;</a>
+                  <attr title="The total number of times the gNSI.authz module allowed access
+to a RPC."> <em> gnsi-authz:access-accepts </em></abbr>
+            
+               </div>
+            </td> 
+        <td nowrap>leaf</td>
+        <td nowrap><abbr title="oc-yang:counter64
+uint64
+">oc-yang:counter64</abbr></td>
+                
+        <td nowrap>no config</td>
+        <td>?</td>
+        <td>current</td>
+        <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/gnsi-authz:authz-policy-counters/gnsi-authz:rpcs/gnsi-authz:rpc/gnsi-authz:state/gnsi-authz:access-accepts</td>
+        </tr>
+        <tr id="1-1-16-42-66-88-138-31-27" class="a">
+        
+            <td nowrap>
+               <div id=9999 class=tier9>
+                  <a class="leaf">&nbsp;</a>
+                  <attr title="A timestamp of the last time the gNSI.authz allowed access to
+a RPC."> <em> gnsi-authz:last-access-accept </em></abbr>
+            
+               </div>
+            </td> 
+        <td nowrap>leaf</td>
+        <td nowrap><abbr title="oc-types:timeticks64
+uint64
+">oc-types:timeticks64</abbr></td>
+                
+        <td nowrap>no config</td>
+        <td>?</td>
+        <td>current</td>
+        <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/gnsi-authz:authz-policy-counters/gnsi-authz:rpcs/gnsi-authz:rpc/gnsi-authz:state/gnsi-authz:last-access-accept</td>
+        </tr>
 </table>
 </div>
 </body>

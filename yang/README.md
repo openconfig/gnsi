@@ -1,5 +1,111 @@
 # gNSI Telemetry Extension
 
+## `gnsi-*` trees
+<details>
+<summary>
+
+An overview of the changes defined in all `gnsi-*.yang` files are shown
+below.
+</summary>
+
+```sh
+module: gnsi-authz
+
+  augment /oc-sys:system/oc-sys:aaa/oc-sys:authorization/oc-sys:state:
+    +--ro grpc-authz-policy-version?      version
+    +--ro grpc-authz-policy-created-on?   created-on
+  augment /oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server:
+    +--ro authz-policy-counters
+       +--ro rpcs
+          +--ro rpc* [name]
+             +--ro name     -> ../state/name
+             +--ro state
+                +--ro name?                 string
+                +--ro access-rejects?       oc-yang:counter64
+                +--ro last-access-reject?   oc-types:timeticks64
+                +--ro access-accepts?       oc-yang:counter64
+                +--ro last-access-accept?   oc-types:timeticks64
+
+module: gnsi-certz
+
+  augment /oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state:
+    +--ro certificate-version?                             version
+    +--ro certificate-created-on?                          created-on
+    +--ro ca-trust-bundle-version?                         version
+    +--ro ca-trust-bundle-created-on?                      created-on
+    +--ro certificate-revocation-list-bundle-version?      version
+    +--ro certificate-revocation-list-bundle-created-on?   created-on
+    +--ro counters
+       +--ro access-rejects?       oc-yang:counter64
+       +--ro last-access-reject?   oc-types:timeticks64
+       +--ro access-accepts?       oc-yang:counter64
+       +--ro last-access-accept?   oc-types:timeticks64
+
+module: gnsi-credentialz
+
+  augment /oc-sys:system:
+    +--rw console
+       +--rw config
+       +--ro state
+          +--ro counters
+             +--ro access-rejects?       oc-yang:counter64
+             +--ro last-access-reject?   oc-types:timeticks64
+             +--ro access-accepts?       oc-yang:counter64
+             +--ro last-access-accept?   oc-types:timeticks64
+  augment /oc-sys:system/oc-sys:ssh-server/oc-sys:state:
+    +--ro active-trusted-user-ca-keys-version?      version
+    +--ro active-trusted-user-ca-keys-created-on?   created-on
+    +--ro active-host-certificate-version?          version
+    +--ro active-host-certificate-created-on?       created-on
+    +--ro active-host-key-version?                  version
+    +--ro active-host-key-version-created-on?       created-on
+    +--ro counters
+       +--ro access-rejects?       oc-yang:counter64
+       +--ro last-access-reject?   oc-types:timeticks64
+       +--ro access-accepts?       oc-yang:counter64
+       +--ro last-access-accept?   oc-types:timeticks64
+  augment /oc-sys:system/oc-sys:aaa/oc-sys:authentication/oc-sys:users/oc-sys:user/oc-sys:state:
+    +--ro password-version?                   version
+    +--ro password-created-on?                created-on
+    +--ro authorized-users-list-version?      version
+    +--ro authorized-users-list-created-on?   created-on
+    +--ro authorized-keys-list-version?       version
+    +--ro authorized-keys-list-created-on?    created-on
+
+module: gnsi-pathz
+
+  augment /oc-sys:system:
+    +--ro gnmi-pathz-policies
+       +--ro policies
+          +--ro policy* [instance]
+             +--ro instance    -> ../state/instance
+             +--ro state
+                +--ro instance?     enumeration
+                +--ro version?      version
+                +--ro created-on?   created-on
+  augment /oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state:
+    +--ro gnmi-pathz-policy-version?      version
+    +--ro gnmi-pathz-policy-created-on?   created-on
+  augment /oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server:
+    +--ro gnmi-pathz-policy-counters
+       +--ro paths
+          +--ro path* [xpath]
+             +--ro xpath    -> ../state/xpath
+             +--ro state
+                +--ro xpath?    string
+                +--ro reads
+                |  +--ro access-rejects?       oc-yang:counter64
+                |  +--ro last-access-reject?   oc-types:timeticks64
+                |  +--ro access-accepts?       oc-yang:counter64
+                |  +--ro last-access-accept?   oc-types:timeticks64
+                +--ro writes
+                   +--ro access-rejects?       oc-yang:counter64
+                   +--ro last-access-reject?   oc-types:timeticks64
+                   +--ro access-accepts?       oc-yang:counter64
+                   +--ro last-access-accept?   oc-types:timeticks64
+```
+</details>
+
 ## `openconfig-system` tree
 
 The `openconfig-system` subtree after applying augments defined in the
@@ -105,13 +211,22 @@ module: openconfig-system
      |  |  +--rw rate-limit?         uint16
      |  |  +--rw session-limit?      uint16
      |  +--ro state
-     |     +--ro enable?                                      boolean
-     |     +--ro protocol-version?                            enumeration
-     |     +--ro timeout?                                     uint16
-     |     +--ro rate-limit?                                  uint16
-     |     +--ro session-limit?                               uint16
-     |     +--ro gnsi-credz:active-trust-bundle-version?      version
-     |     +--ro gnsi-credz:active-trust-bundle-created-on?   created-on
+     |     +--ro enable?                                              boolean
+     |     +--ro protocol-version?                                    enumeration
+     |     +--ro timeout?                                             uint16
+     |     +--ro rate-limit?                                          uint16
+     |     +--ro session-limit?                                       uint16
+     |     +--ro gnsi-credz:active-trusted-user-ca-keys-version?      version
+     |     +--ro gnsi-credz:active-trusted-user-ca-keys-created-on?   created-on
+     |     +--ro gnsi-credz:active-host-certificate-version?          version
+     |     +--ro gnsi-credz:active-host-certificate-created-on?       created-on
+     |     +--ro gnsi-credz:active-host-key-version?                  version
+     |     +--ro gnsi-credz:active-host-key-version-created-on?       created-on
+     |     +--ro gnsi-credz:counters
+     |        +--ro gnsi-credz:access-rejects?       oc-yang:counter64
+     |        +--ro gnsi-credz:last-access-reject?   oc-types:timeticks64
+     |        +--ro gnsi-credz:access-accepts?       oc-yang:counter64
+     |        +--ro gnsi-credz:last-access-accept?   oc-types:timeticks64
      +--rw telnet-server
      |  +--rw config
      |  |  +--rw enable?          boolean
@@ -416,34 +531,74 @@ module: openconfig-system
      |           +--ro valid?             boolean
      +--rw oc-sys-grpc:grpc-servers
      |  +--rw oc-sys-grpc:grpc-server* [name]
-     |     +--rw oc-sys-grpc:name      -> ../config/name
+     |     +--rw oc-sys-grpc:name                         -> ../config/name
      |     +--rw oc-sys-grpc:config
      |     |  +--rw oc-sys-grpc:name?                      string
      |     |  +--rw oc-sys-grpc:services*                  identityref
      |     |  +--rw oc-sys-grpc:enable?                    boolean
      |     |  +--rw oc-sys-grpc:port?                      oc-inet:port-number
      |     |  +--rw oc-sys-grpc:transport-security?        boolean
+     |     |  +--rw oc-sys-grpc:certificate-id?            string
      |     |  +--rw oc-sys-grpc:metadata-authentication?   boolean
      |     |  +--rw oc-sys-grpc:listen-addresses*          union
      |     |  +--rw oc-sys-grpc:network-instance?          oc-ni:network-instance-ref
      |     +--ro oc-sys-grpc:state
-     |        +--ro oc-sys-grpc:name?                                           string
-     |        +--ro oc-sys-grpc:services*                                       identityref
-     |        +--ro oc-sys-grpc:enable?                                         boolean
-     |        +--ro oc-sys-grpc:port?                                           oc-inet:port-number
-     |        +--ro oc-sys-grpc:transport-security?                             boolean
-     |        +--ro oc-sys-grpc:certificate-id?                                 string
-     |        +--ro oc-sys-grpc:metadata-authentication?                        boolean
-     |        +--ro oc-sys-grpc:listen-addresses*                               union
-     |        +--ro oc-sys-grpc:network-instance?                               oc-ni:network-instance-ref
-     |        +--ro gnsi-certz:certificate-version?                             version
-     |        +--ro gnsi-certz:certificate-created-on?                          created-on
-     |        +--ro gnsi-certz:ca-trust-bundle-version?                         version
-     |        +--ro gnsi-certz:ca-trust-bundle-created-on?                      created-on
-     |        +--ro gnsi-certz:certificate-revocation-list-bundle-version?      version
-     |        +--ro gnsi-certz:certificate-revocation-list-bundle-created-on?   created-on
-     |        +--ro gnsi-pathz:gnmi-pathz-policy-version?                       version
-     |        +--ro gnsi-pathz:gnmi-pathz-policy-created-on?                    created-on
+     |     |  +--ro oc-sys-grpc:name?                                           string
+     |     |  +--ro oc-sys-grpc:services*                                       identityref
+     |     |  +--ro oc-sys-grpc:enable?                                         boolean
+     |     |  +--ro oc-sys-grpc:port?                                           oc-inet:port-number
+     |     |  +--ro oc-sys-grpc:transport-security?                             boolean
+     |     |  +--ro oc-sys-grpc:certificate-id?                                 string
+     |     |  +--ro oc-sys-grpc:metadata-authentication?                        boolean
+     |     |  +--ro oc-sys-grpc:listen-addresses*                               union
+     |     |  +--ro oc-sys-grpc:network-instance?                               oc-ni:network-instance-ref
+     |     |  +--ro gnsi-certz:certificate-version?                             version
+     |     |  +--ro gnsi-certz:certificate-created-on?                          created-on
+     |     |  +--ro gnsi-certz:ca-trust-bundle-version?                         version
+     |     |  +--ro gnsi-certz:ca-trust-bundle-created-on?                      created-on
+     |     |  +--ro gnsi-certz:certificate-revocation-list-bundle-version?      version
+     |     |  +--ro gnsi-certz:certificate-revocation-list-bundle-created-on?   created-on
+     |     |  +--ro gnsi-certz:counters
+     |     |  |  +--ro gnsi-certz:access-rejects?       oc-yang:counter64
+     |     |  |  +--ro gnsi-certz:last-access-reject?   oc-types:timeticks64
+     |     |  |  +--ro gnsi-certz:access-accepts?       oc-yang:counter64
+     |     |  |  +--ro gnsi-certz:last-access-accept?   oc-types:timeticks64
+     |     |  +--ro gnsi-pathz:gnmi-pathz-policy-version?                       version
+     |     |  +--ro gnsi-pathz:gnmi-pathz-policy-created-on?                    created-on
+     |     +--ro gnsi-authz:authz-policy-counters
+     |     |  +--ro gnsi-authz:rpcs
+     |     |     +--ro gnsi-authz:rpc* [name]
+     |     |        +--ro gnsi-authz:name     -> ../state/name
+     |     |        +--ro gnsi-authz:state
+     |     |           +--ro gnsi-authz:name?                 string
+     |     |           +--ro gnsi-authz:access-rejects?       oc-yang:counter64
+     |     |           +--ro gnsi-authz:last-access-reject?   oc-types:timeticks64
+     |     |           +--ro gnsi-authz:access-accepts?       oc-yang:counter64
+     |     |           +--ro gnsi-authz:last-access-accept?   oc-types:timeticks64
+     |     +--ro gnsi-pathz:gnmi-pathz-policy-counters
+     |        +--ro gnsi-pathz:paths
+     |           +--ro gnsi-pathz:path* [xpath]
+     |              +--ro gnsi-pathz:xpath    -> ../state/xpath
+     |              +--ro gnsi-pathz:state
+     |                 +--ro gnsi-pathz:xpath?    string
+     |                 +--ro gnsi-pathz:reads
+     |                 |  +--ro gnsi-pathz:access-rejects?       oc-yang:counter64
+     |                 |  +--ro gnsi-pathz:last-access-reject?   oc-types:timeticks64
+     |                 |  +--ro gnsi-pathz:access-accepts?       oc-yang:counter64
+     |                 |  +--ro gnsi-pathz:last-access-accept?   oc-types:timeticks64
+     |                 +--ro gnsi-pathz:writes
+     |                    +--ro gnsi-pathz:access-rejects?       oc-yang:counter64
+     |                    +--ro gnsi-pathz:last-access-reject?   oc-types:timeticks64
+     |                    +--ro gnsi-pathz:access-accepts?       oc-yang:counter64
+     |                    +--ro gnsi-pathz:last-access-accept?   oc-types:timeticks64
+     +--rw gnsi-credz:console
+     |  +--rw gnsi-credz:config
+     |  +--ro gnsi-credz:state
+     |     +--ro gnsi-credz:counters
+     |        +--ro gnsi-credz:access-rejects?       oc-yang:counter64
+     |        +--ro gnsi-credz:last-access-reject?   oc-types:timeticks64
+     |        +--ro gnsi-credz:access-accepts?       oc-yang:counter64
+     |        +--ro gnsi-credz:last-access-accept?   oc-types:timeticks64
      +--ro gnsi-pathz:gnmi-pathz-policies
         +--ro gnsi-pathz:policies
            +--ro gnsi-pathz:policy* [instance]

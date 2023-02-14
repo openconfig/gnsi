@@ -97,7 +97,7 @@ message Request {
 message Rule {
   // Required. The name of an authorization rule.
   // It is mainly for monitoring and error message generation.
-  // This name must be unique within the list of deny (or allow) rules. 
+  // This name must be unique within the list of deny (or allow) rules.
   string name = 1;
 
   // Optional. If not set, no checks will be performed against the source. An
@@ -311,6 +311,17 @@ module: gnsi-authz
   augment /oc-sys:system/oc-sys:aaa/oc-sys:authorization/oc-sys:state:
     +--ro grpc-authz-policy-version?      version
     +--ro grpc-authz-policy-created-on?   created-on
+  augment /oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server:
+    +--ro authz-policy-counters
+       +--ro rpcs
+          +--ro rpc* [name]
+             +--ro name     -> ../state/name
+             +--ro state
+                +--ro name?                 string
+                +--ro access-rejects?       oc-yang:counter64
+                +--ro last-access-reject?   oc-types:timeticks64
+                +--ro access-accepts?       oc-yang:counter64
+                +--ro last-access-accept?   oc-types:timeticks64
 ```
 
 ### `openconfig-system` tree
@@ -732,7 +743,7 @@ module: openconfig-system
      |           +--ro valid?             boolean
      +--rw oc-sys-grpc:grpc-servers
         +--rw oc-sys-grpc:grpc-server* [name]
-           +--rw oc-sys-grpc:name      -> ../config/name
+           +--rw oc-sys-grpc:name                    -> ../config/name
            +--rw oc-sys-grpc:config
            |  +--rw oc-sys-grpc:name?                      string
            |  +--rw oc-sys-grpc:services*                  identityref
@@ -744,15 +755,25 @@ module: openconfig-system
            |  +--rw oc-sys-grpc:listen-addresses*          union
            |  +--rw oc-sys-grpc:network-instance?          oc-ni:network-instance-ref
            +--ro oc-sys-grpc:state
-              +--ro oc-sys-grpc:name?                      string
-              +--ro oc-sys-grpc:services*                  identityref
-              +--ro oc-sys-grpc:enable?                    boolean
-              +--ro oc-sys-grpc:port?                      oc-inet:port-number
-              +--ro oc-sys-grpc:transport-security?        boolean
-              +--ro oc-sys-grpc:certificate-id?            string
-              +--ro oc-sys-grpc:metadata-authentication?   boolean
-              +--ro oc-sys-grpc:listen-addresses*          union
-              +--ro oc-sys-grpc:network-instance?          oc-ni:network-instance-ref
+           |  +--ro oc-sys-grpc:name?                      string
+           |  +--ro oc-sys-grpc:services*                  identityref
+           |  +--ro oc-sys-grpc:enable?                    boolean
+           |  +--ro oc-sys-grpc:port?                      oc-inet:port-number
+           |  +--ro oc-sys-grpc:transport-security?        boolean
+           |  +--ro oc-sys-grpc:certificate-id?            string
+           |  +--ro oc-sys-grpc:metadata-authentication?   boolean
+           |  +--ro oc-sys-grpc:listen-addresses*          union
+           |  +--ro oc-sys-grpc:network-instance?          oc-ni:network-instance-ref
+           +--ro gnsi-authz:authz-policy-counters
+              +--ro gnsi-authz:rpcs
+                 +--ro gnsi-authz:rpc* [name]
+                    +--ro gnsi-authz:name     -> ../state/name
+                    +--ro gnsi-authz:state
+                       +--ro gnsi-authz:name?                 string
+                       +--ro gnsi-authz:access-rejects?       oc-yang:counter64
+                       +--ro gnsi-authz:last-access-reject?   oc-types:timeticks64
+                       +--ro gnsi-authz:access-accepts?       oc-yang:counter64
+                       +--ro gnsi-authz:last-access-accept?   oc-types:timeticks64
 
 ```
 </details>
