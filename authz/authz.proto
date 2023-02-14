@@ -23,7 +23,7 @@ package gnsi.authz;
 import "github.com/openconfig/gnoi/types/types.proto";
 
 option go_package = "github.com/openconfig/gnsi/authz";
-option (gnoi.types.gnoi_version) = "0.1.0";
+option (gnoi.types.gnoi_version) = "0.2.0";
 
 // The gRPC-level Authorization Policy Management Service exported by targets.
 //
