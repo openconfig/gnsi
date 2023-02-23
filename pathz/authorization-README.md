@@ -109,7 +109,7 @@ Example 1
 
 Installed Rules
 
-```
+```sh
 /network-instances/network-instance[name=DEFAULT]/protocols/protocol[identifier=BGP] -> group admin, action PERMIT
 /network-instances/network-instance[name=*]/protocols/protocol[identifier=BGP] -> user stevie, action DENY
 ```
@@ -121,19 +121,19 @@ Example 2
 
 Installed Rules
 
-```
+```sh
 /network-instances/network-instance[name=DEFAULT]/protocols/protocol[identifier=BGP] -> user stevie, action PERMIT
 /network-instances/network-instance[name=DEFAULT]/protocols/protocol[identifier=BGP] -> group admin, action DENY
 ```
 
-Result: PERMIT, both paths are the same length, the first policy applies to the user, 
+Result: PERMIT, both paths are the same length, the first policy applies to the user,
 so it is prefer over the rule that applies to group.
 
 Example 3
 
 Installed Rules
 
-```
+```sh
 /network-instances/network-instance[name=DEFAULT]/protocols/protocol[identifier=*] -> user stevie, action PERMIT
 /network-instances/network-instance[name=*]/protocols/protocol[identifier=BGP] -> user stevie, action DENY
 ```
@@ -145,7 +145,7 @@ Example 4
 
 Installed Rules
 
-```
+```sh
 /network-instances/network-instance[name=DEFAULT]/protocols/protocol[identifier=BGP] -> group admin, action PERMIT
 /network-instances/network-instance[name=DEFAULT]/protocols/protocol[identifier=BGP] -> group engineers, action DENY
 ```
