@@ -33,7 +33,7 @@ requested path and prefers in order:
    preferred over one with fewer.
 2. User over group. A rule that matches with the user is preferred over one
    with matches with a group a user belongs to.
-3. Deny over permit. If all above are equal, prefer the rule that with DENY action.
+3. Deny over permit. If all above are equal, prefer the rule with DENY action.
 
 Match rules permit a match against:
 
@@ -94,7 +94,7 @@ the second rule, which specifies 'any value is accepted'.
 
 ### Conflict Resolution
 
-The policy must be evaluated in the order described by the in "Best Match" section.
+The policy must be evaluated in the order described by the "Best Match" section.
 In case of conflicting paths or group membership, preferring DENY over ALLOW ensures
 only a single action is applicable.
 
@@ -102,8 +102,6 @@ only a single action is applicable.
 
 Probe Path: `/network-instances/network-instance[name=DEFAULT]/protocols/protocol[identifier=BGP]`  
 Group Memberships: `admin: [stevie]; engineers: [stevie]`
-
-Note: these are contrived
 
 Example 1
 
