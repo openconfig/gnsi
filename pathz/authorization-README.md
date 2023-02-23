@@ -26,14 +26,15 @@ Authorization is performed for a singular user, gNMI path access, and access
 methodology (READ/WRITE). The result of an Authorization evaluation is an
 Action (PERMIT/DENY), policy version, and rule identifier.
 
-A Best, or most specific, match is that which has the longest match to the
-requested path and prefers in order:
+Among all matching policies, the best, or most specific match,
+is determined from the following rules in order:
 
+1. A longer matching path is preferred over a shorter one.
 1. Definite keys over wildcards keys. A rule with more definite keys is
    preferred over one with fewer.
-2. User over group. A rule that matches with the user is preferred over one
+1. User over group. A rule that matches with the user is preferred over one
    with matches with a group a user belongs to.
-3. Deny over permit. If all above are equal, prefer the rule with DENY action.
+1. Deny over permit. If all above are equal, prefer the rule with DENY action.
 
 Match rules permit a match against:
 
