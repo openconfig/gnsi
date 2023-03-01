@@ -26,16 +26,15 @@ Authorization is performed for a singular user, gNMI path access, and access
 methodology (READ/WRITE). The result of an Authorization evaluation is an
 Action (PERMIT/DENY), policy version, and rule identifier.
 
-A Best, or most specific, match is that which has the longest match to the
-requested path and prefers:
+Among all matching policies, the best, or most specific match,
+is determined from the following rules in order:
 
-* a specific user over a group in the matching policy.
-* a defined KEY over a wildcard element in a keyed path.
-* a mode which matches that of the request (READ/WRITE).
-
-Authorization rules must be defined such that a single best match is possible.
-If the result of policy evaluation is more than one match, an error must be
-raised.
+1. A longer matching path is preferred over a shorter one.
+1. Definite keys over wildcards keys. A rule with more definite keys is
+   preferred over one with fewer.
+1. User over group. A rule that matches with the user is preferred over one
+   with matches with a group a user belongs to.
+1. Deny over permit. If all above are equal, prefer the rule with DENY action.
 
 Match rules permit a match against:
 
@@ -94,6 +93,64 @@ to attribute wildcarding:
 The first rule specifies a single key, that rule is more specific than
 the second rule, which specifies 'any value is accepted'.
 
+### Conflict Resolution
+
+The policy must be evaluated in the order described by the "Best Match" section.
+In case of conflicting paths or group membership, preferring DENY over ALLOW ensures
+only a single action is applicable.
+
+### Examples
+
+Probe Path: `/network-instances/network-instance[name=DEFAULT]/protocols/protocol[identifier=BGP]`  
+Group Memberships: `admin: [stevie]; engineers: [stevie]`
+
+Example 1
+
+Installed Rules
+
+```sh
+/network-instances/network-instance[name=DEFAULT]/protocols/protocol[identifier=BGP] -> group admin, action PERMIT
+/network-instances/network-instance[name=*]/protocols/protocol[identifier=BGP] -> user stevie, action DENY
+```
+
+Result: PERMIT, both paths are the same length, the first policy has more definite keys,
+so it is a better match, even though it applies to a group while the second applies to the user.
+
+Example 2
+
+Installed Rules
+
+```sh
+/network-instances/network-instance[name=DEFAULT]/protocols/protocol[identifier=BGP] -> user stevie, action PERMIT
+/network-instances/network-instance[name=DEFAULT]/protocols/protocol[identifier=BGP] -> group admin, action DENY
+```
+
+Result: PERMIT, both paths are the same length, the first policy applies to the user,
+so it is prefer over the rule that applies to group.
+
+Example 3
+
+Installed Rules
+
+```sh
+/network-instances/network-instance[name=DEFAULT]/protocols/protocol[identifier=*] -> user stevie, action PERMIT
+/network-instances/network-instance[name=*]/protocols/protocol[identifier=BGP] -> user stevie, action DENY
+```
+
+Result: DENY, both paths are the same length, have the same amount of definite keys,
+apply to the user (not group), so prefer DENY over PERMIT.
+
+Example 4
+
+Installed Rules
+
+```sh
+/network-instances/network-instance[name=DEFAULT]/protocols/protocol[identifier=BGP] -> group admin, action PERMIT
+/network-instances/network-instance[name=DEFAULT]/protocols/protocol[identifier=BGP] -> group engineers, action DENY
+```
+
+Result: DENY, both paths are the same length, have the same amount of definite keys,
+apply to groups that user is a member of, so prefer DENY over PERMIT.
 
 ## Bootstrap / Install Options
 
@@ -107,11 +164,7 @@ Using the Secure Zero Touch Provisioning (sZTP - RFC8572) process for
 bootstrap/installation is a recommended method for accomplishing this
 delivery, and the delivery of all other bootstrap artifacts in a secure manner.
 
-## Conflict Resolution
 
-Policy evaluation should end with a single best match rule for the provided
-user / path / mode. If there is more than one 'best match', an error must be logged
-and evaluation should return a failure.
 
 ## An Example Authorization Protobuf
 
@@ -445,4 +498,3 @@ policy {
 
 provides an explicit deny for any request which does not match any other policy
 rule. This rule also requests that the result be logged in full fidelity.
-
