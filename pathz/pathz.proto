@@ -25,7 +25,7 @@ import "github.com/openconfig/gnoi/types/types.proto";
 import "github.com/openconfig/gnsi/pathz/authorization.proto";
 
 option go_package = "github.com/openconfig/gnsi/pathz";
-option (gnoi.types.gnoi_version) = "0.2.0";
+option (gnoi.types.gnoi_version) = "0.3.0";
 
 // The OpenConfig gNMI Path-based Authorization Policy Management Service
 // exported by targets.
@@ -113,6 +113,9 @@ message RotateRequest {
 
 // Response messages from the target.
 message RotateResponse {
+  oneof response {
+    UploadResponse upload_response = 1;
+  }
 }
 
 // A Finalize message is sent to the target to confirm the rotation of
