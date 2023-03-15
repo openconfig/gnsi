@@ -114,7 +114,7 @@ message RotateRequest {
 // Response messages from the target.
 message RotateResponse {
   oneof response {
-    UploadResponse upload_response = 1;
+    UploadResponse upload = 1;
   }
 }
 
