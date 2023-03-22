@@ -64,6 +64,8 @@ service Accounting {
   // ServerStream is a stream of Record()s sent from the system to
   // a remote collection service, when the system is configured to
   // connect to that remote collection service.
+  // NOTE: this service would be implemented on the remote collection
+  // service, not on the system itself.
   rpc ServerStream(stream RecordResponse)
     returns (stream Record);
 }
