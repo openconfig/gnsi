@@ -41,6 +41,33 @@ import "github.com/openconfig/gnoi/types/types.proto";
 option go_package = "github.com/openconfig/gnsi/accounting";
 option (gnoi.types.gnoi_version) = "0.2.0";
 
+//
+// The Accounting service describes the interface between a system
+// and downstream management systems that may want/need to collect
+// data about what changes were attempted or completed on that system.
+// 
+// Accounting messages may be collected by connecting to the Accounting
+// service on a system from a remote endpoint, or by configuring a
+// system to connect to the remote endpoint directly.
+//
+// Records created on a system can be delivered to remote collectors,
+// stored locally, or discarded locally. Configuration of this behavior
+// is done with standard gNMI system configuration methods.
+
+service Accounting {
+  // ClientStream is a stream of Record()s sent from the system to
+  // a remote collection service, when the remote service connects
+  // to the Accounting service..
+  rpc ClientStream(stream Record)
+    returns (stream RecordResponse);
+
+  // ServerStream is a stream of Record()s sent from the system to
+  // a remote collection service, when the system is configured to
+  // connect to that remote collection service.
+  rpc ServerStream(stream RecordResponse)
+    returns (stream Record);
+}
+
 // Session identifier that identifies the context in which service
 // was executed.
 message SessionInfo {
@@ -159,4 +186,7 @@ message Record {
   // Optional repeated task_id that represent tasks that were used to
   // accomplish the request on the system.
   repeated string task_ids = 32;
+}
+
+message RecordResponse {
 }
