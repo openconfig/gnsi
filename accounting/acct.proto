@@ -42,14 +42,14 @@ option go_package = "github.com/openconfig/gnsi/accounting";
 option (gnoi.types.gnoi_version) = "0.2.0";
 
 //
-// The Accounting(Push/Pull) services describe the interfaces between
-// a system and downstream management systems that may want/need to collect
+// The Accounting(Push/Pull) services describe the interfaces between a
+// system and a downstream management systems that may want/need to collect
 // data about what changes were attempted or completed on that system.
 //
 // Accounting messages may be collected by connecting to the Accounting
-// service (AccoutningPull) on a system from a remote endpoint, or
-// by configuring a system to connect(AccountingPush) to the remote
-// endpoint directly.
+// service (AccoutningPull) on a system from a remote endpoint, or by
+// configuring a system to connect(AccountingPush) to the remote endpoint
+// directly.
 //
 // Records created on a system can be delivered to remote collectors,
 // stored locally, or discarded locally. Configuration of this behavior
@@ -58,19 +58,41 @@ option (gnoi.types.gnoi_version) = "0.2.0";
 service AccountingPull {
   // ClientStream is a stream of Record()s sent from the system to
   // a remote collection service, when the remote service connects
-  // to the Accounting service..
-  rpc ClientStream(stream Record)
-    returns (stream RecordResponse);
+  // to the Accounting service.
+  //
+  // The RecordRequest contains a timestamp indicating the last message
+  // received. The remote collector's expectation is that all messages
+  // after the timestamp will be streamed.
+  //
+  // At connection initiation the remote collector may send either
+  // the current time or a zero time. A zero time indicates that all
+  // stored messages should be sent to the collector. A current time
+  // indicates that only new messages should be sent.
+  //
+  // The remote collector must send a RecordRequest at least every 60
+  // seconds, in order to signal its status to the system.
+  rpc ClientStream(stream RecordRequest)
+    returns (stream Record);
 }
 
 service AccountingPush {
   // ServerStream is a stream of Record()s sent from the system to
   // a remote collection service, when the system is configured to
   // connect to that remote collection service.
-  // NOTE: this service would be implemented on the remote collection
-  // service, not on the system itself.
-  rpc ServerStream(stream RecordResponse)
-    returns (stream Record);
+  //
+  // The RecordsAck contains a timestamp indicating the last message
+  // received. The remote collector's expectation is that all messages
+  // after the timestamp will be streamed.
+  //
+  // At connection initiation the remote collector may send either
+  // the current time or a zero time. A zero time indicates that all
+  // stored messages should be sent to the collector. A current time
+  // indicates that only new messages should be sent.
+  //
+  // The remote collector must send a RecordsAck at least every 60
+  // seconds, in order to signal its status to the system.
+  rpc ServerStream(stream Record)
+    returns (stream RecordsAck);
 }
 
 // Session identifier that identifies the context in which service
@@ -150,7 +172,8 @@ message GrpcService {
   //   gnsi.cert.Rotate()
   string rpc_name = 2;
 
-  // A string of bytes that are gRPC encoded. Best to decode using PROTO_ANY.
+  // A string of bytes that are gRPC encoded. Best to decode using
+  // PROTO_ANY.
   repeated google.protobuf.Any payloads = 3;
 
   // config_metadata can be used to track all set requests that were to be
@@ -193,5 +216,18 @@ message Record {
   repeated string task_ids = 32;
 }
 
-message RecordResponse {
+// RecordRequest, requests that Records be streamed to the caller.
+// The timestamp indicates the last accepted Record at the caller.
+message RecordRequest {
+  // The time when the system recorded this event. Recorded as nanoseconds
+  // since epoch.
+  google.protobuf.Timestamp timestamp = 2;
+}
+
+// RecordsAck, acknowledges Records recieved at the remote collector.
+// The timestamp indicates the last accepted Record at the caller.
+message RecordsAck {
+  // The time when the system recorded this event. Recorded as nanoseconds
+  // since epoch.
+  google.protobuf.Timestamp timestamp = 2;
 }
