@@ -51,7 +51,7 @@ option (gnoi.types.gnoi_version) = "0.2.0";
 // stored locally, or discarded locally. Configuration of this behavior
 // is done with standard gNMI system configuration methods.
 service AccountingPull {
-  // ClientStream is a stream of Record()s sent from the system to
+  // RecordStream is a stream of Record()s sent from the system to
   // a remote collection service, when the remote service connects
   // to the Accounting service.
   //
@@ -68,12 +68,12 @@ service AccountingPull {
   // seconds, in order to signal its status to the system. Failure to send a
   // RecordRequest for more than 120 seconds will cause the connection to be
   // reset.
-  rpc ClientStream(stream RecordRequest)
+  rpc RecordStream(stream RecordSync)
     returns (stream Record);
 }
 
 service AccountingPush {
-  // ServerStream is a stream of Record()s sent from the System to
+  // RecordStream is a stream of Record()s sent from the System to
   // a remote collection service when the System is configured to
   // connect to that remote collection service.
   //
@@ -90,8 +90,8 @@ service AccountingPush {
   // seconds, in order to signal its status to the System. Failure
   // to send a RecordsAck for more than 120 seconds will cause the
   // connection to be reset.
-  rpc ServerStream(stream Record)
-    returns (stream RecordsAck);
+  rpc RecordStream(stream Record)
+    returns (stream RecordsSync);
 }
 
 // SessionInfo is the session identifier that identifies the context
@@ -216,17 +216,11 @@ message Record {
   repeated string task_ids = 32;
 }
 
-// RecordRequest, requests that Record()s be streamed to the caller.
-// The timestamp indicates the last accepted Record() at the caller.
-message RecordRequest {
-  // The time when the system recorded this event, represented as nanoseconds
-  // since the unix epoch.
-  google.protobuf.Timestamp timestamp = 2;
-}
-
-// RecordsAck, acknowledges Record()s recieved at the remote collector.
-// The timestamp indicates the last accepted Record() at the caller.
-message RecordsAck {
+// RecordSync, requests a starting point for records to be sent to the caller.
+// The reciever then can signal back to the sender periodic sync messages to
+// acknowledge received records.
+// The timestamp indicates the last processed Record at the caller.
+message RecordsSync {
   // The time when the system recorded this event represented as nanoseconds
   // since the unix epoch.
   google.protobuf.Timestamp timestamp = 2;
