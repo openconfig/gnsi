@@ -91,7 +91,7 @@ service AccountingPush {
   // to send a RecordsAck for more than 120 seconds will cause the
   // connection to be reset.
   rpc RecordStream(stream Record)
-    returns (stream RecordsSync);
+    returns (stream RecordSync);
 }
 
 // SessionInfo is the session identifier that identifies the context
@@ -220,7 +220,7 @@ message Record {
 // The reciever then can signal back to the sender periodic sync messages to
 // acknowledge received records.
 // The timestamp indicates the last processed Record at the caller.
-message RecordsSync {
+message RecordSync {
   // The time when the system recorded this event represented as nanoseconds
   // since the unix epoch.
   google.protobuf.Timestamp timestamp = 2;
