@@ -19,10 +19,9 @@ syntax = "proto3";
 
 package gnsi.certz;
 
-import "github.com/openconfig/gnoi/types/types.proto";
+import "github.com/openconfig/gnsi/version/version.proto";
 
 option go_package = "github.com/openconfig/gnsi/cert";
-option (gnoi.types.gnoi_version) = "0.2.0";
 
 // The Certificate Management Service exported by targets.
 //

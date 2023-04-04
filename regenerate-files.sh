@@ -26,3 +26,5 @@ bazel build //credentialz:all
 copy_generated "credentialz"
 bazel build //pathz:all
 copy_generated "pathz"
+bazel build //version:all
+copy_generated "version"

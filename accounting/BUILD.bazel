@@ -3,18 +3,22 @@ load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
 load("@rules_proto//proto:defs.bzl", "proto_library")
 load("@rules_proto_grpc//cpp:defs.bzl", "cpp_grpc_library")
 load("//:common.bzl", "use_new_compilers")
+
 use_new_compilers()
 
 package(default_visibility = ["//visibility:public"])
 
-filegroup( name = "yang", srcs = glob(["*.yang"]))
+filegroup(
+    name = "yang",
+    srcs = glob(["*.yang"]),
+)
 
 proto_library(
     name = "acct_proto",
     srcs = ["acct.proto"],
     import_prefix = "github.com/openconfig/gnsi",
     deps = [
-        "@com_github_openconfig_gnoi//types:types_proto",
+        "//version:version_proto",
         "@com_google_protobuf//:any_proto",
         "@com_google_protobuf//:timestamp_proto",
     ],
@@ -27,8 +31,8 @@ cpp_grpc_library(
     name = "acct_cc_proto",
     protos = [
         ":acct_proto",
-        "@com_github_openconfig_gnoi//types:types_proto",
     ],
+    deps = ["//version:version_cc_proto"],
 )
 
 ##############################################################################
@@ -36,10 +40,13 @@ cpp_grpc_library(
 ##############################################################################
 go_proto_library(
     name = "acct_go_proto",
-    compilers = ["go_protoc_gen_go", "go_protoc_gen_go_grpc"],
+    compilers = [
+        "go_protoc_gen_go",
+        "go_protoc_gen_go_grpc",
+    ],
     importpath = "github.com/openconfig/gnsi/accounting",
     proto = ":acct_proto",
-    deps = ["@com_github_openconfig_gnoi//types:types_go_proto"],
+    deps = ["//version:version_go_proto"],
 )
 
 go_library(

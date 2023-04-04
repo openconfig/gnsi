@@ -36,10 +36,9 @@ package gnsi.accounting;
 import "google/protobuf/any.proto";
 import "google/protobuf/timestamp.proto";
 
-import "github.com/openconfig/gnoi/types/types.proto";
+import "github.com/openconfig/gnsi/version/version.proto";
 
 option go_package = "github.com/openconfig/gnsi/accounting";
-option (gnoi.types.gnoi_version) = "0.2.0";
 
 // Session identifier that identifies the context in which service
 // was executed.
