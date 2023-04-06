@@ -33,10 +33,9 @@ package gnsi.accounting;
 import "google/protobuf/any.proto";
 import "google/protobuf/timestamp.proto";
 
-import "github.com/openconfig/gnoi/types/types.proto";
+import "github.com/openconfig/gnsi/version/version.proto";
 
 option go_package = "github.com/openconfig/gnsi/accounting";
-option (gnoi.types.gnoi_version) = "0.2.0";
 
 // The Accounting(Pull/Push) services describe the interfaces between a System
 // and a remote collector that collect data about what changes were attempted or
