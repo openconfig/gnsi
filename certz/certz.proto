@@ -17,7 +17,7 @@
 // This file defines the gNSI API to be used for certificate rotation.
 syntax = "proto3";
 
-package gnsi.certz;
+package gnsi.certz.v1;
 
 import "github.com/openconfig/gnsi/version/version.proto";
 

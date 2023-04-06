@@ -36,7 +36,7 @@ func NewPathzClient(cc grpc.ClientConnInterface) PathzClient {
 }
 
 func (c *pathzClient) Rotate(ctx context.Context, opts ...grpc.CallOption) (Pathz_RotateClient, error) {
-	stream, err := c.cc.NewStream(ctx, &Pathz_ServiceDesc.Streams[0], "/gnsi.pathz.Pathz/Rotate", opts...)
+	stream, err := c.cc.NewStream(ctx, &Pathz_ServiceDesc.Streams[0], "/gnsi.pathz.v1.Pathz/Rotate", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -68,7 +68,7 @@ func (x *pathzRotateClient) Recv() (*RotateResponse, error) {
 
 func (c *pathzClient) Probe(ctx context.Context, in *ProbeRequest, opts ...grpc.CallOption) (*ProbeResponse, error) {
 	out := new(ProbeResponse)
-	err := c.cc.Invoke(ctx, "/gnsi.pathz.Pathz/Probe", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/gnsi.pathz.v1.Pathz/Probe", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -77,7 +77,7 @@ func (c *pathzClient) Probe(ctx context.Context, in *ProbeRequest, opts ...grpc.
 
 func (c *pathzClient) Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error) {
 	out := new(GetResponse)
-	err := c.cc.Invoke(ctx, "/gnsi.pathz.Pathz/Get", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/gnsi.pathz.v1.Pathz/Get", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -156,7 +156,7 @@ func _Pathz_Probe_Handler(srv interface{}, ctx context.Context, dec func(interfa
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/gnsi.pathz.Pathz/Probe",
+		FullMethod: "/gnsi.pathz.v1.Pathz/Probe",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(PathzServer).Probe(ctx, req.(*ProbeRequest))
@@ -174,7 +174,7 @@ func _Pathz_Get_Handler(srv interface{}, ctx context.Context, dec func(interface
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/gnsi.pathz.Pathz/Get",
+		FullMethod: "/gnsi.pathz.v1.Pathz/Get",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(PathzServer).Get(ctx, req.(*GetRequest))
@@ -186,7 +186,7 @@ func _Pathz_Get_Handler(srv interface{}, ctx context.Context, dec func(interface
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Pathz_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "gnsi.pathz.Pathz",
+	ServiceName: "gnsi.pathz.v1.Pathz",
 	HandlerType: (*PathzServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

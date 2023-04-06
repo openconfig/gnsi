@@ -36,7 +36,7 @@ func NewCredentialzClient(cc grpc.ClientConnInterface) CredentialzClient {
 }
 
 func (c *credentialzClient) RotateAccountCredentials(ctx context.Context, opts ...grpc.CallOption) (Credentialz_RotateAccountCredentialsClient, error) {
-	stream, err := c.cc.NewStream(ctx, &Credentialz_ServiceDesc.Streams[0], "/gnsi.credentialz.Credentialz/RotateAccountCredentials", opts...)
+	stream, err := c.cc.NewStream(ctx, &Credentialz_ServiceDesc.Streams[0], "/gnsi.credentialz.v1.Credentialz/RotateAccountCredentials", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -67,7 +67,7 @@ func (x *credentialzRotateAccountCredentialsClient) Recv() (*RotateAccountCreden
 }
 
 func (c *credentialzClient) RotateHostCredentials(ctx context.Context, opts ...grpc.CallOption) (Credentialz_RotateHostCredentialsClient, error) {
-	stream, err := c.cc.NewStream(ctx, &Credentialz_ServiceDesc.Streams[1], "/gnsi.credentialz.Credentialz/RotateHostCredentials", opts...)
+	stream, err := c.cc.NewStream(ctx, &Credentialz_ServiceDesc.Streams[1], "/gnsi.credentialz.v1.Credentialz/RotateHostCredentials", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -99,7 +99,7 @@ func (x *credentialzRotateHostCredentialsClient) Recv() (*RotateHostCredentialsR
 
 func (c *credentialzClient) CanGenerateKey(ctx context.Context, in *CanGenerateKeyRequest, opts ...grpc.CallOption) (*CanGenerateKeyResponse, error) {
 	out := new(CanGenerateKeyResponse)
-	err := c.cc.Invoke(ctx, "/gnsi.credentialz.Credentialz/CanGenerateKey", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/gnsi.credentialz.v1.Credentialz/CanGenerateKey", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -204,7 +204,7 @@ func _Credentialz_CanGenerateKey_Handler(srv interface{}, ctx context.Context, d
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/gnsi.credentialz.Credentialz/CanGenerateKey",
+		FullMethod: "/gnsi.credentialz.v1.Credentialz/CanGenerateKey",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(CredentialzServer).CanGenerateKey(ctx, req.(*CanGenerateKeyRequest))
@@ -216,7 +216,7 @@ func _Credentialz_CanGenerateKey_Handler(srv interface{}, ctx context.Context, d
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Credentialz_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "gnsi.credentialz.Credentialz",
+	ServiceName: "gnsi.credentialz.v1.Credentialz",
 	HandlerType: (*CredentialzServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

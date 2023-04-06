@@ -36,7 +36,7 @@ func NewAuthzClient(cc grpc.ClientConnInterface) AuthzClient {
 }
 
 func (c *authzClient) Rotate(ctx context.Context, opts ...grpc.CallOption) (Authz_RotateClient, error) {
-	stream, err := c.cc.NewStream(ctx, &Authz_ServiceDesc.Streams[0], "/gnsi.authz.Authz/Rotate", opts...)
+	stream, err := c.cc.NewStream(ctx, &Authz_ServiceDesc.Streams[0], "/gnsi.authz.v1.Authz/Rotate", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -68,7 +68,7 @@ func (x *authzRotateClient) Recv() (*RotateAuthzResponse, error) {
 
 func (c *authzClient) Probe(ctx context.Context, in *ProbeRequest, opts ...grpc.CallOption) (*ProbeResponse, error) {
 	out := new(ProbeResponse)
-	err := c.cc.Invoke(ctx, "/gnsi.authz.Authz/Probe", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/gnsi.authz.v1.Authz/Probe", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -77,7 +77,7 @@ func (c *authzClient) Probe(ctx context.Context, in *ProbeRequest, opts ...grpc.
 
 func (c *authzClient) Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error) {
 	out := new(GetResponse)
-	err := c.cc.Invoke(ctx, "/gnsi.authz.Authz/Get", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/gnsi.authz.v1.Authz/Get", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -156,7 +156,7 @@ func _Authz_Probe_Handler(srv interface{}, ctx context.Context, dec func(interfa
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/gnsi.authz.Authz/Probe",
+		FullMethod: "/gnsi.authz.v1.Authz/Probe",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AuthzServer).Probe(ctx, req.(*ProbeRequest))
@@ -174,7 +174,7 @@ func _Authz_Get_Handler(srv interface{}, ctx context.Context, dec func(interface
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/gnsi.authz.Authz/Get",
+		FullMethod: "/gnsi.authz.v1.Authz/Get",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AuthzServer).Get(ctx, req.(*GetRequest))
@@ -186,7 +186,7 @@ func _Authz_Get_Handler(srv interface{}, ctx context.Context, dec func(interface
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Authz_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "gnsi.authz.Authz",
+	ServiceName: "gnsi.authz.v1.Authz",
 	HandlerType: (*AuthzServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

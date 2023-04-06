@@ -38,7 +38,7 @@ func NewCertzClient(cc grpc.ClientConnInterface) CertzClient {
 }
 
 func (c *certzClient) Rotate(ctx context.Context, opts ...grpc.CallOption) (Certz_RotateClient, error) {
-	stream, err := c.cc.NewStream(ctx, &Certz_ServiceDesc.Streams[0], "/gnsi.certz.Certz/Rotate", opts...)
+	stream, err := c.cc.NewStream(ctx, &Certz_ServiceDesc.Streams[0], "/gnsi.certz.v1.Certz/Rotate", opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -70,7 +70,7 @@ func (x *certzRotateClient) Recv() (*RotateCertificateResponse, error) {
 
 func (c *certzClient) AddProfile(ctx context.Context, in *AddProfileRequest, opts ...grpc.CallOption) (*AddProfileResponse, error) {
 	out := new(AddProfileResponse)
-	err := c.cc.Invoke(ctx, "/gnsi.certz.Certz/AddProfile", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/gnsi.certz.v1.Certz/AddProfile", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -79,7 +79,7 @@ func (c *certzClient) AddProfile(ctx context.Context, in *AddProfileRequest, opt
 
 func (c *certzClient) DeleteProfile(ctx context.Context, in *DeleteProfileRequest, opts ...grpc.CallOption) (*DeleteProfileResponse, error) {
 	out := new(DeleteProfileResponse)
-	err := c.cc.Invoke(ctx, "/gnsi.certz.Certz/DeleteProfile", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/gnsi.certz.v1.Certz/DeleteProfile", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -88,7 +88,7 @@ func (c *certzClient) DeleteProfile(ctx context.Context, in *DeleteProfileReques
 
 func (c *certzClient) GetProfileList(ctx context.Context, in *GetProfileListRequest, opts ...grpc.CallOption) (*GetProfileListResponse, error) {
 	out := new(GetProfileListResponse)
-	err := c.cc.Invoke(ctx, "/gnsi.certz.Certz/GetProfileList", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/gnsi.certz.v1.Certz/GetProfileList", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -97,7 +97,7 @@ func (c *certzClient) GetProfileList(ctx context.Context, in *GetProfileListRequ
 
 func (c *certzClient) CanGenerateCSR(ctx context.Context, in *CanGenerateCSRRequest, opts ...grpc.CallOption) (*CanGenerateCSRResponse, error) {
 	out := new(CanGenerateCSRResponse)
-	err := c.cc.Invoke(ctx, "/gnsi.certz.Certz/CanGenerateCSR", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/gnsi.certz.v1.Certz/CanGenerateCSR", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -184,7 +184,7 @@ func _Certz_AddProfile_Handler(srv interface{}, ctx context.Context, dec func(in
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/gnsi.certz.Certz/AddProfile",
+		FullMethod: "/gnsi.certz.v1.Certz/AddProfile",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(CertzServer).AddProfile(ctx, req.(*AddProfileRequest))
@@ -202,7 +202,7 @@ func _Certz_DeleteProfile_Handler(srv interface{}, ctx context.Context, dec func
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/gnsi.certz.Certz/DeleteProfile",
+		FullMethod: "/gnsi.certz.v1.Certz/DeleteProfile",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(CertzServer).DeleteProfile(ctx, req.(*DeleteProfileRequest))
@@ -220,7 +220,7 @@ func _Certz_GetProfileList_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/gnsi.certz.Certz/GetProfileList",
+		FullMethod: "/gnsi.certz.v1.Certz/GetProfileList",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(CertzServer).GetProfileList(ctx, req.(*GetProfileListRequest))
@@ -238,7 +238,7 @@ func _Certz_CanGenerateCSR_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/gnsi.certz.Certz/CanGenerateCSR",
+		FullMethod: "/gnsi.certz.v1.Certz/CanGenerateCSR",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(CertzServer).CanGenerateCSR(ctx, req.(*CanGenerateCSRRequest))
@@ -250,7 +250,7 @@ func _Certz_CanGenerateCSR_Handler(srv interface{}, ctx context.Context, dec fun
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Certz_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "gnsi.certz.Certz",
+	ServiceName: "gnsi.certz.v1.Certz",
 	HandlerType: (*CertzServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
