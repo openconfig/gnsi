@@ -28,7 +28,7 @@
 
 syntax = "proto3";
 
-package gnsi.accounting;
+package gnsi.accounting.v1;
 
 import "google/protobuf/any.proto";
 import "google/protobuf/timestamp.proto";
