@@ -19,6 +19,7 @@ proto_library(
     import_prefix = "github.com/openconfig/gnsi",
     deps = [
         "//version:version_proto",
+        "@com_google_protobuf//:any_proto",
     ],
 )
 

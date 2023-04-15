@@ -20,6 +20,7 @@ syntax = "proto3";
 package gnsi.certz.v1;
 
 import "github.com/openconfig/gnsi/version/version.proto";
+import "google/protobuf/any.proto";
 
 option go_package = "github.com/openconfig/gnsi/cert";
 
@@ -452,6 +453,13 @@ message CertificateRevocationListBundle {
   repeated CertificateRevocationList certificate_revocation_lists = 1;
 }
 
+// A federation policy.
+// This policy defines which Certificate Authority can sign which certificate.
+message FederationPolicy {
+  // Actual federation policy.
+  google.protobuf.Any policy = 1;
+}
+
 // An entity.
 message Entity {
   // `version` contains versioning information that is controlled by
@@ -480,6 +488,7 @@ message Entity {
     CertificateChain certificate_chain = 3;
     CertificateChain trust_bundle = 4;
     CertificateRevocationListBundle certificate_revocation_list_bundle = 5;
+    FederationPolicy federation_policy = 6;
   }
 }
 
