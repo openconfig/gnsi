@@ -18,7 +18,7 @@ The following files are expected to be created during the bootstrap process:
   * always required
 * target's private key
   * always required
-* `${system_role_home}/.ssh/authorized_users` file for every system account
+* `${system_role_home}/.ssh/authorized_users` file for every system account.  This file contains a list of principals to validate against for access to the system account.
   * always required
   * used to authorize the `username` provided by a client to use this system
     account
@@ -332,6 +332,45 @@ resp := stream.Receive()
 * Check if the new keys and certificate 'work'
 
 * Finalize the operation
+
+```go
+stream.Send(
+    RotateHostCredentialsResponse {
+        finalize: FinalizeRequest {}
+    }
+)
+```
+
+### Rotate Certificate based on existing key.
+
+The most common operation we are expecting to require on devices is the rotation of certificates used for SSH access for devices. This operation expects to reuse the existing host key on the device as there is not really a good reason frequently rotate this identity.
+
+* Get the public key configured on the host.
+
+```go
+
+resp, err := c.GetPublicKey(&GetPublicKeyRequest{})
+```
+
+* Generate certificate basd on key.
+
+* Rotate certificate on device.
+
+```go
+stream.Send(
+    RotateHostCredentialsRequest {
+        server_keys: ServerKeysRequest {
+            certificate: "A....=",
+            version: "v1.0",
+            created_on: 3214451134,
+        }
+    }
+)
+```
+
+* Validate that new settings are working as expected.
+
+* Finalize request
 
 ```go
 stream.Send(
