@@ -52,8 +52,10 @@ option go_package = "github.com/openconfig/gnsi/cert";
 // | | +- CA Intermediate Certificate
 // | |
 // | +-+ Certificate Revocation List bundle
-// |   +-+ Certificate Revocation List A
-// |   +-+ Certificate Revocation List B
+// | | +-+ Certificate Revocation List A
+// | | +-+ Certificate Revocation List B
+// | |
+// | +- authentication policy
 // |
 // +-+ Another SSL profile used by another service
 //   |
@@ -66,8 +68,10 @@ option go_package = "github.com/openconfig/gnsi/cert";
 //   | +- CA Intermediate Certificate
 //   |
 //   +-+ Certificate Revocation List bundle
-//     +-+ Certificate Revocation List A
-//     +-+ Certificate Revocation List B
+//   | +-+ Certificate Revocation List A
+//   | +-+ Certificate Revocation List B
+//   |
+//   +- authentication policy
 //
 // As shown above the gNSI.certz manages certificates (public and private keys),
 // trust bundles (Certificate Authority chain of certificates) and Certificate
@@ -114,8 +118,10 @@ service Certz {
   //     mandatory: signed certificate with private key
   //     optional: trust bundle - Certificate Authority certificate chain
   //     optional: certificate revocation list bundle
+  //     optional: authentication policy
   //     Client --> UploadRequest(certificate, [trust_bundle],
-  //                              [certificate_revocation_list]) ----> Target
+  //                              [certificate_revocation_list],
+  //                              [authentication_policy]) ----> Target
   //     Client <-- UploadResponse <--- Target
   //
   //   Step 4 (optional): Test/Validation by the client.
@@ -149,8 +155,10 @@ service Certz {
   //     mandatory: signed certificate without private key
   //     optional: trust bundle - Certificate Authority certificate chain
   //     optional: certificate revocation list bundle
+  //     optional: authentication policy
   //     Client --> UploadRequest(certificate, [trust_bundle],
-  //                              [certificate_revocation_list]) ----> Target
+  //                              [certificate_revocation_list],
+  //                              [authentication_policy]) ----> Target
   //     Client <-- UploadResponse <--- Target
   //
   //   Step 5: Test/Validation by the client.
@@ -175,9 +183,7 @@ service Certz {
   //
   //   Step 2: Send CA Certificate Bundle to the Target.
   //     mandatory: trust bundle - Certificate Authority chain
-  //     optional: certificate revocation list bundle
-  //     Client --> UploadRequest(trust_bundle,
-  //                              [certificate_revocation_list]) ----> Target
+  //     Client --> UploadRequest(trust_bundle) ----> Target
   //     Client <-- UploadResponse <--- Target
   //
   //   Step 3 (optional): Test/Validation by the client.
@@ -216,6 +222,26 @@ service Certz {
   //   Step 4: Final commit.
   //     Client ---> FinalizeRequest ----> Target
   //
+  // Case 5: Client provides authentication policy to the Target.
+  //
+  //   Step 1: Start the stream
+  //     Client <---- Rotate() RPC stream begin ------> Target
+  //
+  //   Step 2: Send authentication policy to the target.
+  //     mandatory: authentication policy
+  //     Client --> UploadRequest(authentication_policy) ----> Target
+  //     Client <-- UploadResponse <--- Target
+  //
+  //   Step 3 (optional): Test/Validation by the client.
+  //     During this step the client attempts to establish a new connection
+  //     to the target using certificate(s) signed with incorrect CA -
+  //     the attempt must fail proving that the authentication policy works.
+  //     If the new connection can be completed the client will cancel the
+  //     RPC thereby forcing the target to rollback the authentication policy.
+  //     Once verified, the client then proceeds to finalize the rotation.
+  //
+  //   Step 4: Final commit.
+  //     Client ---> FinalizeRequest ----> Target
   //
   rpc Rotate(stream RotateCertificateRequest)
       returns (stream RotateCertificateResponse);

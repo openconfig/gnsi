@@ -2,16 +2,16 @@
 
 ## gNSI certz Service Protobuf Definition
 **Contributors**: hines@google.com, morrowc@google.com, tmadejski@google.com
-**Last Updated**: 2022-11-10
+**Last Updated**: 2023-05-10
 
 ### Background
 
 The certz service definition provides the API to be used for rotating and
 testing PKI primitives used on network systems.
 The `Rotate()` is bidirectional streaming RPC which permit
-mutating Certificates, Root Certificate Bundles and Certificate Revocation
-Lists. For `Rotate()` stream it is possible to mutate
-one or more of the elements, and to send a `Finalize` message once the
+mutating Certificates, Root Certificate Bundles, Certificate Revocation
+Lists and Authentication Policies. For `Rotate()` stream it is possible to
+mutate one or more of the elements, and to send a `Finalize` message once the
 in-flight change has been verified to be operational. Failure to send
 the `Finalize` message will result in the candidate element being discarded
 and the original element being used instead.
@@ -54,6 +54,41 @@ When no longer a profile is needed it can be removed from the target via
 `Certz.DeleteProfile()` RPC. Note that the gNxI SSL profile cannot be
 removed.
 
+#### Authentication Policy
+
+An authentication policy is a set of rules that defines which CAs can sign which
+certificate. By rotating authentication policies, data center admins can ensure
+that only authorized CAs are able to sign certificates for specific users/roles
+in the authentication framework. This helps to minimize the impact of a security
+breach, as it prevents, for example, an attacker from using a less privileged CA
+to sign for high value users/roles.
+
+##### Details
+
+When a client tries to establish a gRPC connection to a gRPC server, the server
+must verify that the client is authorized to do so. To do that the client
+presents a certificate to the server, which the server verifies to see if it was
+issued by a trusted Certificate Authority (CA).
+
+In an enterprise environment, it is impractical and risky to have all client
+certificates signed by a single CA. It is also impractical to provide the gRPC
+server with certificates from all CAs that can issue client certificates.
+
+The solution to this problem is to have a single "root of trust" that is common
+to all CAs. This root of trust can be used to verify certificates issued by all
+intermediate CAs. In such case, the gRPC server only needs to be configured with
+the “root of trust” certificate. The client must provide a chain of certificates
+that includes certificates from all intermediate CAs.
+
+This organization of certificate issuing processes also allows for
+specialization of CAs. It is possible to limit which CAs can issue certificates
+for particular users. This allows the gRPC server to reject certificates that
+are otherwise valid but were signed by the wrong CA.
+
+The information about which CAs can issue certificates for a user is called the
+authentication policy. This policy must be provided to the gRPC server and then
+periodically updated.
+
 ### User Experiences
 
 #### Create a SSL profile
@@ -71,39 +106,73 @@ ID of the SSL profile to be deleted.
 Call `Certz.GetProfileList` RPC. The response will list all existing
 SSL profiles.
 
-#### A CertificateBundle is to be rotated or updated
+#### A Certificate is to be rotated or updated
 
-Create, and test, a new CertificateBundle.
+Create, and test, a new certificate and a private key.
 
-Send that policy to the target network system with a
-`Certz.RotateCertificateRequest` to `Certz.Rotate` RPC. The
-`RotateCertificateRequest`'s rotate_request will be a `Certz.CertificateBundle`.
+Send that certificate, its private key and all required intermediate certificate
+chain to the target network system in the `Certz.UploadRequest`'s
+`entity.certificate_chain` field.
 
-Verify that the CertificateBundle newly rotated is used by services
+Verify that the certificate newly rotated is used by services
 which require it.
 
-Send a `Finalize` message to the `Certz.Rotate` RPC to close out the action.
+Send a `Certz.FinalizeRequest` message to the `Certz.Rotate` RPC to close out
+the action.
 
 If the stream is disconnected prior to the `Finalize` message being
 sent, the proposed configuration is rolled back automatically.
 
-#### A Certificate is rotated, the session breaks before `Finalize`
+#### A Certificate is rotated, the session breaks before `FinalizeRequest`
 
-Create a new Certificate and Key.
+Create a new certificate chain and a private key.
 
-Send that certificate to the target network system with a
-`Certz.RotateCertificateRequest` to the `Certz.Rotate` RPC. The
-`RotateCertificateRequest`'s `rotate_request` will be a
-`Certz.Certificate`.
+Send that certificate, its private key and all required intermediate certificate
+chain to the target network system in the `Certz.UploadRequest`'s
+`entity.certificate_chain` field.
 
 Verify that the certificate newly deployed is usable by the relevant
 services, that the services properly present the certificate upon
 new service connections.
 
-The connection to the network system is broken, there is no `Finalize` sent.
+The connection to the network system is broken, there is no
+`Certz.FinalizeRequest` sent.
 
 The gNSI service rolls back the candidate and re-installs the original
-certificate and key.
+certificate and associated private key.
+
+#### An Authentication Policy is to be rotated or updated
+
+Create a new authentication policy.
+
+Send that authentication policy to the target network system in
+the `Certz.UploadRequest`'s `entity.authentication_policy` field.
+
+Verify that the authentication policy newly rotated is used by services
+which require it.
+
+Send a `Certz.FinalizeRequest` message to the `Certz.Rotate` RPC to close out
+the action.
+
+If the stream is disconnected prior to the `Certz.FinalizeRequest` message being
+sent, the proposed authentication policy is rolled back automatically.
+
+#### An Authentication Policy is rotated, the session breaks before `FinalizeRequest`
+
+Create a new authentication policy.
+
+Send that authentication policy to the target network system in
+the `Certz.UploadRequest`'s `entity.authentication_policy` field.
+
+Verify that the authentication policy newly deployed is usable by the relevant
+services, that the services properly uses the authentication policy upon
+new service connections.
+
+The connection to the network system is broken, there is no
+`Certz.FinalizeRequest` sent.
+
+The gNSI service rolls back the candidate and re-installs the original
+authentication policy.
 
 ### Open Questions/Considerations
 
@@ -126,6 +195,8 @@ module: gnsi-certz
     +--ro ca-trust-bundle-created-on?                      created-on
     +--ro certificate-revocation-list-bundle-version?      version
     +--ro certificate-revocation-list-bundle-created-on?   created-on
+    +--ro authentication-policy-version?                   version
+    +--ro authentication-policy-created-on?                created-on
     +--ro counters
        +--ro access-rejects?       oc-yang:counter64
        +--ro last-access-reject?   oc-types:timeticks64
@@ -570,6 +641,8 @@ module: openconfig-system
               +--ro gnsi-certz:ca-trust-bundle-created-on?                      created-on
               +--ro gnsi-certz:certificate-revocation-list-bundle-version?      version
               +--ro gnsi-certz:certificate-revocation-list-bundle-created-on?   created-on
+              +--ro gnsi-certz:authentication-policy-version?                   version
+              +--ro gnsi-certz:authentication-policy-created-on?                created-on
               +--ro gnsi-certz:counters
                  +--ro gnsi-certz:access-rejects?       oc-yang:counter64
                  +--ro gnsi-certz:last-access-reject?   oc-types:timeticks64
