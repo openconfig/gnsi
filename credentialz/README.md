@@ -208,7 +208,7 @@ stream.Send(
 )
 ```
 
-#### Update the host's keys
+#### Update the host's keys with externally generated keys
 
 * Start streaming RPC call to the target device.
 
@@ -222,10 +222,48 @@ stream := RotateHostCredentials()
 stream.Send(
     RotateHostCredentialsRequest {
         server_keys: ServerKeysRequest {
-            public_key: "A....=",
             private_key: "A....=",
             version: "v1.0",
             created_on: 3214451134,
+        }
+    }
+)
+
+resp := stream.Receive()
+```
+
+* Check if the new keys 'work'
+
+* Finalize the operation
+
+```go
+stream.Send(
+    RotateHostCredentialsResponse {
+        finalize: FinalizeRequest {}
+    }
+)
+```
+
+#### Update the host's keys with keys generated on the switch
+
+* Start streaming RPC call to the target device.
+
+```go
+stream := RotateHostCredentials()
+```
+
+* The `GenerateKeysRequest` message will be used to update the host key
+  with a key generated on the switch. Send a server's keys generate request
+  message to the target device to generate one or more keys (of different type)
+  which will be installed as the host keys. When this message is received
+  if any host certificate was installed, the old host certificate will be
+  removed from config.
+  
+```go
+stream.Send(
+    RotateHostCredentialsRequest {
+        generate_key_request: GenerateKeysRequest {
+            key_params: KeyGen,
         }
     }
 )
@@ -302,7 +340,7 @@ stream.Send(
 )
 ```
 
-#### Update the host's keys and certificate
+#### Update the host's keys and certificate (externally generated keys)
 
 * Start streaming RPC call to the target device.
 
@@ -311,15 +349,76 @@ stream := RotateHostCredentials()
 ```
 
 * Send a server's keys and certificate change request message to the target
-  device.
+  device. Its an error if the public key of the private key does not
+  correspond to the private key provided.
 
 ```go
 stream.Send(
     RotateHostCredentialsRequest {
         server_keys: ServerKeysRequest {
             certificate: "A....=",
-            public_key: "A....=",
             private_key: "A....=",
+            version: "v1.0",
+            created_on: 3214451134,
+        }
+    }
+)
+
+resp := stream.Receive()
+```
+
+* Check if the new keys and certificate 'work'
+
+* Finalize the operation
+
+```go
+stream.Send(
+    RotateHostCredentialsResponse {
+        finalize: FinalizeRequest {}
+    }
+)
+```
+
+#### Update the host's keys and certificate (keys generated on the switch)
+
+* Start streaming RPC call to the target device.
+
+```go
+stream := RotateHostCredentials()
+```
+
+* The `GenerateKeysRequest` message will be used to update the hostkey
+  with a key generated on the switch. Send a server's keys generate request
+  message to the target device to generate one or more keys (of different type)
+  which will be installed as the host keys. When this message is received
+  if any host certificate was installed, the old host certificate will be
+  removed from config.
+
+```go
+stream.Send(
+    RotateHostCredentialsRequest {
+        generate_key_request: GenerateKeysRequest {
+            key_params: KeyGen,
+        }
+    }
+)
+
+resp := stream.Receive()
+```
+
+* The response message `GenerateKeysResponse` will have one or more public keys
+  corresponding to the server's keys generate request message. This will be used
+  to create a host certificate which will be sent in the next step.
+
+* Send a server's certificate change request message to the target device. Its an
+  error if the public key of the certificate does not correspond to the current
+  active host key.
+
+```go
+stream.Send(
+    RotateHostCredentialsRequest {
+        server_keys: ServerKeysRequest {
+            certificate: "A....=",
             version: "v1.0",
             created_on: 3214451134,
         }
