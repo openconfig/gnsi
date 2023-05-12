@@ -349,7 +349,7 @@ stream := RotateHostCredentials()
 ```
 
 * Send a server's keys and certificate change request message to the target
-  device. Its an error if the public key of the private key does not
+  device. Its an error if the public key of the certificate does not
   correspond to the private key provided.
 
 ```go
