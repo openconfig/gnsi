@@ -341,18 +341,20 @@ stream.Send(
 )
 ```
 
-### Rotate Certificate based on existing key.
+## User Journeys
 
-The most common operation we are expecting to require on devices is the rotation of certificates used for SSH access for devices. This operation expects to reuse the existing host key on the device as there is not really a good reason frequently rotate this identity.
+### Rotate Certificate based on existing key
+
+The most common operation we are expecting to require on devices is the rotation of certificates used for SSH access for devices. This operation expects to reuse the existing host key on the device.
 
 * Get the public key configured on the host.
 
 ```go
 
-resp, err := c.GetPublicKey(&GetPublicKeyRequest{})
+resp, err := c.GetPublicKeys(&GetPublicKeyRequests{})
 ```
 
-* Generate certificate basd on key.
+* Generate certificate based on key.
 
 * Rotate certificate on device.
 
@@ -366,6 +368,85 @@ stream.Send(
         }
     }
 )
+```
+
+* Validate that new settings are working as expected.
+
+* Finalize request.
+
+```go
+stream.Send(
+    RotateHostCredentialsResponse {
+        finalize: FinalizeRequest {}
+    }
+)
+```
+
+### Generate new host key and rotate Certificate based on the new key
+
+This use case focuses on the rotation of a host key and then generation of the certificate based on the new public key.
+
+* Send request for generation of new private key.
+
+```go
+stream.Send(
+    RotateHostCredentialsRequest {
+        generate_keys_request: GenerateKeysRequest {
+            key_params: KeyGen.KEY_GEN_SSH_KEY_TYPE_EDDSA_ED25519 
+        }
+    }
+)
+```
+
+* Get Response containing public key to generate the certificate.
+
+```go
+resp, err := stream.Recv()
+data := resp.PublicKey
+```
+
+* The caller will then use this data to generate a certificate.
+
+* Send generated cert to device to rotate.
+
+```go
+stream.Send(
+    RotateHostCredentialsRequest {
+        server_keys: ServerKeysRequest {
+            certificate: "A....=",
+            version: "v1.0",
+            created_on: 3214451134,
+        }
+    }
+)
+```
+
+* Validate the `RotateCredentialsResponse`.
+
+```go
+if _, err := stream.Recv(); err != nil {
+    ...
+}
+```
+
+* (Proposal) As there is would be a state after the generate key step but before the certficate is returned the device will not be able to have alignment between the previous cert and new key. We are proposing to add a new state which allows for the atomic rotation of both the key and certificate by holding the rotation of the key until a `Rotate` message is sent after the Response message.
+
+```go
+stream.Send(
+    RotateHostCredentialsRequest {
+        rotate_keys: RotateHostKey{}
+    }
+)
+```
+
+* (Proposal) Validate the Rotate Keys is successful.
+
+At this point both the host key and certificate would be updated to the new values atomically.
+
+```go
+if _, err := stream.Recv(); err != nil {
+    ...
+}
 ```
 
 * Validate that new settings are working as expected.
