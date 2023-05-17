@@ -208,7 +208,7 @@ stream.Send(
 )
 ```
 
-#### Update the host's keys
+#### Update the host's keys with external keys
 
 * Start streaming RPC call to the target device.
 
@@ -216,14 +216,16 @@ stream.Send(
 stream := RotateHostCredentials()
 ```
 
-* Send a server's keys change request message to the target device.
+* Send a server's keys change request message to the target device. The bytes are expected to be base64 encoded.
 
 ```go
 stream.Send(
     RotateHostCredentialsRequest {
         server_keys: ServerKeysRequest {
-            public_key: "A....=",
-            private_key: "A....=",
+            auth_artifacts: []AuthenticationArtifacts{
+                private_key: []bytes("...."),
+                certificate: []bytes("...."),
+            },
             version: "v1.0",
             created_on: 3214451134,
         }
@@ -231,6 +233,39 @@ stream.Send(
 )
 
 resp := stream.Receive()
+```
+
+* Check if the new keys 'work'
+
+* Finalize the operation
+
+```go
+stream.Send(
+    RotateHostCredentialsResponse {
+        finalize: FinalizeRequest {}
+    }
+)
+```
+
+#### Update the host's keys with generated keys
+
+* Start streaming RPC call to the target device.
+
+```go
+stream := RotateHostCredentials()
+```
+
+* Send a server's keys change request message to the target device. The bytes are expected to be base64 encoded.
+
+```go
+stream.Send(
+    RotateHostCredentialsRequest {
+        generate_keys: GenerateKeysRequest{
+            key_params: KEY_GEN_SSH_KEY_TYPE_RSA_4096,
+        }
+    }
+)
+resp, err := stream.Receive()
 ```
 
 * Check if the new keys 'work'
@@ -382,7 +417,7 @@ stream.Send(
 )
 ```
 
-### Generate new host key and rotate Certificate based on the new key
+### Generate new host key on device and rotate certificate based on the new key
 
 This use case focuses on the rotation of a host key and then generation of the certificate based on the new public key.
 
@@ -391,9 +426,9 @@ This use case focuses on the rotation of a host key and then generation of the c
 ```go
 stream.Send(
     RotateHostCredentialsRequest {
-        generate_keys_request: GenerateKeysRequest {
+        generate_keys: []GenerateKeysRequest {{
             key_params: KeyGen.KEY_GEN_SSH_KEY_TYPE_EDDSA_ED25519 
-        }
+        }}
     }
 )
 ```
@@ -402,7 +437,7 @@ stream.Send(
 
 ```go
 resp, err := stream.Recv()
-data := resp.PublicKey
+data := resp.PublicKeys
 ```
 
 * The caller will then use this data to generate a certificate.
@@ -429,7 +464,7 @@ if _, err := stream.Recv(); err != nil {
 }
 ```
 
-* (Proposal) As there is would be a state after the generate key step but before the certficate is returned the device will not be able to have alignment between the previous cert and new key. We are proposing to add a new state which allows for the atomic rotation of both the key and certificate by holding the rotation of the key until a `Rotate` message is sent after the Response message.
+* (Proposal) As there would be a state after the generate key step but before the certficate is returned, the device will not be able to have alignment between the previous cert and new key. We are proposing to add a new state which allows for the atomic rotation of both the key and certificate by holding the rotation of the key until a `Rotate` message is sent after the Response message.
 
 ```go
 stream.Send(
