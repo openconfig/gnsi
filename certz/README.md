@@ -56,10 +56,12 @@ removed.
 
 #### Authentication Policy
 
-An authentication policy is a set of rules that defines which CAs can sign which
-certificate. By rotating authentication policies, data center admins can ensure
-that only authorized CAs are able to sign certificates for specific users/roles
-in the authentication framework. This helps to minimize the impact of a security
+An authentication policy is a set of rules that defines which CA can be trusted
+to sign certificates for which subjects. By rotating authentication policies,
+data center admins can ensure all endpoints are updated to validate certificates
+presented by their peers during mutual authentication are signed by one of
+the authorized CAs in the authentication framework as specified in the policy.
+This helps to minimize the impact of a security
 breach, as it prevents, for example, an attacker from using a less privileged CA
 to sign for high value users/roles.
 
