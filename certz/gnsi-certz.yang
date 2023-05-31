@@ -25,6 +25,12 @@ module gnsi-certz {
         "This module provides a data model for the metadata of gRPC credentials
         installed on a networking device.";
 
+    revision 2023-05-10 {
+        description
+            "Adds authentication policy freshness information.";
+        reference "0.3.0";
+    }
+
     revision 2022-10-30 {
         description
             "Adds success/failure counters.";
@@ -134,6 +140,18 @@ module gnsi-certz {
             description
                 "The timestamp of the moment when the Certificate Revocation
                 List bundle was created.";
+        }
+        leaf authentication-policy-version {
+            type version;
+            description
+                "The version of the authentication policy that is used by
+                this gRPC server.";
+        }
+        leaf authentication-policy-created-on {
+            type created-on;
+            description
+                "The timestamp of the moment when the authentication policy
+                that is currently used by this gRPC server was created.";
         }
     }
 
