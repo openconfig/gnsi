@@ -1,22 +1,22 @@
-# gNMI Accounting Protocol
+# gNSI Accounting Protocol
 
 ## Objective
 
 This proto definition serves to describe a method of transfering
 accounting records from a System, which may be a network device, to a
-remote collection service, primarily over a gNMI transport connection.
+remote collection service, primarily over a gRPC transport connection.
 
 ## Method of Operation
 
-Accounting Records are available at a gNMI origin:
-   gnmi.accounting
+Accounting Records are available at a gNSI origin:
+   gnsi.accounting
 
-Records maybe streamed from a system either at request of the remote
+Records may be streamed from a system either at request of the remote
 collector, via the ClientStream() service/rpc, or at the request of
 the system to a remote endpoint, via the ServerStream() service/rpc.
 
 Configuration of the Accounting service is made through standard
-gNMI methods using the defined YANG model.
+gNxI methods using the defined YANG model.
 
 Records will be streamed to the receiver as individual Record
 messages as they are defined in the gnsi.accounting protocol buffer
