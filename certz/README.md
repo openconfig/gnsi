@@ -2,7 +2,7 @@
 
 ## gNSI certz Service Protobuf Definition
 **Contributors**: hines@google.com, morrowc@google.com, tmadejski@google.com
-**Last Updated**: 2023-05-10
+**Last Updated**: 2023-05-31
 
 ### Background
 
@@ -61,9 +61,9 @@ to sign certificates for which subjects. By rotating authentication policies,
 data center admins can ensure all endpoints are updated to validate certificates
 presented by their peers during mutual authentication are signed by one of
 the authorized CAs in the authentication framework as specified in the policy.
-This helps to minimize the impact of a security
-breach, as it prevents, for example, an attacker from using a less privileged CA
-to sign for high value users/roles.
+This helps to minimize the impact of a security breach, as it prevents,
+for example, an attacker from using a less privileged CA to sign for high value
+users/roles.
 
 ##### Details
 
@@ -72,24 +72,19 @@ must verify that the client is authorized to do so. To do that the client
 presents a certificate to the server, which the server verifies to see if it was
 issued by a trusted Certificate Authority (CA).
 
-In an enterprise environment, it is impractical and risky to have all client
-certificates signed by a single CA. It is also impractical to provide the gRPC
-server with certificates from all CAs that can issue client certificates.
+In large scale PKI deployments consisting of multiple signing authorities
+assigned to issue certificates of specific users/entities with their own key
+hierarchies, use of an authentication policy is one solution to maintain
+a single Trust Bundle across all applications. Use of one Trust Bundle
+consisting of the root certificates of all signing authorities simplifies
+maintenance and avoid endpoint application configuration complexities.
 
-The solution to this problem is to have a single "root of trust" that is common
-to all CAs. This root of trust can be used to verify certificates issued by all
-intermediate CAs. In such case, the gRPC server only needs to be configured with
-the “root of trust” certificate. The client must provide a chain of certificates
-that includes certificates from all intermediate CAs.
-
-This organization of certificate issuing processes also allows for
-specialization of CAs. It is possible to limit which CAs can issue certificates
-for particular users. This allows the gRPC server to reject certificates that
-are otherwise valid but were signed by the wrong CA.
-
-The information about which CAs can issue certificates for a user is called the
-authentication policy. This policy must be provided to the gRPC server and then
-periodically updated.
+In such deployment, a centrally maintained authentication policy specifies which
+signing authorities are permitted to issue certificates for which group of
+users. In other words, after validating a connecting peer's certificates against
+the Trust Bundle during a TLS handshake, the endpoint will also validate
+the peer's and the certificate issuer's identities against the authentication
+policy before accepting the connection.
 
 ### User Experiences
 
