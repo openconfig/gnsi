@@ -464,26 +464,6 @@ if _, err := stream.Recv(); err != nil {
 }
 ```
 
-* (Proposal) As there would be a state after the generate key step but before the certficate is returned, the device will not be able to have alignment between the previous cert and new key. We are proposing to add a new state which allows for the atomic rotation of both the key and certificate by holding the rotation of the key until a `Rotate` message is sent after the Response message.
-
-```go
-stream.Send(
-    RotateHostCredentialsRequest {
-        rotate_keys: RotateHostKey{}
-    }
-)
-```
-
-* (Proposal) Validate the Rotate Keys is successful.
-
-At this point both the host key and certificate would be updated to the new values atomically.
-
-```go
-if _, err := stream.Recv(); err != nil {
-    ...
-}
-```
-
 * Validate that new settings are working as expected.
 
 * Finalize request
