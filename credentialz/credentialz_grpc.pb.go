@@ -25,6 +25,7 @@ type CredentialzClient interface {
 	RotateAccountCredentials(ctx context.Context, opts ...grpc.CallOption) (Credentialz_RotateAccountCredentialsClient, error)
 	RotateHostCredentials(ctx context.Context, opts ...grpc.CallOption) (Credentialz_RotateHostCredentialsClient, error)
 	CanGenerateKey(ctx context.Context, in *CanGenerateKeyRequest, opts ...grpc.CallOption) (*CanGenerateKeyResponse, error)
+	GetPublicKeys(ctx context.Context, in *GetPublicKeysRequest, opts ...grpc.CallOption) (*GetPublicKeysResponse, error)
 }
 
 type credentialzClient struct {
@@ -106,6 +107,15 @@ func (c *credentialzClient) CanGenerateKey(ctx context.Context, in *CanGenerateK
 	return out, nil
 }
 
+func (c *credentialzClient) GetPublicKeys(ctx context.Context, in *GetPublicKeysRequest, opts ...grpc.CallOption) (*GetPublicKeysResponse, error) {
+	out := new(GetPublicKeysResponse)
+	err := c.cc.Invoke(ctx, "/gnsi.credentialz.v1.Credentialz/GetPublicKeys", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CredentialzServer is the server API for Credentialz service.
 // All implementations must embed UnimplementedCredentialzServer
 // for forward compatibility
@@ -113,6 +123,7 @@ type CredentialzServer interface {
 	RotateAccountCredentials(Credentialz_RotateAccountCredentialsServer) error
 	RotateHostCredentials(Credentialz_RotateHostCredentialsServer) error
 	CanGenerateKey(context.Context, *CanGenerateKeyRequest) (*CanGenerateKeyResponse, error)
+	GetPublicKeys(context.Context, *GetPublicKeysRequest) (*GetPublicKeysResponse, error)
 	mustEmbedUnimplementedCredentialzServer()
 }
 
@@ -128,6 +139,9 @@ func (UnimplementedCredentialzServer) RotateHostCredentials(Credentialz_RotateHo
 }
 func (UnimplementedCredentialzServer) CanGenerateKey(context.Context, *CanGenerateKeyRequest) (*CanGenerateKeyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CanGenerateKey not implemented")
+}
+func (UnimplementedCredentialzServer) GetPublicKeys(context.Context, *GetPublicKeysRequest) (*GetPublicKeysResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetPublicKeys not implemented")
 }
 func (UnimplementedCredentialzServer) mustEmbedUnimplementedCredentialzServer() {}
 
@@ -212,6 +226,24 @@ func _Credentialz_CanGenerateKey_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Credentialz_GetPublicKeys_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPublicKeysRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CredentialzServer).GetPublicKeys(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/gnsi.credentialz.v1.Credentialz/GetPublicKeys",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CredentialzServer).GetPublicKeys(ctx, req.(*GetPublicKeysRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Credentialz_ServiceDesc is the grpc.ServiceDesc for Credentialz service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -222,6 +254,10 @@ var Credentialz_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CanGenerateKey",
 			Handler:    _Credentialz_CanGenerateKey_Handler,
+		},
+		{
+			MethodName: "GetPublicKeys",
+			Handler:    _Credentialz_GetPublicKeys_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
