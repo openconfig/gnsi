@@ -18,7 +18,7 @@ The following files are expected to be created during the bootstrap process:
   * always required
 * target's private key
   * always required
-* `${system_role_home}/.ssh/authorized_users` file for every system account
+* `${system_role_home}/.ssh/authorized_users` file for every system account.  This file contains a list of principals to validate against for access to the system account.
   * always required
   * used to authorize the `username` provided by a client to use this system
     account
@@ -208,7 +208,7 @@ stream.Send(
 )
 ```
 
-#### Update the host's keys
+#### Update the host's keys with external keys
 
 * Start streaming RPC call to the target device.
 
@@ -216,14 +216,16 @@ stream.Send(
 stream := RotateHostCredentials()
 ```
 
-* Send a server's keys change request message to the target device.
+* Send a server's keys change request message to the target device. The bytes are expected to be base64 encoded.
 
 ```go
 stream.Send(
     RotateHostCredentialsRequest {
         server_keys: ServerKeysRequest {
-            public_key: "A....=",
-            private_key: "A....=",
+            auth_artifacts: []AuthenticationArtifacts{
+                private_key: []bytes("...."),
+                certificate: []bytes("...."),
+            },
             version: "v1.0",
             created_on: 3214451134,
         }
@@ -231,6 +233,39 @@ stream.Send(
 )
 
 resp := stream.Receive()
+```
+
+* Check if the new keys 'work'
+
+* Finalize the operation
+
+```go
+stream.Send(
+    RotateHostCredentialsResponse {
+        finalize: FinalizeRequest {}
+    }
+)
+```
+
+#### Update the host's keys with generated keys
+
+* Start streaming RPC call to the target device.
+
+```go
+stream := RotateHostCredentials()
+```
+
+* Send a server's keys change request message to the target device. The bytes are expected to be base64 encoded.
+
+```go
+stream.Send(
+    RotateHostCredentialsRequest {
+        generate_keys: GenerateKeysRequest{
+            key_params: KEY_GEN_SSH_KEY_TYPE_RSA_4096,
+        }
+    }
+)
+resp, err := stream.Receive()
 ```
 
 * Check if the new keys 'work'
@@ -332,6 +367,106 @@ resp := stream.Receive()
 * Check if the new keys and certificate 'work'
 
 * Finalize the operation
+
+```go
+stream.Send(
+    RotateHostCredentialsResponse {
+        finalize: FinalizeRequest {}
+    }
+)
+```
+
+## User Journeys
+
+### Rotate Certificate based on existing key
+
+The most common operation we are expecting to require on devices is the rotation of certificates used for SSH access for devices. This operation expects to reuse the existing host key on the device.
+
+* Get the public key configured on the host.
+
+```go
+
+resp, err := c.GetPublicKeys(&GetPublicKeyRequests{})
+```
+
+* Generate certificate based on key.
+
+* Rotate certificate on device.
+
+```go
+stream.Send(
+    RotateHostCredentialsRequest {
+        server_keys: ServerKeysRequest {
+            certificate: "A....=",
+            version: "v1.0",
+            created_on: 3214451134,
+        }
+    }
+)
+```
+
+* Validate that new settings are working as expected.
+
+* Finalize request.
+
+```go
+stream.Send(
+    RotateHostCredentialsResponse {
+        finalize: FinalizeRequest {}
+    }
+)
+```
+
+### Generate new host key on device and rotate certificate based on the new key
+
+This use case focuses on the rotation of a host key and then generation of the certificate based on the new public key.
+
+* Send request for generation of new private key.
+
+```go
+stream.Send(
+    RotateHostCredentialsRequest {
+        generate_keys: []GenerateKeysRequest {{
+            key_params: KeyGen.KEY_GEN_SSH_KEY_TYPE_EDDSA_ED25519 
+        }}
+    }
+)
+```
+
+* Get Response containing public key to generate the certificate.
+
+```go
+resp, err := stream.Recv()
+data := resp.PublicKeys
+```
+
+* The caller will then use this data to generate a certificate.
+
+* Send generated cert to device to rotate.
+
+```go
+stream.Send(
+    RotateHostCredentialsRequest {
+        server_keys: ServerKeysRequest {
+            certificate: "A....=",
+            version: "v1.0",
+            created_on: 3214451134,
+        }
+    }
+)
+```
+
+* Validate the `RotateCredentialsResponse`.
+
+```go
+if _, err := stream.Recv(); err != nil {
+    ...
+}
+```
+
+* Validate that new settings are working as expected.
+
+* Finalize request
 
 ```go
 stream.Send(
