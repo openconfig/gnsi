@@ -96,7 +96,7 @@ service AccountingPush {
 // SessionInfo is the session identifier that identifies the context
 // in which service was executed.
 message SessionInfo {
-  // system_address is the address of the System sending the event,
+  // system_address is the IP address of the System sending the event,
   // in most cases this address is the Loopback or Loopback equivalent
   // on the System which is sending the messages to the remote collector.
   string system_address = 1;
@@ -204,7 +204,7 @@ message Record {
   }
   ServiceStatus status = 5;
 
-  // In case of STATUS_FAILURE, cause for the failure
+  // If status == SERVICE_STATUS_FAILURE, cause for the failure
   string failure_cause = 6;
 
   // Authentication related details
