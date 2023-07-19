@@ -107,7 +107,7 @@ message SessionInfo {
   string remote_address = 4;
   uint32 remote_port = 5;
 
-  // For multiplexing multiple channels over single 5 tuple
+  // For multiplexing multiple channels over a single connection
   // - multiple CLI connections over single SSH
   // - multiple channels in a gRPC conncetion
   string channel_id = 6;
@@ -181,7 +181,7 @@ message GrpcService {
 }
 
 // An accounting record message is generated everytime the user types a
-// shell/vendorCLI command or sends a gNxI setRequest.
+// shell/vendorCLI command or sends a gNxI request.
 message Record {
   // Session information
   SessionInfo session_info = 1;
