@@ -3,10 +3,10 @@
 
 Implementation of reliable and fast APIs to control remote network-connected
 device like a switch or a router is not easy due to complexity of the
-communication over a computer network. Fortunately by using `Remote Procedure
+communication over a computer network. Fortunately, by using `Remote Procedure
 Call` (`RPC`) technique all (or most) of this complexity can be hidden from
-a user but because those APIs can be used to create havoc in mission-critical
-networks not everybody should be able to perform all RPC provided by those
+a user, but because those APIs can be used to create havoc in mission-critical
+networks, not everybody should be able to perform all RPCs provided by those
 management APIs.
 
 `gNSI.authz` defines an API that allows for configuration of the RPC service on
@@ -14,10 +14,10 @@ a switch to control which user can and cannot access specific RPCs.
 
 ## The gRPC-level Authorization Policy
 
-The policy the RPC is to enforce is defined in a form of a JSON string whose
+The policy to be enforced is defined in the form of a JSON string whose
 structure depends on the requirements of the RPC server.
 
-In the case of a `gRPC`-based server the JSON string's schema can be found
+In the case of a `gRPC`-based server, the JSON string's schema can be found
 [here](https://github.com/grpc/proposal/pull/246).
 It also can be described using the following PROTOBUF definition.
 
@@ -145,16 +145,16 @@ message AuthorizationPolicy {
 
   // Required. List of allow rules to match. The allow rules will only be
   // evaluated after the deny rules. If a request matches any of the allow
-  // rules, then it will allowed. If none of the allow rules matches, it will be
-  // denied.
+  // rules, then it will be allowed. If none of the allow rules match, it
+  // will be denied.
   repeated Rule allow_rules = 3;
 }
 ```
 
 ## An example
 
-Below is an example of a gRPC-level Authorization Policy that allows two admins:
-Alice and Bob access to all RPCs that are defined by the `gNSI.ssh` interface.
+Below is an example of a gRPC-level Authorization Policy that allows two admins,
+Alice and Bob, access to all RPCs that are defined by the `gNSI.ssh` interface.
 Nobody else will be able to call any of the `gNSI.ssh` RPCs.
 
 ```json
@@ -246,8 +246,8 @@ Authorization Policy, namely:
    track of what gRPC-level Authorization Policy is active on a particular
    switch.
 
-1. After pre-validating and activating the new policy, the server sends the
-   `UploadResponse` is sent back to the client
+1. After syntactic validation and activating the new policy, the server sends
+   the `UploadResponse` back to the client
 
 1. The client verifies the correctness of the new gRPC-level Authorization
    Policy using separate `gNSI.authz.Probe()` RPC(s)
@@ -257,15 +257,15 @@ Authorization Policy, namely:
 
    > **⚠ Warning**
    > Closing the stream without sending the `Finalize` message will result in
-   > abandoning the uploaded policy and rollback of the one that was active
-   > before the RPC started.
+   > abandoning the uploaded policy and rollback to the one that was active
+   > before the Rotation RPC started.
 
 ### Evaluating the rules
 
-In a simple deployment the set of rules in the gRPC-level Authorization Policy
-most likely will be clear enough for a human to analyze but in a data-center
-environment most likely the list of rules will be long and complex and therefore
-hard to reason about.
+In a simple deployment, the set of rules in the gRPC-level Authorization Policy
+most likely will be clear enough for a human to analyze, but in a data-center
+environment the list of rules will likely be long and complex, and therefore
+difficult to reason about.
 
 To help this process the `gNSI.authz` API includes the `gNSI.authz.Probe()` RPC.
 
@@ -274,10 +274,9 @@ engine to a RPC performed by a specific user based the installed policy.
 
 Because the policy uploaded during the `gNSI.authz.Rotate()` call becomes active
 immediately, the `gNSI.authz.Probe()` can be used to check if the uploaded
-policy provides the expected response without attempting performing the
-(potentially destructive) RPC in question while the `gNSI.authz.Rotate()` is
-still active (the stream is opened and the `Finalize` message has not been sent
-yet.
+policy provides the expected response, without attempting the (potentially
+destructive) RPC in question, while the `gNSI.authz.Rotate()` is still active
+(the stream is still open and the `Finalize` message has not been sent yet).
 
 For example, to check if `alice` can perform the
 `gNSI.ssh.MutateAccountCredentials()` RPC the `gNSI.authz.Probe()` should be
@@ -327,13 +326,8 @@ module: gnsi-authz
 ```
 
 ### `openconfig-system` tree
-The  `openconfig-system` subtree after augments defined in the `gnsi-authz.yang`
+The `openconfig-system` subtree after augments defined in the `gnsi-authz.yang`
 file is shown below.
-
-<details>
-<summary>
-The diagram of the tree.
-</summary>
 
 <details>
 <summary>
