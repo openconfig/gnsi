@@ -2,7 +2,7 @@
 
 ## Bootstrap / Assumptions
 
-The `gNSI.credentialz` API allows for changing of the exisitng credentials.
+The `gNSI.credentialz` API allows for changing of the existing credentials.
 Therefore credentials should be set up before credential RPCs are executed.
 
 The following files are expected to be created during the bootstrap process:
