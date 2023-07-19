@@ -165,7 +165,7 @@ message GrpcService {
     // By default, the logging authorization
     // should keep GRIBI logging off.
     GRPC_SERVICE_TYPE_GRIBI = 4;
-    GRPC_SERVICE_TYPE_P4RT = 4;		// P4-Runtime
+    GRPC_SERVICE_TYPE_P4RT = 5;		// P4-Runtime
   }
   GrpcServiceType service_type = 1;
 
