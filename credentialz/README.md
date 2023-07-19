@@ -383,7 +383,7 @@ authentication types are globally permissable.
 stream.Send(
     RotateHostParametersRequest {
         authentication_allowed: AllowedAuthenticationRequest {
-            authentication_type: AuthenticationType {
+            authentication_types: AuthenticationType {
                 AuthenticationType_PUBKEY.Enum(),
             }
         }
