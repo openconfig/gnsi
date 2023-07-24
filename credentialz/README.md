@@ -2,7 +2,7 @@
 
 ## Bootstrap / Assumptions
 
-The `gNSI.credentialz` API allows for changing of the existing credentials.
+The `gNSI.credentialz` API allows changing existing SSH credentials.
 Therefore credentials should be set up before credential RPCs are executed.
 
 The following files are expected to be created during the bootstrap process:
@@ -17,32 +17,10 @@ The following files are expected to be created during the bootstrap process:
   * always required
 * target's private key
   * always required
-* `${system_role_home}/.ssh/authorized_principals` file for every system account.  This file contains a list of principals to validate against for access to the system account.
-  * optional if AuthorizedPrincipalsCommand is used
-  * used to authorize the `username` provided by a client to use this system
-    account
-* `${system_role_home}/.ssh/authorized_keys` file for every system account
-  * used to specify SSH keys that clients can use to use this system account
 
 ## Console access authentication
 
-There are two methods to configure a password:
-
-* directly on the device
-* using `gNSI.credentialz` API
-
-### Method 1: Directly on the device
-
-To change password execute the following command after logging-in to the device
-using `ssh` or directly using a console (for example a RS232-based one or
-similar method):
-
-```bash
-$ echo "TeStP_w0rD" | passwd ${account} --stdin
-$
-```
-
-### Method 2: Using ``gNSI.credentialz`` API
+### Using ``gNSI.credentialz`` API
 
 * Start streaming RPC call to the target device.
 
@@ -106,9 +84,6 @@ In the case of public key based authentication users are authenticated by:
 * `username`
 * SSH public key
 
-Provided credentials are checked with the known to the target device public
-keys that are stored in `${system_role_home}/.ssh/authorized_keys`
-
 #### Update the client's credentials
 
 ##### Update the client's authorized key
@@ -157,7 +132,7 @@ stream.Send(
 )
 ```
 
-#### Update the host's keys with external keys
+#### Update the host's keys with externally created keys
 
 * Start streaming RPC call to the target device.
 
@@ -165,7 +140,7 @@ stream.Send(
 stream := RotateHostParameters()
 ```
 
-* Send a server's keys change request message to the target device. The bytes are expected to be base64 encoded.
+* Send a server's keys change request message to the target device. The keys must be base64 encoded.
 
 ```go
 stream.Send(
@@ -292,7 +267,7 @@ stream.Send(
 stream := RotateHostParameters()
 ```
 
-* Send a server's certificate change request message to the target device. The bytes are expected to be base64 encoded.
+* Send a server's certificate change request message to the target device. The bytes must be base64 encoded.
 
 ```go
 stream.Send(
@@ -370,10 +345,10 @@ stream.Send(
 
 ### Setting Allowed Authentication Types
 
-Default sshd configuration generally allows for password, public key, and
+The default sshd configuration generally allows for password, public key, and
 keyboard interactive authentication types. Certificate authentication is implied
 by way of setting a TrustedUserCaKeys file. In order to globally disable
-specific types credentialz provides the `AllowedAuthenticationRequest`. Rather
+specific types, credentialz provides the `AllowedAuthenticationRequest`. Rather
 than operating with sshd defaults, this allows the operator to specify which
 authentication types are globally permissable.
 
