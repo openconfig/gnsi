@@ -23,7 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CredentialzClient interface {
 	RotateAccountCredentials(ctx context.Context, opts ...grpc.CallOption) (Credentialz_RotateAccountCredentialsClient, error)
-	RotateHostCredentials(ctx context.Context, opts ...grpc.CallOption) (Credentialz_RotateHostCredentialsClient, error)
+	RotateHostParameters(ctx context.Context, opts ...grpc.CallOption) (Credentialz_RotateHostParametersClient, error)
 	CanGenerateKey(ctx context.Context, in *CanGenerateKeyRequest, opts ...grpc.CallOption) (*CanGenerateKeyResponse, error)
 	GetPublicKeys(ctx context.Context, in *GetPublicKeysRequest, opts ...grpc.CallOption) (*GetPublicKeysResponse, error)
 }
@@ -67,31 +67,31 @@ func (x *credentialzRotateAccountCredentialsClient) Recv() (*RotateAccountCreden
 	return m, nil
 }
 
-func (c *credentialzClient) RotateHostCredentials(ctx context.Context, opts ...grpc.CallOption) (Credentialz_RotateHostCredentialsClient, error) {
-	stream, err := c.cc.NewStream(ctx, &Credentialz_ServiceDesc.Streams[1], "/gnsi.credentialz.v1.Credentialz/RotateHostCredentials", opts...)
+func (c *credentialzClient) RotateHostParameters(ctx context.Context, opts ...grpc.CallOption) (Credentialz_RotateHostParametersClient, error) {
+	stream, err := c.cc.NewStream(ctx, &Credentialz_ServiceDesc.Streams[1], "/gnsi.credentialz.v1.Credentialz/RotateHostParameters", opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &credentialzRotateHostCredentialsClient{stream}
+	x := &credentialzRotateHostParametersClient{stream}
 	return x, nil
 }
 
-type Credentialz_RotateHostCredentialsClient interface {
-	Send(*RotateHostCredentialsRequest) error
-	Recv() (*RotateHostCredentialsResponse, error)
+type Credentialz_RotateHostParametersClient interface {
+	Send(*RotateHostParametersRequest) error
+	Recv() (*RotateHostParametersResponse, error)
 	grpc.ClientStream
 }
 
-type credentialzRotateHostCredentialsClient struct {
+type credentialzRotateHostParametersClient struct {
 	grpc.ClientStream
 }
 
-func (x *credentialzRotateHostCredentialsClient) Send(m *RotateHostCredentialsRequest) error {
+func (x *credentialzRotateHostParametersClient) Send(m *RotateHostParametersRequest) error {
 	return x.ClientStream.SendMsg(m)
 }
 
-func (x *credentialzRotateHostCredentialsClient) Recv() (*RotateHostCredentialsResponse, error) {
-	m := new(RotateHostCredentialsResponse)
+func (x *credentialzRotateHostParametersClient) Recv() (*RotateHostParametersResponse, error) {
+	m := new(RotateHostParametersResponse)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
@@ -121,7 +121,7 @@ func (c *credentialzClient) GetPublicKeys(ctx context.Context, in *GetPublicKeys
 // for forward compatibility
 type CredentialzServer interface {
 	RotateAccountCredentials(Credentialz_RotateAccountCredentialsServer) error
-	RotateHostCredentials(Credentialz_RotateHostCredentialsServer) error
+	RotateHostParameters(Credentialz_RotateHostParametersServer) error
 	CanGenerateKey(context.Context, *CanGenerateKeyRequest) (*CanGenerateKeyResponse, error)
 	GetPublicKeys(context.Context, *GetPublicKeysRequest) (*GetPublicKeysResponse, error)
 	mustEmbedUnimplementedCredentialzServer()
@@ -134,8 +134,8 @@ type UnimplementedCredentialzServer struct {
 func (UnimplementedCredentialzServer) RotateAccountCredentials(Credentialz_RotateAccountCredentialsServer) error {
 	return status.Errorf(codes.Unimplemented, "method RotateAccountCredentials not implemented")
 }
-func (UnimplementedCredentialzServer) RotateHostCredentials(Credentialz_RotateHostCredentialsServer) error {
-	return status.Errorf(codes.Unimplemented, "method RotateHostCredentials not implemented")
+func (UnimplementedCredentialzServer) RotateHostParameters(Credentialz_RotateHostParametersServer) error {
+	return status.Errorf(codes.Unimplemented, "method RotateHostParameters not implemented")
 }
 func (UnimplementedCredentialzServer) CanGenerateKey(context.Context, *CanGenerateKeyRequest) (*CanGenerateKeyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CanGenerateKey not implemented")
@@ -182,26 +182,26 @@ func (x *credentialzRotateAccountCredentialsServer) Recv() (*RotateAccountCreden
 	return m, nil
 }
 
-func _Credentialz_RotateHostCredentials_Handler(srv interface{}, stream grpc.ServerStream) error {
-	return srv.(CredentialzServer).RotateHostCredentials(&credentialzRotateHostCredentialsServer{stream})
+func _Credentialz_RotateHostParameters_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(CredentialzServer).RotateHostParameters(&credentialzRotateHostParametersServer{stream})
 }
 
-type Credentialz_RotateHostCredentialsServer interface {
-	Send(*RotateHostCredentialsResponse) error
-	Recv() (*RotateHostCredentialsRequest, error)
+type Credentialz_RotateHostParametersServer interface {
+	Send(*RotateHostParametersResponse) error
+	Recv() (*RotateHostParametersRequest, error)
 	grpc.ServerStream
 }
 
-type credentialzRotateHostCredentialsServer struct {
+type credentialzRotateHostParametersServer struct {
 	grpc.ServerStream
 }
 
-func (x *credentialzRotateHostCredentialsServer) Send(m *RotateHostCredentialsResponse) error {
+func (x *credentialzRotateHostParametersServer) Send(m *RotateHostParametersResponse) error {
 	return x.ServerStream.SendMsg(m)
 }
 
-func (x *credentialzRotateHostCredentialsServer) Recv() (*RotateHostCredentialsRequest, error) {
-	m := new(RotateHostCredentialsRequest)
+func (x *credentialzRotateHostParametersServer) Recv() (*RotateHostParametersRequest, error) {
+	m := new(RotateHostParametersRequest)
 	if err := x.ServerStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
@@ -268,8 +268,8 @@ var Credentialz_ServiceDesc = grpc.ServiceDesc{
 			ClientStreams: true,
 		},
 		{
-			StreamName:    "RotateHostCredentials",
-			Handler:       _Credentialz_RotateHostCredentials_Handler,
+			StreamName:    "RotateHostParameters",
+			Handler:       _Credentialz_RotateHostParameters_Handler,
 			ServerStreams: true,
 			ClientStreams: true,
 		},
