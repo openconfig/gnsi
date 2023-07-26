@@ -28,25 +28,50 @@ option go_package = "github.com/openconfig/gnsi/authz";
 //
 
 // Authorization Policy defines which principals are permitted to access which
-// resource. Resources are individual RPC methods scoped by services.
+// resource(s). Resources are individual RPC methods scoped by their path(s).
+// The policy is expressed in JSON format, following the schema in
+// https://github.com/grpc/proposal/blob/master/A43-grpc-authorization-api.md
+// and the protobuf in the
+// README(https://github.com/openconfig/gnsi/blob/main/authz/README.md).
 
-// Example policy:
+// Example UploadRequest with policy:
 //
 // {
+//     "version": "version-1",
+//     "created_on": "1632779276520673693",
 //     "name": "gNSI.ssh policy",
-//     "allow_rules": [{
+//     "policy": {
+//       "allow_rules": [{
 //         "name": "admin-access",
-//         "principals": [
+//         "source": {
+//           "principals": [
 //             "spiffe://company.com/sa/alice",
 //             "spiffe://company.com/sa/bob"
-//         ],
+//           ]
+//         },
 //         "request": {
-//             "paths": [
-//                 "/gnsi.ssh.Ssh/MutateAccountCredentials",
-//                 "/gnsi.ssh.Ssh/MutateHostCredentials"
-//             ]
+//           "paths": [
+//             "/gnsi.ssh.Ssh/MutateAccountCredentials",
+//             "/gnsi.ssh.Ssh/MutateHostCredentials"
+//           ]
 //         }
-//     }]
+//       }],
+//       "deny_rules": [{
+//         "name": "sales-access",
+//         "source": {
+//           "principals": [
+//             "spiffe://company.com/sa/marge",
+//             "spiffe://company.com/sa/don"
+//           ]
+//         },
+//         "request": {
+//           "paths": [
+//             "/gnsi.ssh.Ssh/MutateAccountCredentials",
+//             "/gnsi.ssh.Ssh/MutateHostCredentials"
+//           ]
+//         }
+//       }]
+//     }
 // }
 //
 // This example would authorize "alice" and "bob" to call
@@ -172,8 +197,8 @@ message UploadRequest {
   uint64 created_on = 2;
 
   // The actual gRPC-level Authorization Policy.
-  // It is provided as a JSON formatted string whose structure is defined by
-  // gRPC.
+  // It is provided as a JSON formatted string whose structure is defined in
+  // https://github.com/grpc/proposal/blob/master/A43-grpc-authorization-api.md
   string policy = 3;
 }
 
@@ -195,6 +220,8 @@ message ProbeRequest {
 // ProbeResponse returns the ACK/NACK for a single user request
 // as evaluated against the current policy, along with the version of the policy
 // that the gRPC call/user were evaluated against.
+// If no policy has been defined, the default response is ACTION_PERMIT, with
+// a zero-length version string.
 message ProbeResponse {
   // Action is the defined action for an gRPC-level Authorization Policy.
   enum Action {
