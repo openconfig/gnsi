@@ -98,8 +98,13 @@ message SessionInfo {
   // on the System which is sending the messages to the Collector.
   string system_address = 1;
 
-  // Information for 5 tuple for the connection
+  // Information for 5 tuple for the gRPC client connection.  It is possible
+  // for local_address and system_address to be the same, regardless both
+  // must be populated.
+  // layer4_proto is the OSI Transport layer protocol numnber, eg: 6 (TCP);
+  // see http://www.iana.org/assignments/protocol-numbers
   uint32 layer4_proto = 2;
+  string local_address = 7;
   uint32 local_port = 3;
   string remote_address = 4;
   uint32 remote_port = 5;
