@@ -17,8 +17,8 @@ a switch to control which user can and cannot access specific RPCs.
 The policy to be enforced is defined in the form of a JSON string whose
 structure depends on the requirements of the RPC server.
 
-In the case of a `gRPC`-based server, the JSON string's schema can be found
-[here](https://github.com/grpc/proposal/pull/246).
+In the case of a `gRPC`-based server the JSON string's schema can be found
+[here](https://github.com/grpc/proposal/blob/master/A43-grpc-authorization-api.md).
 It also can be described using the following PROTOBUF definition.
 
 ```protobuf
@@ -179,16 +179,17 @@ Nobody else will be able to call any of the `gNSI.ssh` RPCs.
 
 ## Managing the gRPC-based Authorization Policy
 
-### Initial (fresh out of the box) state assumption
+### Initial (factory reset) state assumption
 
 When a device boots for the first time it should have:
 
-1. The `gNSI.authz` service up and running
-1. A default gRPC-level Authorization Policy for every active gRPC service.
+1. The `gNSI.authz` service transitions to up and running.
+1. The default gRPC-level Authorization Policy for all active gRPC services.
 
-   The initial default gRPC-level Authorization Policy can either allow access
-   to all RPCs or deny access to all RPCs except for the `gNSI.authz` family of
-   RPCs.
+   The default gRPC-level Authorization Policy must allow access to all RPCs.
+1. Once a gNSI policy is set (uploaded and Finalized), the default policy
+   disposition becomes deny, as mentioned in the AuthorizationPolicy message
+   documentation above.
 
 ### Updating the policy
 
@@ -215,22 +216,38 @@ Authorization Policy, namely:
    {
      "version": "version-1",
      "created_on": "1632779276520673693",
-     "policy": "
-        {
-          "name": "gNSI.ssh policy",
-          "allow_rules": [{
-            "name": "admin-access",
-            "principals": [
-              "spiffe://company.com/sa/alice",
-              "spiffe://company.com/sa/bob"
-              ],
-            "request": {
-              "paths": [
-                "/gnsi.ssh.Ssh/*"
-              ]
-            }
-          }]
-        }"
+     "policy": {
+       "name": "gNSI.ssh policy",
+       "allow_rules": [{
+         "name": "admin-access",
+         "source": {
+           "principals": [
+             "spiffe://company.com/sa/alice",
+             "spiffe://company.com/sa/bob"
+           ]
+         },
+         "request": {
+           "paths": [
+             "/gnsi.ssh.Ssh/*"
+           ]
+         }
+       }],
+       "deny_rules": [{
+         "name": "sales-access",
+         "source": {
+           "principals": [
+             "spiffe://company.com/sa/marge",
+             "spiffe://company.com/sa/don"
+           ]
+         },
+         "request": {
+           "paths": [
+             "/gnsi.ssh.Ssh/MutateAccountCredentials",
+             "/gnsi.ssh.Ssh/MutateHostCredentials"
+           ]
+         }
+       }]
+     }
    }
    ```
 
