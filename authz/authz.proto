@@ -130,6 +130,7 @@ service Authz {
 
   // Get returns current instance of the gRPC-level Authorization Policy
   // together with its version and created-on information.
+  // If no policy has been set, Get() returns FAILED_PRECONDITION.
   rpc Get(GetRequest) returns (GetResponse);
 }
 
