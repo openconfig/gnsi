@@ -148,9 +148,16 @@ message CommandService {
   CmdServiceType service_type = 1;
 
   // The command that was executed.
+  // For SHELL or CLI, if command abbreviation is supported, the command should
+  // be expanded to its full name.  eg: 'sh' -> 'show'.
   string cmd = 2;
 
   // Arguments to a command above.
+  // For SHELL or CLI, if command abbreviation is supported, the arguments
+  // of the command lexicon that are known should be expanded to their full
+  // names.  eg: 'sh ver det | gr foo' -> 'show version detail | grep foo'.
+  // Arguments should be split on typical word delimiters or be multi-word
+  // enclosed in grouping characters (eg: "hello world").
   repeated string cmd_args = 3;
 }
 
