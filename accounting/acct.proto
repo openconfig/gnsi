@@ -20,7 +20,7 @@
 //   o A System is a network device or other gN*I enabled entity creating
 //     accounting Record()s.
 //
-//   o A remote collector which either connects to a System to retrieve
+//   o A remote Collector which either connects to a System to retrieve
 //     messages streamed in a realtime fashion, or which receives a
 //     connection from a System to receive accounting Record()s.
 //
@@ -38,33 +38,31 @@ import "github.com/openconfig/gnsi/version/version.proto";
 option go_package = "github.com/openconfig/gnsi/accounting";
 
 // The Accounting(Pull/Push) services describe the interfaces between a System
-// and a remote collector that collect data about what changes were attempted or
-// completed on that System through standard interfaces to the System.
+// and a remote Collector that collect data about what changes were attempted
+// or completed on that System through standard interfaces to the System.
 //
 // Accounting messages may be collected by connecting to the Accounting
-// service (AccountingPull) on a System from a remote collector, or by
-// configuring a System to connect(AccountingPush) to the remote collector
-// directly.
+// service (AccountingPull) on a System from a Collector, or by configuring
+// a System to connect(AccountingPush) to the Collector.
 //
-// Record()s created on a System can be delivered to remote collectors,
-// stored locally, or discarded locally. Configuration of this behavior
-// is done with standard gNMI system configuration methods.
+// Record()s created on a System can be delivered to Collectors, stored
+// locally, or discarded locally. Configuration of this behavior is done with
+// standard gNMI system configuration methods.
 service AccountingPull {
   // RecordStream is a stream of Record()s sent from the system to
-  // a remote collection service, when the remote service connects
-  // to the Accounting service.
+  // a Collector, when the Collector connects to the Accounting service.
   //
   // A RecordRequest contains a timestamp indicating the last message
-  // received. The remote collector's expectation is that all messages
-  // after the timestamp will be streamed.
+  // received. The Collector's expectation is that all messages after the
+  // timestamp will be streamed.
   //
-  // At connection initiation the remote collector may send either the current
+  // At connection initiation the Collector may send either the current
   // time or a zero time. A zero time indicates that all messages stored on the
-  // System should be sent to the collector. A current time indicates that only
+  // System should be sent to the Collector. A current time indicates that only
   // new messages should be sent.
   //
-  // The remote collector must send a RecordRequest at least every 60
-  // seconds, in order to signal its status to the system. Failure to send a
+  // The Collector must send a RecordRequest at least every 60 seconds, in
+  // order to signal its liveliness to the system. Failure to send a
   // RecordRequest for more than 120 seconds will cause the connection to be
   // reset.
   rpc RecordStream(stream RecordSync)
@@ -73,22 +71,21 @@ service AccountingPull {
 
 service AccountingPush {
   // RecordStream is a stream of Record()s sent from the System to
-  // a remote collection service when the System is configured to
-  // connect to that remote collection service.
+  // a collector when the System is configured to connect to that Collector
+  // service.
   //
-  // The RecordsAck contains a timestamp indicating the last message
-  // received. The remote collector's expectation is that all messages
-  // after the timestamp will be streamed.
+  // The RecordsAck contains a timestamp indicating the last message received.
+  // The Collector's expectation is that all messages after the timestamp will
+  // be streamed.
   //
-  // At connection initiation the remote collector may send either
-  // the current time or a zero time. A zero time indicates that all
-  // stored messages should be sent to the collector. A current time
-  // indicates that only new messages should be sent.
+  // At connection initiation, the Collector may send either the current time
+  // or a zero time. A zero time indicates that all stored messages should be
+  // sent to the Collector. A current time indicates that only new messages
+  // should be sent.
   //
-  // The remote collector must send a RecordsAck at least every 60
-  // seconds, in order to signal its status to the System. Failure
-  // to send a RecordsAck for more than 120 seconds will cause the
-  // connection to be reset.
+  // The Collector must send a RecordsAck at least every 60 seconds, in order
+  // to signal its liveliness to the System. Failure to send a RecordsAck for
+  // more than 120 seconds will cause the connection to be reset.
   rpc RecordStream(stream Record)
     returns (stream RecordSync);
 }
@@ -98,7 +95,7 @@ service AccountingPush {
 message SessionInfo {
   // system_address is the IP address of the System sending the event,
   // in most cases this address is the Loopback or Loopback equivalent
-  // on the System which is sending the messages to the remote collector.
+  // on the System which is sending the messages to the Collector.
   string system_address = 1;
 
   // Information for 5 tuple for the connection
