@@ -12,8 +12,8 @@ Accounting Records are available at a gNSI origin:
    gnsi.accounting
 
 Records may be streamed from a system either at request of the remote
-collector, via the ClientStream() service/rpc, or at the request of
-the system to a remote endpoint, via the ServerStream() service/rpc.
+collector, via the AccountingPull() service/rpc, or at the request of
+the system to a remote collector, via the AccountingPush() service/rpc.
 
 Configuration of the Accounting service is made through standard
 gNxI methods using the defined YANG model.
