@@ -93,10 +93,14 @@ service AccountingPush {
 // SessionInfo is the session identifier that identifies the context
 // in which service was executed.
 message SessionInfo {
-  // system_address is the IP address of the System sending the event,
-  // in most cases this address is the Loopback or Loopback equivalent
-  // on the System which is sending the messages to the Collector.
-  string system_address = 1;
+  // system_address is the IP address(es) of the System sending the event.
+  // In most cases this address is the Loopback, or Loopback equivalent,
+  // on the System which is sending the messages to the Collector, and might
+  // be specifically configured for gNxI (eg: gnxi source-address interface
+  // loopback 0).
+  // One per-address family (AF) might exist, all of which should be included
+  // in this field.
+  repeated string system_address = 1;
 
   // Information for 5 tuple for the gRPC client connection.  It is possible
   // for local_address and system_address to be the same, regardless both
