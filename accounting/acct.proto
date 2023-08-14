@@ -100,7 +100,7 @@ message SessionInfo {
   // loopback 0).
   // One per-address family (AF) might exist, all of which should be included
   // in this field.
-  repeated string system_address = 1;
+  repeated string system_addresses = 1;
 
   // Information for 5 tuple for the gRPC client connection.  It is possible
   // for local_address and system_address to be the same, regardless both
