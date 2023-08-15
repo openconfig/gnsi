@@ -183,7 +183,8 @@ message GrpcService {
   bool payload_istruncated = 5;
 
   // config_metadata can be used to track all set requests that were to be
-  // applied atomically.
+  // applied atomically.  It should contain a per-transaction (1 per stream)
+  // UUID.
   string config_metadata = 4;
 
   // True, if truncation of config_metadata occurs due to an implementation
