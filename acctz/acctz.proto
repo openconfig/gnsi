@@ -28,33 +28,33 @@
 
 syntax = "proto3";
 
-package gnsi.accounting.v1;
+package gnsi.acctz.v1;
 
 import "google/protobuf/any.proto";
 import "google/protobuf/timestamp.proto";
 
 import "github.com/openconfig/gnsi/version/version.proto";
 
-option go_package = "github.com/openconfig/gnsi/accounting";
+option go_package = "github.com/openconfig/gnsi/acctz";
 
-// The Accounting(Pull/Push) services describe the interfaces between a System
+// The gRPC-level Accounting service exported by targets.
+
+// The Accounting service describes the interfaces between a System
 // and a remote Collector that collect data about what changes were attempted
 // or completed on that System through standard interfaces to the System.
 //
 // Accounting messages may be collected by connecting to the Accounting
-// service (AccountingPull) on a System from a Collector, or by configuring
-// a System to connect(AccountingPush) to the Collector.
-//
-// Record()s created on a System can be delivered to Collectors, stored
-// locally, or discarded locally. Configuration of this behavior is done with
-// standard gNMI system configuration methods.
-service AccountingPull {
-  // RecordStream is a stream of Record()s sent from the system to
-  // a Collector, when the Collector connects to the Accounting service.
+// service (Acctz) on a System from a Collector.
+
+service Acctz {
+
+  // RecordSubscribe returns a stream of Record()s sent from the system to
+  // a Collector, when the Collector connects to the Acctz service.
   //
   // A RecordRequest contains a timestamp indicating the last message
   // received. The Collector's expectation is that all messages after the
-  // timestamp will be streamed.
+  // timestamp will be streamed.  Any history for replay of records is subject
+  // to the implementation support and may or may not be configurable.
   //
   // At connection initiation the Collector may send either the current
   // time or a zero time. A zero time indicates that all messages stored on the
@@ -65,29 +65,7 @@ service AccountingPull {
   // order to signal its liveliness to the system. Failure to send a
   // RecordRequest for more than 120 seconds will cause the connection to be
   // reset.
-  rpc RecordStream(stream RecordSync)
-    returns (stream Record);
-}
-
-service AccountingPush {
-  // RecordStream is a stream of Record()s sent from the System to
-  // a collector when the System is configured to connect to that Collector
-  // service.
-  //
-  // The RecordsAck contains a timestamp indicating the last message received.
-  // The Collector's expectation is that all messages after the timestamp will
-  // be streamed.
-  //
-  // At connection initiation, the Collector may send either the current time
-  // or a zero time. A zero time indicates that all stored messages should be
-  // sent to the Collector. A current time indicates that only new messages
-  // should be sent.
-  //
-  // The Collector must send a RecordsAck at least every 60 seconds, in order
-  // to signal its liveliness to the System. Failure to send a RecordsAck for
-  // more than 120 seconds will cause the connection to be reset.
-  rpc RecordStream(stream Record)
-    returns (stream RecordSync);
+  rpc RecordSubscribe(stream RecordRequest) returns (stream RecordResponse);
 }
 
 // SessionInfo is the session identifier that identifies the context
@@ -215,7 +193,7 @@ message GrpcService {
 
 // An accounting record message is generated everytime the user types a
 // shell/vendorCLI command or sends a gNxI request.
-message Record {
+message RecordResponse {
   // Session information
   SessionInfo session_info = 1;
 
@@ -248,11 +226,11 @@ message Record {
   repeated string task_ids = 32;
 }
 
-// RecordSync, requests a starting point for records to be sent to the caller.
-// The reciever then can signal back to the sender periodic sync messages to
+// RecordRequest, requests a starting point for records to be sent to the caller.
+// The receiver then can signal back to the sender periodic sync messages to
 // acknowledge received records.
 // The timestamp indicates the last processed Record at the caller.
-message RecordSync {
+message RecordRequest {
   // The time when the system recorded this event represented as nanoseconds
   // since the unix epoch.
   google.protobuf.Timestamp timestamp = 2;
