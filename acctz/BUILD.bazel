@@ -44,7 +44,7 @@ go_proto_library(
         "go_protoc_gen_go",
         "go_protoc_gen_go_grpc",
     ],
-    importpath = "github.com/openconfig/gnsi/accounting",
+    importpath = "github.com/openconfig/gnsi/acctz",
     proto = ":acct_proto",
     deps = ["//version:version_go_proto"],
 )
@@ -52,5 +52,5 @@ go_proto_library(
 go_library(
     name = "acct",
     embed = [":acct_go_proto"],
-    importpath = "github.com/openconfig/gnsi/accounting",
+    importpath = "github.com/openconfig/gnsi/acctz",
 )
