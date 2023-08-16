@@ -175,6 +175,17 @@ message GrpcService {
   // True, if truncation of payloads occurs due to an implementation
   // limitation in the originating service, any middleware, or the receiver.
   bool payload_istruncated = 5;
+
+  // Service processing status at the time of event reporting.
+  enum ServiceStatus {
+    SERVICE_STATUS_UNSPECIFIED = 0;
+    SERVICE_STATUS_SUCCESS = 1;
+    SERVICE_STATUS_FAILURE = 2;
+  }
+  ServiceStatus status = 6;
+
+  // If status == SERVICE_STATUS_FAILURE, cause for the failure
+  string failure_cause = 7;
 }
 
 // An accounting record message is generated everytime the user types a
@@ -192,17 +203,6 @@ message RecordResponse {
     CommandService cmd_service = 3;
     GrpcService grpc_service = 4;
   }
-
-  // Service processing status at the time of event reporting.
-  enum ServiceStatus {
-    SERVICE_STATUS_UNSPECIFIED = 0;
-    SERVICE_STATUS_SUCCESS = 1;
-    SERVICE_STATUS_FAILURE = 2;
-  }
-  ServiceStatus status = 5;
-
-  // If status == SERVICE_STATUS_FAILURE, cause for the failure
-  string failure_cause = 6;
 
   // Authentication related details
   AuthDetail authen = 7;
