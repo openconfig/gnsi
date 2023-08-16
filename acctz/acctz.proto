@@ -226,7 +226,8 @@ message RecordResponse {
   repeated string task_ids = 32;
 }
 
-// RecordRequest, requests a starting point for records to be sent to the caller.
+// RecordRequest, requests a starting point for records to be sent to the
+// caller.
 // The receiver then can signal back to the sender periodic sync messages to
 // acknowledge received records.
 // The timestamp indicates the last processed Record at the caller.
