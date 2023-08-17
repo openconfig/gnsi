@@ -53,8 +53,13 @@ service Acctz {
   //
   // A RecordRequest contains a timestamp indicating the last message
   // received. The Collector's expectation is that all messages after the
-  // timestamp will be streamed.  Any history for replay of records is subject
-  // to the implementation support and may or may not be configurable.
+  // timestamp will be streamed.  If this results in no records to send, the
+  // server should return an OK error and zero records.
+  //
+  // Any history for replay of records or size of the history is subject to
+  // implementation support and may or may not be configurable.  The history
+  // should be global to the device or virtual tenant, such that new and
+  // re-connecting clients can access the history.
   //
   // At connection initiation the Collector may send either the current
   // time or a zero time. A zero time indicates that all messages stored on the
@@ -187,10 +192,20 @@ message RecordResponse {
   // since the unix epoch.
   google.protobuf.Timestamp timestamp = 2;
 
+  // True, if the server's history does not include a message with the given
+  // RecordRequest.timestamp or an older record, indicating that history
+  // truncation has occurred relative to the timestamp reference point and
+  // records might have been missed.
+  // If RecordRequest.timestamp was not equal to a previously received
+  // RecordResponse.timestamp received, instead randomly chosen, the Collector
+  // can not know if it missed records.
+  // If RecordRequest.timestamp = 0, this must be false.
+  bool history_istruncated = 3;
+
   // Service request details of the accounting record.
   oneof service_request {
-    CommandService cmd_service = 3;
-    GrpcService grpc_service = 4;
+    CommandService cmd_service = 4;
+    GrpcService grpc_service = 5;
   }
 
   // Authentication related details
