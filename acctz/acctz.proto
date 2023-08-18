@@ -94,28 +94,88 @@ message SessionInfo {
   // - multiple sessions over a single SSH connection
   // - multiple channels over a single gRPC connection
   string channel_id = 6;
+
+  // optional name of the tty, eg: console0, aux0, vty0, pty0.  If the
+  // connection is a serial line, such as a console, the adddress,
+  // port, and protocol fields above will be omitted.
+  string tty = 7;
+
+  // session status
+  enum SessionStatus {
+    SESSION_STATUS_UNSPECIFIED = 0;
+    SESSION_STATUS_LOGIN = 1;	// "start"
+    SESSION_STATUS_LOGOUT = 2;	// "stop"
+    SESSION_STATUS_ONCE = 3;	// simultaneous login, cmd, logout
+    SESSION_STATUS_ENABLE = 4;	// change privilege level
+    SESSION_STATUS_IDLE = 5;	// "watchog"
+  }
+  SessionStatus status = 8;
+
+  // User details
+  UserDetail user = 9;
+
+  // Authentication details
+  AuthenDetail authen = 10;
 }
 
-// Details of authentication - for gRPC or shell/vendor-CLI.
-message AuthDetail {
+// Details of a user
+message UserDetail {
   // Identity string is used to identify the user that executed the
   // command. For instance, it could be the spiffe-id in the case of
   // gRPC or unix-style user-name in the case of shell/vendor-CLI.
+  // This might be omitted if the username is unknown, such as
+  // accounting a login that terminated before a username was received.
   string identity = 1;
 
   // Privilege level configured on the system.
   uint32 privilege_level = 2;
+}
+
+// Details of authentication
+// While some authentication mechanisms authenticate the client only
+// once, at connection time, such as mTLS and shell, others authenticate
+// the client for each service_request, such as gRPC w/o mTLS or HTTP.
+message AuthenDetail {
+  // authentication type
+  enum AuthenType {
+    AUTHEN_TYPE_UNSPECIFIED = 0;
+    AUTHEN_TYPE_NONE = 1;
+    AUTHEN_TYPE_PASSWORD = 2;
+    AUTHEN_TYPE_SSHKEY = 3;
+    AUTHEN_TYPE_SSHCERT = 4;
+    AUTHEN_TYPE_TLSCERT = 5;
+    AUTHEN_TYPE_PAP = 6;
+    AUTHEN_TYPE_CHAP = 7;
+  }
+  AuthenType type = 1;
 
   // authentication status
   enum AuthenStatus {
     AUTHEN_STATUS_UNSPECIFIED = 0;
-    AUTHEN_STATUS_PERMIT = 1;
-    AUTHEN_STATUS_DENY = 2;
+    AUTHEN_STATUS_SUCCESS = 1;
+    AUTHEN_STATUS_FAIL = 2;
+    AUTHEN_STATUS_ERROR = 3;
   }
-  AuthenStatus status = 3;
+  AuthenStatus status = 2;
 
-  // In case of STATUS_DENY, cause for the deny
-  string deny_cause = 4;
+  // In case of STATUS_FAIL/_ERROR, detail of the cause
+  string cause = 3;
+}
+
+// Details of authorization - all service_requests
+message AuthorDetail {
+  // authorization status
+  enum AuthorStatus {
+    AUTHOR_STATUS_UNSPECIFIED = 0;
+    AUTHOR_STATUS_PERMIT = 1;
+    AUTHOR_STATUS_DENY = 2;
+    AUTHOR_STATUS_ERROR = 3;
+  }
+  AuthorStatus status = 1;
+
+  // Detail of the status, which might include the policy that caused
+  // a PERMIT or DENY.
+  string detail = 2;
 }
 
 // Command details for shell/vendor-CLI
@@ -208,12 +268,12 @@ message RecordResponse {
     GrpcService grpc_service = 5;
   }
 
-  // Authentication related details
-  AuthDetail authen = 7;
+  // Authorization details
+  AuthorDetail author = 6;
 
   // Optional repeated task_id that represent tasks that were used to
   // accomplish the request on the system.
-  repeated string task_ids = 32;
+  repeated string task_ids = 7;
 }
 
 // RecordRequest, requests a starting point for records to be sent to the
