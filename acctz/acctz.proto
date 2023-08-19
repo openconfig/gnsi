@@ -175,6 +175,9 @@ message GrpcService {
 
   // True, if truncation of payloads occurs due to an implementation
   // limitation in the originating service, any middleware, or the receiver.
+  // Truncation must only occur within a given API's message field (non
+  // PROTO_ANY) and not break the boundaries of the protobuf message fields to
+  // allow for proper deserialization.
   bool payload_istruncated = 5;
 }
 
