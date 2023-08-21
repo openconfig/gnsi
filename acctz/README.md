@@ -9,24 +9,29 @@ remote collection service, primarily over a gRPC transport connection.
 ## Method of Operation
 
 Accounting Records are available at a gNSI origin:
-   gnsi.accounting
+   gnsi.acctz
 
-Records may be streamed from a system either at request of the remote
-collector, via the AccountingPull() service/rpc, or at the request of
-the system to a remote collector, via the AccountingPush() service/rpc.
+Records may be streamed from a system at request of the remote collector,
+via the AccountingPull() service/rpc.
 
 Configuration of the Accounting service is made through standard
 gNxI methods using the defined YANG model.
 
 Records will be streamed to the receiver as individual Record
-messages as they are defined in the gnsi.accounting protocol buffer
+messages as they are defined in the gnsi.acctz protocol buffer
 definition.
 
 Each Record() message contains a timestamp element, this represents the
 time at which the accounted event occured, local to the system which sends
-the message. This could be different from the time received at the distant
-end, and the time the Record was emitted from the system.
+the message. This could be different from the time received at the Collector
+and the time the Record was emitted from the system.
 
-Each stream method requires that acknowledgements be sent periodically
+The stream method requires that acknowledgements be sent periodically
 in order to signal both which messages have been successfully processed
-and that the remote collector has not lost state relative to the connection.
+and that the remote collector is alive.
+
+Devices should maintain a history of accounting records so that they can be
+retrieved periodically by newly and already connected Collectors.  The depth
+of this history should be configurable by the administrator.  The default
+depth and configurability are subject to implementation support, but should
+be documented.
