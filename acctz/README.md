@@ -30,3 +30,9 @@ end, and the time the Record was emitted from the system.
 Each stream method requires that acknowledgements be sent periodically
 in order to signal both which messages have been successfully processed
 and that the remote collector has not lost state relative to the connection.
+
+Devices should maintain a history of accounting records so that they can be
+retrieved periodically by newly and already connected Collectors.  The depth
+of this history should be configurable by the administrator.  The default
+depth and configurability are subject to implementation support, but should
+be documented.
