@@ -54,7 +54,7 @@ When no longer a profile is needed it can be removed from the target via
 `Certz.DeleteProfile()` RPC. Note that the gNxI SSL profile cannot be
 removed.
 
-The SSL profile ID of a gRPC server is exposed in the YANG leaf 
+The SSL profile ID of a gRPC server is exposed in the YANG leaf
 `ssl-profile-id` which is an augment to the
 `/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state`
 container.
