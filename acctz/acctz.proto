@@ -127,8 +127,10 @@ message UserDetail {
   // accounting a login that terminated before a username was received.
   string identity = 1;
 
-  // Privilege level configured on the system.
-  uint32 privilege_level = 2;
+  // user's privilege level, user class, user group, task group, etc.,
+  // which is implementation dependent.  Might be omitted if
+  // authentication fails.
+  string group = 2;
 }
 
 // Details of authentication
