@@ -16,8 +16,8 @@ copy_generated() {
   done
 }
 
-bazel build //accounting:all
-copy_generated "accounting" "acct"
+bazel build //acctz:all
+copy_generated "acctz"
 bazel build //authz:all
 copy_generated "authz"
 bazel build //certz:all

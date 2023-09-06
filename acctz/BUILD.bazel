@@ -14,8 +14,8 @@ filegroup(
 )
 
 proto_library(
-    name = "acct_proto",
-    srcs = ["acct.proto"],
+    name = "acctz_proto",
+    srcs = ["acctz.proto"],
     import_prefix = "github.com/openconfig/gnsi",
     deps = [
         "//version:version_proto",
@@ -28,9 +28,9 @@ proto_library(
 # C++
 ##############################################################################
 cpp_grpc_library(
-    name = "acct_cc_proto",
+    name = "acctz_cc_proto",
     protos = [
-        ":acct_proto",
+        ":acctz_proto",
     ],
     deps = ["//version:version_cc_proto"],
 )
@@ -39,18 +39,18 @@ cpp_grpc_library(
 # Go
 ##############################################################################
 go_proto_library(
-    name = "acct_go_proto",
+    name = "acctz_go_proto",
     compilers = [
         "go_protoc_gen_go",
         "go_protoc_gen_go_grpc",
     ],
     importpath = "github.com/openconfig/gnsi/acctz",
-    proto = ":acct_proto",
+    proto = ":acctz_proto",
     deps = ["//version:version_go_proto"],
 )
 
 go_library(
-    name = "acct",
-    embed = [":acct_go_proto"],
+    name = "acctz",
+    embed = [":acctz_go_proto"],
     importpath = "github.com/openconfig/gnsi/acctz",
 )

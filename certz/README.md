@@ -54,6 +54,11 @@ When no longer a profile is needed it can be removed from the target via
 `Certz.DeleteProfile()` RPC. Note that the gNxI SSL profile cannot be
 removed.
 
+The SSL profile ID of a gRPC server is exposed in the YANG leaf
+`ssl-profile-id` which is an augment to the
+`/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state`
+container.
+
 #### Authentication Policy
 
 An authentication policy is a set of rules that defines which CA can be trusted
@@ -194,6 +199,7 @@ module: gnsi-certz
     +--ro certificate-revocation-list-bundle-created-on?   created-on
     +--ro authentication-policy-version?                   version
     +--ro authentication-policy-created-on?                created-on
+    +--ro ssl-profile-id?                                  string
     +--ro counters
        +--ro access-rejects?       oc-yang:counter64
        +--ro last-access-reject?   oc-types:timeticks64
@@ -640,6 +646,7 @@ module: openconfig-system
               +--ro gnsi-certz:certificate-revocation-list-bundle-created-on?   created-on
               +--ro gnsi-certz:authentication-policy-version?                   version
               +--ro gnsi-certz:authentication-policy-created-on?                created-on
+              +--ro gnsi-certz:ssl-profile-id?                                  string
               +--ro gnsi-certz:counters
                  +--ro gnsi-certz:access-rejects?       oc-yang:counter64
                  +--ro gnsi-certz:last-access-reject?   oc-types:timeticks64
