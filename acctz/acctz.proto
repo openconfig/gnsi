@@ -99,34 +99,30 @@ message SessionInfo {
 // Details of authentication - for gRPC or shell/vendor-CLI.
 message AuthDetail {
   // Identity string is used to identify the user that executed the
-  // command. For instance, it could be the spiffe-id in the case of
+  // command. For instance, it could be the SPIFFE-ID in the case of
   // gRPC or unix-style user-name in the case of shell/vendor-CLI.
   string identity = 1;
 
-  // Privilege level configured on the system.
-  uint32 privilege_level = 2;
-
-  // authentication status
+  // Authentication status
   enum AuthenStatus {
     AUTHEN_STATUS_UNSPECIFIED = 0;
     AUTHEN_STATUS_PERMIT = 1;
     AUTHEN_STATUS_DENY = 2;
   }
-  AuthenStatus status = 3;
+  AuthenStatus status = 2;
 
   // In case of STATUS_DENY, cause for the deny
-  string deny_cause = 4;
+  string deny_cause = 3;
 }
 
 // Command details for shell/vendor-CLI
 message CommandService {
   enum CmdServiceType {
     CMD_SERVICE_TYPE_UNSPECIFIED = 0;
-    CMD_SERVICE_TYPE_SHELL = 1;
-    CMD_SERVICE_TYPE_CLI = 2;
-    CMD_SERVICE_TYPE_HTTP = 3;		// Web UIs
-    CMD_SERVICE_TYPE_RESTCONF = 4;
-    CMD_SERVICE_TYPE_NETCONF = 5;
+    CMD_SERVICE_TYPE_CLI = 1;
+    CMD_SERVICE_TYPE_HTTP = 2;		// Web UIs
+    CMD_SERVICE_TYPE_RESTCONF = 3;
+    CMD_SERVICE_TYPE_NETCONF = 4;
   }
   CmdServiceType service_type = 1;
 
@@ -179,6 +175,9 @@ message GrpcService {
 
   // True, if truncation of payloads occurs due to an implementation
   // limitation in the originating service, any middleware, or the receiver.
+  // Truncation must only occur within a given API's message field (non
+  // PROTO_ANY) and not break the boundaries of the protobuf message fields to
+  // allow for proper deserialization.
   bool payload_istruncated = 5;
 }
 
@@ -210,10 +209,6 @@ message RecordResponse {
 
   // Authentication related details
   AuthDetail authen = 7;
-
-  // Optional repeated task_id that represent tasks that were used to
-  // accomplish the request on the system.
-  repeated string task_ids = 32;
 }
 
 // RecordRequest, requests a starting point for records to be sent to the
