@@ -115,7 +115,7 @@ message SessionInfo {
   UserDetail user = 9;
 
   // Authentication details
-  AuthenDetail authen = 10;
+  AuthnDetail authn = 10;
 }
 
 // Details of a user
@@ -137,43 +137,43 @@ message UserDetail {
 // While some authentication mechanisms authenticate the client only
 // once, at connection time, such as mTLS and shell, others authenticate
 // the client for each service_request, such as gRPC w/o mTLS or HTTP.
-message AuthenDetail {
+message AuthnDetail {
   // authentication type
-  enum AuthenType {
-    AUTHEN_TYPE_UNSPECIFIED = 0;
-    AUTHEN_TYPE_NONE = 1;
-    AUTHEN_TYPE_PASSWORD = 2;
-    AUTHEN_TYPE_SSHKEY = 3;
-    AUTHEN_TYPE_SSHCERT = 4;
-    AUTHEN_TYPE_TLSCERT = 5;
-    AUTHEN_TYPE_PAP = 6;
-    AUTHEN_TYPE_CHAP = 7;
+  enum AuthnType {
+    AUTHN_TYPE_UNSPECIFIED = 0;
+    AUTHN_TYPE_NONE = 1;
+    AUTHN_TYPE_PASSWORD = 2;
+    AUTHN_TYPE_SSHKEY = 3;
+    AUTHN_TYPE_SSHCERT = 4;
+    AUTHN_TYPE_TLSCERT = 5;
+    AUTHN_TYPE_PAP = 6;
+    AUTHN_TYPE_CHAP = 7;
   }
-  AuthenType type = 1;
+  AuthnType type = 1;
 
   // authentication status
-  enum AuthenStatus {
-    AUTHEN_STATUS_UNSPECIFIED = 0;
-    AUTHEN_STATUS_SUCCESS = 1;
-    AUTHEN_STATUS_FAIL = 2;
-    AUTHEN_STATUS_ERROR = 3;
+  enum AuthnStatus {
+    AUTHN_STATUS_UNSPECIFIED = 0;
+    AUTHN_STATUS_SUCCESS = 1;
+    AUTHN_STATUS_FAIL = 2;
+    AUTHN_STATUS_ERROR = 3;
   }
-  AuthenStatus status = 2;
+  AuthnStatus status = 2;
 
   // In case of STATUS_FAIL/_ERROR, detail of the cause
   string cause = 3;
 }
 
 // Details of authorization - all service_requests
-message AuthorDetail {
+message AuthzDetail {
   // authorization status
-  enum AuthorStatus {
-    AUTHOR_STATUS_UNSPECIFIED = 0;
-    AUTHOR_STATUS_PERMIT = 1;
-    AUTHOR_STATUS_DENY = 2;
-    AUTHOR_STATUS_ERROR = 3;
+  enum AuthzStatus {
+    AUTHZ_STATUS_UNSPECIFIED = 0;
+    AUTHZ_STATUS_PERMIT = 1;
+    AUTHZ_STATUS_DENY = 2;
+    AUTHZ_STATUS_ERROR = 3;
   }
-  AuthorStatus status = 1;
+  AuthzStatus status = 1;
 
   // Detail of the status, which might include the policy that caused
   // a PERMIT or DENY.
@@ -212,6 +212,9 @@ message CommandService {
   // True, if truncation of cmd_args occurs due to an implementation
   // limitation in the originating service, any middleware, or the receiver.
   bool cmd_args_istruncated = 5;
+
+  // Authorization details
+  AuthzDetail authz = 6;
 }
 
 // Command details for openconfig gNxI commands.
@@ -242,6 +245,9 @@ message GrpcService {
   // True, if truncation of payloads occurs due to an implementation
   // limitation in the originating service, any middleware, or the receiver.
   bool payload_istruncated = 5;
+
+  // Authorization details
+  AuthzDetail authz = 6;
 }
 
 // An accounting record message is generated everytime the user types a
@@ -269,9 +275,6 @@ message RecordResponse {
     CommandService cmd_service = 4;
     GrpcService grpc_service = 5;
   }
-
-  // Authorization details
-  AuthorDetail author = 6;
 
   // Optional repeated task_id that represent tasks that were used to
   // accomplish the request on the system.
