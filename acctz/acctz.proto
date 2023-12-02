@@ -131,6 +131,13 @@ message UserDetail {
   // which is implementation dependent.  Might be omitted if
   // authentication fails.
   string group = 2;
+
+  // this indicates the role of the user.
+  string role = 3;
+
+  // this indicates the principal present in SSH certificates populated
+  // when the user is authenticated via SSH certificates.
+  string principal = 4;
 }
 
 // Details of authentication
@@ -282,12 +289,10 @@ message RecordResponse {
 }
 
 // RecordRequest, requests a starting point for records to be sent to the
-// caller.
-// The receiver then can signal back to the sender periodic sync messages to
-// acknowledge received records.
-// The timestamp indicates the last processed Record at the caller.
+// caller. A tiemstamp of 0 indicates that the server should return all
+// records present to the client.
 message RecordRequest {
   // The time when the system recorded this event represented as nanoseconds
-  // since the unix epoch.
+  // since the unix epoch (UTC).
   google.protobuf.Timestamp timestamp = 2;
 }
