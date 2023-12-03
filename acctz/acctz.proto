@@ -257,7 +257,7 @@ message RecordResponse {
   SessionInfo session_info = 1;
 
   // The time when the system recorded this event, represented as nanoseconds
-  // since the unix epoch.
+  // since the unix epoch (Jan 1, 1970 00:00:00 UTC).
   google.protobuf.Timestamp timestamp = 2;
 
   // True, if the server's history does not include a message with the given
@@ -282,12 +282,10 @@ message RecordResponse {
 }
 
 // RecordRequest, requests a starting point for records to be sent to the
-// caller.
-// The receiver then can signal back to the sender periodic sync messages to
-// acknowledge received records.
-// The timestamp indicates the last processed Record at the caller.
+// caller. A timestamp of 0 indicates that the server should return all
+// records present to the client.
 message RecordRequest {
-  // The time when the system recorded this event represented as nanoseconds
-  // since the unix epoch.
+  // The time is represented as nanoseconds since the
+  // unix epoch (Jan 1, 1970 00:00:00 UTC).
   google.protobuf.Timestamp timestamp = 2;
 }
