@@ -107,7 +107,7 @@ module gnsi-acctz {
             description
               "The total number of times that a RecordRequest resulted in
                a RecordResponse being marked history_istruncated.  ie: a
-               request was made for a timestamp that ddid not exist in the
+               request was made for a timestamp that did not exist in the
                history.";
         }
         leaf IdleTimeouts {
@@ -119,19 +119,19 @@ module gnsi-acctz {
         leaf RecordRequests {
             type oc-yang:counter64;
             description
-              "The total number of RecordRequest RPCs have been received.";
+              "The total number of RecordRequest RPCs that have been received.";
         }
         leaf RecordResponses {
             type oc-yang:counter64;
             description
-              "The total number of RecordRequest RPCs have been received.";
+              "The total number of RecordRequest RPCs that have been sent.";
         }
     }
 
     // gnsi.acctz producer statistics
     grouping source-counters {
         description
-          "A collection of counters for gNSI.acctz record produces per
+          "A collection of counters for gNSI.acctz record production per
            service request type.";
 
         list source-records {
