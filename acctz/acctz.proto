@@ -108,6 +108,7 @@ message SessionInfo {
     SESSION_STATUS_ONCE = 3;	// simultaneous login, cmd, logout
     SESSION_STATUS_ENABLE = 4;	// change privilege level
     SESSION_STATUS_IDLE = 5;	// "watchog"
+    SESSION_STATUS_OPERATION = 6;  // "cmd"
   }
   SessionStatus status = 8;
 
