@@ -14,4 +14,11 @@ services include:
   5. Secure Shell (ssh) certificate/key management
   6. Associated YANG models for telemetry collection of gNSI systems.
 
-Code and documentation to follow.
+## Releases
+
+   -  A gNSI server is expected to support single version of gNSI
+      (e.g. if v2 releases, then the server will only support v1 until
+      it has support for v2, at which point it will drop support for v1).
+   -  A gNSI server is expected to be pinned to a release tag on the
+      gNSI repository.
+
