@@ -128,17 +128,14 @@ message UserDetail {
   // accounting a login that terminated before a username was received.
   string identity = 1;
 
-  // user's privilege level, user class, user group, task group, etc.,
-  // which is implementation dependent.  Might be omitted if
-  // authentication fails.
-  string group = 2;
+  // user's privilege level, user class, user group, task group,
+  // user role etc., which is implementation dependent.
+  // Might be omitted if authentication fails.
+  string role = 2;
 
-  // this indicates the role of the user.
-  string role = 3;
-
-  // this indicates the principal present in SSH certificates populated
+  // this indicates the principal present in the SSH certificate populated
   // when the user is authenticated via SSH certificates.
-  string principal = 4;
+  string ssh_principal = 3;
 }
 
 // Details of authentication
