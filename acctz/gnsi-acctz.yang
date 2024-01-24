@@ -160,21 +160,8 @@ module gnsi-acctz {
 
     grouping grpc-server-acctz-counters {
         description
-          "A collection of counters from the gNSI.acctz module.";
-
-        container counters {
-            description
-              "A collection of counters from the gNSI.acctz module
-               for acctz clients and sources.";
-           config false;
-
-            leaf last-cleared-on {
-                type oc-types:timeticks64;
-                description
-                    "The last time that the counters were cleared (reset to
-                     zero). This value is reported as nanoseconds since epoch
-                     (January 1st, 1970 00:00:00 GMT).";
-            }
+          "A collection of counters from the gNSI.acctz module. This collection
+           augments the existing certz grpc counters";
 
             container client-counters {
                 uses client-counters;
