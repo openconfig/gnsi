@@ -284,6 +284,9 @@ message RecordResponse {
   // Optional repeated task_id that represent tasks that were used to
   // accomplish the request on the system.
   repeated string task_ids = 7;
+
+  // Name of the component where the accounting record originated from
+  string component_name = 8;
 }
 
 // RecordRequest, requests a starting point for records to be sent to the
