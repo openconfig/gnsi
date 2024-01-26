@@ -237,10 +237,11 @@ message GrpcService {
   }
   GrpcServiceType service_type = 1;
 
-  // rpc_name is the rpc to which the request was sent, examples:
-  //   gnmi.Set()
-  //   gnoi.os.Install()
-  //   gnsi.cert.Rotate()
+  // The RPC as encoded in the HTTP/2 :path header to which the request was
+  // sent, examples:
+  //   * /gnmi.gNMI/Set
+  //   * /gnoi.os.OS/Install
+  //   * /gnsi.certz.v1.Certz/Rotate
   string rpc_name = 2;
 
   // A string of bytes that are gRPC encoded. Best to decode using
