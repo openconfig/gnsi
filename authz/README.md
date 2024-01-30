@@ -320,7 +320,7 @@ expected result of the `gNSI.authz.Probe()` RPC is:
 
 ### `gnsi-authz.yang`
 
-An overview of the changes defined in the `gnmi-authz.yang` file are shown
+An overview of the changes defined in the `gnsi-authz.yang` file are shown
 below.
 
 ```txt

@@ -543,8 +543,8 @@ module: gnsi-credentialz
   augment /oc-sys:system/oc-sys:aaa/oc-sys:authentication/oc-sys:users/oc-sys:user/oc-sys:state:
     +--ro password-version?                   version
     +--ro password-created-on?                created-on
-    +--ro authorized-users-list-version?      version
-    +--ro authorized-users-list-created-on?   created-on
+    +--ro authorized-principals-list-version?      version
+    +--ro authorized-principals-list-created-on?   created-on
     +--ro authorized-keys-list-version?       version
     +--ro authorized-keys-list-created-on?    created-on
 ```
@@ -750,8 +750,8 @@ module: openconfig-system
      |  |           +--ro role?                                          union
      |  |           +--ro gnsi-credz:password-version?                   version
      |  |           +--ro gnsi-credz:password-created-on?                created-on
-     |  |           +--ro gnsi-credz:authorized-users-list-version?      version
-     |  |           +--ro gnsi-credz:authorized-users-list-created-on?   created-on
+     |  |           +--ro gnsi-credz:authorized-principals-list-version?      version
+     |  |           +--ro gnsi-credz:authorized-principals-list-created-on?   created-on
      |  |           +--ro gnsi-credz:authorized-keys-list-version?       version
      |  |           +--ro gnsi-credz:authorized-keys-list-created-on?    created-on
      |  +--rw authorization
