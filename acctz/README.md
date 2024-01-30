@@ -12,7 +12,7 @@ Accounting Records are available at a gNSI origin:
    gnsi.acctz
 
 Records may be streamed from a system at request of the remote collector,
-via the AccountingPull() service/rpc.
+via the RecordSubscribe() service/rpc.
 
 Configuration of the Accounting service is made through standard
 gNxI methods using the defined YANG model.
@@ -26,9 +26,8 @@ time at which the accounted event occured, local to the system which sends
 the message. This could be different from the time received at the Collector
 and the time the Record was emitted from the system.
 
-The stream method requires that acknowledgements be sent periodically
-in order to signal both which messages have been successfully processed
-and that the remote collector is alive.
+The stream continues as new records are received by the accounting subsystem,
+ending when the gNSI session ends or an error occurs.
 
 Devices should maintain a history of accounting records so that they can be
 retrieved periodically by newly and already connected Collectors.  The depth
