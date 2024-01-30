@@ -73,7 +73,7 @@ service Acctz {
   // implying a stuck client (see also getsockopt(SIOCOUTQ) and
   // https://datatracker.ietf.org/doc/draft-ietf-idr-bgp-sendholdtimer/).
   //
-  rpc RecordSubscribe(stream RecordRequest) returns (stream RecordResponse);
+  rpc RecordSubscribe(RecordRequest) returns (stream RecordResponse);
 }
 
 // SessionInfo is the session identifier that identifies the context
