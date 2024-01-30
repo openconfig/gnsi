@@ -66,10 +66,13 @@ service Acctz {
   // System should be sent to the Collector. A current time indicates that only
   // new messages should be sent.
   //
-  // The Collector must send a RecordRequest at least every 60 seconds, in
-  // order to signal its liveliness to the system. Failure to send a
-  // RecordRequest for more than 120 seconds will cause the connection to be
-  // reset.
+  // The stream continues ad infinitum, until the gNSI session is severed.
+  // The gNSI TCP connection could timeout due to expiration of the TCP
+  // keepalive mechanism, or the server could disconnect the client if the
+  // output buffer to the client remains full for a long timeout period,
+  // implying a stuck client (see also getsockopt(SIOCOUTQ) and
+  // https://datatracker.ietf.org/doc/draft-ietf-idr-bgp-sendholdtimer/).
+  //
   rpc RecordSubscribe(stream RecordRequest) returns (stream RecordResponse);
 }
 
