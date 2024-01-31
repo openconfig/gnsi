@@ -22,7 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AcctzClient interface {
-	RecordSubscribe(ctx context.Context, opts ...grpc.CallOption) (Acctz_RecordSubscribeClient, error)
+	RecordSubscribe(ctx context.Context, in *RecordRequest, opts ...grpc.CallOption) (Acctz_RecordSubscribeClient, error)
 }
 
 type acctzClient struct {
@@ -33,27 +33,28 @@ func NewAcctzClient(cc grpc.ClientConnInterface) AcctzClient {
 	return &acctzClient{cc}
 }
 
-func (c *acctzClient) RecordSubscribe(ctx context.Context, opts ...grpc.CallOption) (Acctz_RecordSubscribeClient, error) {
+func (c *acctzClient) RecordSubscribe(ctx context.Context, in *RecordRequest, opts ...grpc.CallOption) (Acctz_RecordSubscribeClient, error) {
 	stream, err := c.cc.NewStream(ctx, &Acctz_ServiceDesc.Streams[0], "/gnsi.acctz.v1.Acctz/RecordSubscribe", opts...)
 	if err != nil {
 		return nil, err
 	}
 	x := &acctzRecordSubscribeClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
 	return x, nil
 }
 
 type Acctz_RecordSubscribeClient interface {
-	Send(*RecordRequest) error
 	Recv() (*RecordResponse, error)
 	grpc.ClientStream
 }
 
 type acctzRecordSubscribeClient struct {
 	grpc.ClientStream
-}
-
-func (x *acctzRecordSubscribeClient) Send(m *RecordRequest) error {
-	return x.ClientStream.SendMsg(m)
 }
 
 func (x *acctzRecordSubscribeClient) Recv() (*RecordResponse, error) {
@@ -68,7 +69,7 @@ func (x *acctzRecordSubscribeClient) Recv() (*RecordResponse, error) {
 // All implementations must embed UnimplementedAcctzServer
 // for forward compatibility
 type AcctzServer interface {
-	RecordSubscribe(Acctz_RecordSubscribeServer) error
+	RecordSubscribe(*RecordRequest, Acctz_RecordSubscribeServer) error
 	mustEmbedUnimplementedAcctzServer()
 }
 
@@ -76,7 +77,7 @@ type AcctzServer interface {
 type UnimplementedAcctzServer struct {
 }
 
-func (UnimplementedAcctzServer) RecordSubscribe(Acctz_RecordSubscribeServer) error {
+func (UnimplementedAcctzServer) RecordSubscribe(*RecordRequest, Acctz_RecordSubscribeServer) error {
 	return status.Errorf(codes.Unimplemented, "method RecordSubscribe not implemented")
 }
 func (UnimplementedAcctzServer) mustEmbedUnimplementedAcctzServer() {}
@@ -93,12 +94,15 @@ func RegisterAcctzServer(s grpc.ServiceRegistrar, srv AcctzServer) {
 }
 
 func _Acctz_RecordSubscribe_Handler(srv interface{}, stream grpc.ServerStream) error {
-	return srv.(AcctzServer).RecordSubscribe(&acctzRecordSubscribeServer{stream})
+	m := new(RecordRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(AcctzServer).RecordSubscribe(m, &acctzRecordSubscribeServer{stream})
 }
 
 type Acctz_RecordSubscribeServer interface {
 	Send(*RecordResponse) error
-	Recv() (*RecordRequest, error)
 	grpc.ServerStream
 }
 
@@ -108,14 +112,6 @@ type acctzRecordSubscribeServer struct {
 
 func (x *acctzRecordSubscribeServer) Send(m *RecordResponse) error {
 	return x.ServerStream.SendMsg(m)
-}
-
-func (x *acctzRecordSubscribeServer) Recv() (*RecordRequest, error) {
-	m := new(RecordRequest)
-	if err := x.ServerStream.RecvMsg(m); err != nil {
-		return nil, err
-	}
-	return m, nil
 }
 
 // Acctz_ServiceDesc is the grpc.ServiceDesc for Acctz service.
@@ -130,7 +126,6 @@ var Acctz_ServiceDesc = grpc.ServiceDesc{
 			StreamName:    "RecordSubscribe",
 			Handler:       _Acctz_RecordSubscribe_Handler,
 			ServerStreams: true,
-			ClientStreams: true,
 		},
 	},
 	Metadata: "github.com/openconfig/gnsi/acctz/acctz.proto",
