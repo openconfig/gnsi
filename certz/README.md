@@ -93,6 +93,14 @@ policy before accepting the connection.
 
 ### User Experiences
 
+#### System default SSL profile
+
+The system will always provide a default TLS profile that uses the IDevID cert.
+This profile will always be available and cannot be changed. It should use the name
+"system-default-profile".
+
+An attempt to change or delete this profile will return an error.
+
 #### Create a SSL profile
 
 Call `Certz.AddProfile` RPC with the `ssl_profile_id` field specifying the ID
