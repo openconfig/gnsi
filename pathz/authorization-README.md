@@ -292,11 +292,7 @@ policy {
   mode: READ
   user { name: "brian" }
 }
-# Add a final rule which is an explicit deny rule.
-policy {
-  id: "explicit-deny"
-  action: DENY
-}
+# Add a final rule which is an implicit deny rule.
 ```
 
 The example first policy rule:
@@ -486,15 +482,5 @@ values, for instance:
     /this/is/a/keyed[name=Ethernet1/*/3]/things - NOT permitted usage of wildcard
 ```
 
-The policy rule:
-
-```proto
-# Add a final rule which is an explicit deny rule.
-policy {
-  id: "explicit-deny"
-  action: DENY
-}
-```
-
-provides an explicit deny for any request which does not match any other policy
-rule. This rule also requests that the result be logged in full fidelity.
+The end of every policy includes an implicit deny policy rule.  This rule will
+cause all matches to be counted.
