@@ -97,7 +97,7 @@ policy before accepting the connection.
 
 The system will always provide a default TLS profile that uses the IDevID cert.
 This profile will always be available and cannot be changed. It should use the name
-"system-default-profile".
+"gNxI".
 
 An attempt to change or delete this profile will return an error.
 
