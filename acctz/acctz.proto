@@ -53,8 +53,10 @@ service Acctz {
   //
   // A RecordRequest contains a timestamp indicating the last message
   // received. The Collector's expectation is that all messages after the
-  // timestamp will be streamed.  If this results in no records to send, the
-  // server should return an OK error and zero records.
+  // timestamp will be streamed. If this results in no records to be sent,
+  // because either the history is empty or no new accounting events occured
+  // after the requested timestamp, the server will be silent until new
+  // records are created.
   //
   // Any history for replay of records or size of the history is subject to
   // implementation support and may or may not be configurable.  The history
