@@ -209,10 +209,10 @@ module: gnsi-certz
     +--ro authentication-policy-created-on?                created-on
     +--ro ssl-profile-id?                                  string
     +--ro counters
-       +--ro access-rejects?       oc-yang:counter64
-       +--ro last-access-reject?   oc-types:timeticks64
-       +--ro access-accepts?       oc-yang:counter64
-       +--ro last-access-accept?   oc-types:timeticks64
+       +--ro connection-rejects?       oc-yang:counter64
+       +--ro last-connection-reject?   oc-types:timeticks64
+       +--ro connection-accepts?       oc-yang:counter64
+       +--ro last-connection-accept?   oc-types:timeticks64
 ```
 
 ### `openconfig-system` tree
@@ -656,9 +656,9 @@ module: openconfig-system
               +--ro gnsi-certz:authentication-policy-created-on?                created-on
               +--ro gnsi-certz:ssl-profile-id?                                  string
               +--ro gnsi-certz:counters
-                 +--ro gnsi-certz:access-rejects?       oc-yang:counter64
-                 +--ro gnsi-certz:last-access-reject?   oc-types:timeticks64
-                 +--ro gnsi-certz:access-accepts?       oc-yang:counter64
-                 +--ro gnsi-certz:last-access-accept?   oc-types:timeticks64
+                 +--ro gnsi-certz:connection-rejects?       oc-yang:counter64
+                 +--ro gnsi-certz:last-connection-reject?   oc-types:timeticks64
+                 +--ro gnsi-certz:connection-accepts?       oc-yang:counter64
+                 +--ro gnsi-certz:last-connection-accept?   oc-types:timeticks64
 
 ```
