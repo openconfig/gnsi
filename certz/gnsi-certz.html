@@ -5115,7 +5115,7 @@ uint64
             <td nowrap>
                <div id=9999 class=tier11>
                   <a class="leaf">&nbsp;</a>
-                  <attr title="Received Access-Accept messages."> <em> access-accepts </em></abbr>
+                  <attr title="Received Access-Accept messages."> <em> connection-accepts </em></abbr>
             
                </div>
             </td> 
@@ -5127,14 +5127,14 @@ uint64
         <td nowrap>no config</td>
         <td>?</td>
         <td>current</td>
-        <td nowrap>/oc-sys:system/oc-sys:aaa/oc-sys:server-groups/oc-sys:server-group/oc-sys:servers/oc-sys:server/oc-sys:radius/oc-sys:state/oc-sys:counters/oc-sys:access-accepts</td>
+        <td nowrap>/oc-sys:system/oc-sys:aaa/oc-sys:server-groups/oc-sys:server-group/oc-sys:servers/oc-sys:server/oc-sys:radius/oc-sys:state/oc-sys:counters/oc-sys:connection-accepts</td>
         </tr>
         <tr id="1-1-9-32-48-32-65-29-22-21-3" class="a">
         
             <td nowrap>
                <div id=9999 class=tier11>
                   <a class="leaf">&nbsp;</a>
-                  <attr title="Received Access-Reject messages."> <em> access-rejects </em></abbr>
+                  <attr title="Received Access-Reject messages."> <em> connection-rejects </em></abbr>
             
                </div>
             </td> 
@@ -5146,7 +5146,7 @@ uint64
         <td nowrap>no config</td>
         <td>?</td>
         <td>current</td>
-        <td nowrap>/oc-sys:system/oc-sys:aaa/oc-sys:server-groups/oc-sys:server-group/oc-sys:servers/oc-sys:server/oc-sys:radius/oc-sys:state/oc-sys:counters/oc-sys:access-rejects</td>
+        <td nowrap>/oc-sys:system/oc-sys:aaa/oc-sys:server-groups/oc-sys:server-group/oc-sys:servers/oc-sys:server/oc-sys:radius/oc-sys:state/oc-sys:counters/oc-sys:connection-rejects</td>
         </tr>
         <tr id="1-1-9-32-48-32-65-29-22-21-4" class="a">
         
@@ -8496,8 +8496,9 @@ the authentication process.">gnsi-certz:counters</abbr>
             <td nowrap>
                <div id=9999 class=tier7>
                   <a class="leaf">&nbsp;</a>
-                  <attr title="The total number of times the gRPC denied access to the server."> <em> gnsi-certz:access-rejects </em></abbr>
-            
+                  <attr title="The total number of times that gRPC clients have succeeded
+in establishing a connection to the server."> <em> gnsi-certz:connection-rejects </em></abbr>
+
                </div>
             </td> 
         <td nowrap>leaf</td>
@@ -8508,16 +8509,16 @@ uint64
         <td nowrap>no config</td>
         <td>?</td>
         <td>current</td>
-        <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/gnsi-certz:counters/gnsi-certz:access-rejects</td>
+        <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/gnsi-certz:counters/gnsi-certz:connection-rejects</td>
         </tr>
         <tr id="1-1-16-42-65-95-139" class="a">
         
             <td nowrap>
                <div id=9999 class=tier7>
                   <a class="leaf">&nbsp;</a>
-                  <attr title="A timestamp of the last time the gRPC denied access to
-the server."> <em> gnsi-certz:last-access-reject </em></abbr>
-            
+                  <attr title="A timestamp of the last time a gRPC client failed
+in establishing a connection to the server."> <em> gnsi-certz:last-connection-reject </em></abbr>
+
                </div>
             </td> 
         <td nowrap>leaf</td>
@@ -8528,16 +8529,16 @@ uint64
         <td nowrap>no config</td>
         <td>?</td>
         <td>current</td>
-        <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/gnsi-certz:counters/gnsi-certz:last-access-reject</td>
+        <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/gnsi-certz:counters/gnsi-certz:last-connection-reject</td>
         </tr>
         <tr id="1-1-16-42-65-95-140" class="a">
         
             <td nowrap>
                <div id=9999 class=tier7>
                   <a class="leaf">&nbsp;</a>
-                  <attr title="The total number of times the gPRC allowed access to
-the server."> <em> gnsi-certz:access-accepts </em></abbr>
-            
+                  <attr title="The total number of times that gRPC clients have succeeded
+in establishing a connection to the server."> <em> gnsi-certz:connection-accepts </em></abbr>
+
                </div>
             </td> 
         <td nowrap>leaf</td>
@@ -8548,16 +8549,16 @@ uint64
         <td nowrap>no config</td>
         <td>?</td>
         <td>current</td>
-        <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/gnsi-certz:counters/gnsi-certz:access-accepts</td>
+        <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/gnsi-certz:counters/gnsi-certz:connection-accepts</td>
         </tr>
         <tr id="1-1-16-42-65-95-141" class="a">
         
             <td nowrap>
                <div id=9999 class=tier7>
                   <a class="leaf">&nbsp;</a>
-                  <attr title="A timestamp of the last time the gRPC allowed access to
-the server."> <em> gnsi-certz:last-access-accept </em></abbr>
-            
+                  <attr title="A timestamp of the last time a gRPC client succeeded
+in establishing a connection to the server."> <em> gnsi-certz:last-connection-accept </em></abbr>
+
                </div>
             </td> 
         <td nowrap>leaf</td>
@@ -8568,7 +8569,7 @@ uint64
         <td nowrap>no config</td>
         <td>?</td>
         <td>current</td>
-        <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/gnsi-certz:counters/gnsi-certz:last-access-accept</td>
+        <td nowrap>/oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:state/gnsi-certz:counters/gnsi-certz:last-connection-accept</td>
         </tr>
 </table>
 </div>
