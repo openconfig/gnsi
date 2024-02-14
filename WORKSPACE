@@ -1,3 +1,5 @@
+workspace(name = "com_github_openconfig_gnsi")
+
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 ### Bazel rules for many languages to compile PROTO into gRPC libraries
@@ -54,53 +56,11 @@ go_register_toolchains(go_version = "1.18")
 # gazelle:repo bazel_gazelle
 bazel_gazelle()
 
-load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies", "go_repository")
+load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
 
-go_repository(
-    name = "com_github_openconfig_gnoi",
-    build_directives = [
-        "gazelle:proto_import_prefix github.com/openconfig/gnoi",
-    ],
-    build_file_generation = "on",
-    importpath = "github.com/openconfig/gnoi",
-    sum = "h1:koTAGmBf6l9XvBqinTC484NSBuCCUaz01136ofgShgo=",
-    version = "v0.0.0-20220615151501-18d7d5153945",
-)
+load("//:deps.bzl", "gnsi_deps")
 
-go_repository(
-    name = "com_github_openconfig_gnmi",
-    build_directives = [
-        "gazelle:proto_import_prefix github.com/openconfig/gnmi",
-    ],
-    build_file_generation = "on",
-    importpath = "github.com/openconfig/gnmi",
-    sum = "h1:tv9HygDMXnoGyWuLmNCodMV2+PK6+uT/ndAxDVzsUUQ=",
-    version = "v0.0.0-20220617175856-41246b1b3507",
-)
-
-go_repository(
-    name = "com_github_kylelemons_godebug",
-    importpath = "github.com/kylelemons/godebug",
-    sum = "h1:RPNrshWIDI6G2gRW9EHilWtl7Z6Sb1BR0xunSBf0SNc=",
-    version = "v1.1.0",
-)
-
-go_repository(
-    name = "com_github_openconfig_goyang",
-    importpath = "github.com/openconfig/goyang",
-    sum = "h1:Z95LskKYk6nBYOxHtmJCu3YEKlr3pJLWG1tYAaNh3yU=",
-    version = "v0.2.9",
-)
-
-go_repository(
-    name = "com_github_openconfig_ygot",
-    build_directives = [
-        "gazelle:proto_import_prefix github.com/openconfig/ygot",
-    ],
-    importpath = "github.com/openconfig/ygot",
-    sum = "h1:EKaeFhx1WwTZGsYeqipyh1mfF8y+z2StaXZtwVnXklk=",
-    version = "v0.13.1",
-)
+gnsi_deps()
 
 load("@rules_proto_grpc//go:repositories.bzl", rules_proto_grpc_go_repos = "go_repos")
 
