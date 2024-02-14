@@ -87,14 +87,14 @@ module gnsi-certz {
             leaf connection-rejects {
                 type oc-yang:counter64;
                 description
-               "The total number of times that gRPC clients have succeeded
+               "The total number of times that gRPC clients have failed
                in establishing a connection to the server.";
             }
             leaf last-connection-reject {
                 type oc-types:timeticks64;
                 description
                 "A timestamp of the last time a gRPC client failed
-                in establishing a connection to the server."
+                in establishing a connection to the server.";
             }
             leaf connection-accepts {
                 type oc-yang:counter64;
@@ -106,7 +106,7 @@ module gnsi-certz {
                 type oc-types:timeticks64;
                 description
                 "A timestamp of the last time a gRPC client succeeded
-                in establishing a connection to the server."
+                in establishing a connection to the server.";
             }
         }
     }
