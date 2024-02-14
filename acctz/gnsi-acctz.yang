@@ -25,6 +25,12 @@ module gnsi-acctz {
         "This module provides a data model for the metadata of the gRPC
          accounting operations on a device.";
 
+    revision 2023-01-24 {
+        description
+            "Remove duplicate counters container.";
+        reference "0.2.0";
+    }
+
     revision 2023-12-01 {
         description
             "Initial revision.";
@@ -149,39 +155,25 @@ module gnsi-acctz {
                 type service-type;
                 mandatory true;
             }
-        leaf records {
-            type oc-yang:counter64;
-            description
-              "The total number of records produced for the service_request
-               type.";
-        }
+            leaf records {
+                type oc-yang:counter64;
+                description
+                    "The total number of records produced for the service_request
+                    type.";
+            }
         }
     }
 
     grouping grpc-server-acctz-counters {
         description
-          "A collection of counters from the gNSI.acctz module.";
+          "A collection of counters from the gNSI.acctz module. This collection
+           augments the existing certz grpc counters";
 
-        container counters {
-            description
-              "A collection of counters from the gNSI.acctz module
-               for acctz clients and sources.";
-           config false;
-
-            leaf last-cleared-on {
-                type oc-types:timeticks64;
-                description
-                    "The last time that the counters were cleared (reset to
-                     zero). This value is reported as nanoseconds since epoch
-                     (January 1st, 1970 00:00:00 GMT).";
-            }
-
-            container client-counters {
-                uses client-counters;
-            }
-            container source-counters {
-                uses source-counters;
-            }
+        container client-counters {
+            uses client-counters;
+        }
+        container source-counters {
+            uses source-counters;
         }
     }
 
