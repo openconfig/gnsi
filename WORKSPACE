@@ -6,9 +6,9 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 # Note: any version of this which is less than 4.3.0 requires bazel version 5.4.0 (set in .bazelversion file)
 http_archive(
     name = "rules_proto_grpc",
-    sha256 = "fb7fc7a3c19a92b2f15ed7c4ffb2983e956625c1436f57a3430b897ba9864059",
-    strip_prefix = "rules_proto_grpc-4.3.0",
-    urls = ["https://github.com/rules-proto-grpc/rules_proto_grpc/archive/4.3.0.tar.gz"],
+    sha256 = "c0d718f4d892c524025504e67a5bfe83360b3a982e654bc71fed7514eb8ac8ad",
+    strip_prefix = "rules_proto_grpc-4.6.0",
+    urls = ["https://github.com/rules-proto-grpc/rules_proto_grpc/archive/4.6.0.tar.gz"],
 )
 
 # googleapis has not had a release since 2016 - take the master version as of 4-jan-23
