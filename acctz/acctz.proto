@@ -290,7 +290,14 @@ message RecordResponse {
   // accomplish the request on the system.
   repeated string task_ids = 7;
 
-  // Name of the component where the accounting record originated from
+  // Name of the component in a vendor system configuration where the accounting
+  // record originated from. This helps to indentify the source of the accouting
+  // record when multiple components can generate them. This is how the
+  // component is identified in the components hierarchy in the
+  // openconfig-platform model.
+  // For reference: /components/component[name="chassis0"]
+  // Eg: component_name = "linecard0"
+  //     component_name = "chassis0"
   string component_name = 8;
 }
 
