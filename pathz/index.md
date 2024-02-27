@@ -93,7 +93,8 @@ sent, the proposed configuration is rolled back automatically.
 
 ### AuthorizationPolicy rotation and gNMI subscriptions
 
-When the pathz policy is rotated, ongoing gNMI subscriptions will be dropped.   
+When the pathz policy is rotated, ongoing gNMI subscriptions will be dropped.
+
 This forces gNMI clients to reconnect and ensures that all gNMI subscriptions
 are proceeding using the most recent pathz policy.
 
