@@ -39,14 +39,47 @@ option go_package = "github.com/openconfig/gnsi/acctz";
 
 // The gRPC-level Accounting service exported by targets.
 
-// The Accounting service describes the interfaces between a System
+// [DEPRECATED] The Accounting service describes the interfaces between a System
 // and a remote Collector that collect data about what changes were attempted
 // or completed on that System through standard interfaces to the System.
 //
 // Accounting messages may be collected by connecting to the Accounting
 // service (Acctz) on a System from a Collector.
-
+// This service will be replaced with AcctzStream for unidirectional streaming.
 service Acctz {
+
+  // RecordSubscribe returns a stream of Record()s sent from the system to
+  // a Collector, when the Collector connects to the Acctz service.
+  //
+  // A RecordRequest contains a timestamp indicating the last message
+  // received. The Collector's expectation is that all messages after the
+  // timestamp will be streamed. If this results in no records to be sent,
+  // because either the history is empty or no new accounting events occured
+  // after the requested timestamp, the server will be silent until new
+  // records are created.
+  //
+  // Any history for replay of records or size of the history is subject to
+  // implementation support and may or may not be configurable.  The history
+  // should be global to the device or virtual tenant, such that new and
+  // re-connecting clients can access the history.
+  //
+  // At connection initiation the Collector may send either the current
+  // time or a zero time. A zero time indicates that all messages stored on the
+  // System should be sent to the Collector. A current time indicates that only
+  // new messages should be sent.
+  //
+  // The stream continues ad infinitum, until the gNSI session is severed.
+  // The gNSI TCP connection could timeout due to expiration of the TCP
+  // keepalive mechanism, or the server could disconnect the client if the
+  // output buffer to the client remains full for a long timeout period,
+  // implying a stuck client (see also getsockopt(SIOCOUTQ) and
+  // https://datatracker.ietf.org/doc/draft-ietf-idr-bgp-sendholdtimer/).
+  //
+  rpc RecordSubscribe(stream RecordRequest) returns (stream RecordResponse);
+}
+
+
+service AcctzStream {
 
   // RecordSubscribe returns a stream of Record()s sent from the system to
   // a Collector, when the Collector connects to the Acctz service.
