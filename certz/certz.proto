@@ -41,7 +41,8 @@ option go_package = "github.com/openconfig/gnsi/cert";
 //
 // Target (as seen from gNSI.certificate microservice point of view)
 // |
-// +-+ SSL profile for gNXI; always present; ssl_profile_id := "gNxI"
+// +-+ SSL profile for gNXI; always present and immutable; 
+//   | ssl_profile_id := "system_default_profile"
 // | |
 // | +-+ certificate
 // | | +- certificate (with public key)
