@@ -516,7 +516,25 @@ message Entity {
     CertificateChain trust_bundle = 4;
     CertificateRevocationListBundle certificate_revocation_list_bundle = 5;
     AuthenticationPolicy authentication_policy = 6;
+    ExistingEntity existing_entity = 7;
   }
+}
+
+// ExistingEntity is used to use artifacts provided by another SSL policy.
+// This operation will copy the entity from the provided policy and entity
+// type into the policy defined in the Rotate Request.
+// If the ssl profile doesn't exist an error will be returned.
+message ExistingEntity {
+  enum EntityType {
+    ENTITY_TYPE_UNSPECIFIED = 0;
+    ENTITY_TYPE_CERTIFICATE_CHAIN = 1;
+    ENTITY_TYPE_TRUST_BUNDLE = 2;
+    ENTITY_TYPE_CERTIFICATE_REVOCATION_LIST_BUNDLE = 3;
+    ENTITY_TYPE_AUTHENTICATION_POLICY = 4;
+  }
+
+  string ssl_profile_id = 1;
+  EntityType entity_type = 2;
 }
 
 // UploadRequest instructs the target to store the given entities (certificate,
