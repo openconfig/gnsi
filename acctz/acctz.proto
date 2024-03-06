@@ -284,14 +284,32 @@ message GrpcService {
 
   // A string of bytes that are gRPC encoded. Best to decode using
   // PROTO_ANY.
-  repeated google.protobuf.Any payloads = 3;
+  // Deprecated in favour of using the payload field.
+  // A warning when using this field: if a google.protobuf.Any value
+  // is truncated, then it will not be possible for the client to
+  // unmarshal this value upon receiving.
+  repeated google.protobuf.Any payloads = 3 [deprecated=true];
 
-  // True, if truncation of payloads occurs due to an implementation
+  // True, if truncation of payload occurs due to an implementation
   // limitation in the originating service, any middleware, or the receiver.
   bool payload_istruncated = 5;
 
   // Authorization details
   AuthzDetail authz = 6;
+
+  // the payload of the RPC, as either a string or proto-encoded.
+  // Note that this may be partially redacted to avoid leaking
+  // sensitive info (e.g. private keys rotated via certz/credentialz)
+  oneof payload {
+    // the payload in proto form.
+    // (suitable for small messages which don't require truncation)
+    // This can be unmarshalled by the acctz client.
+    google.protobuf.Any proto_val = 7;
+
+    // A string describing the payload of the RPC.
+    // This may be truncated.
+    string string_val = 8;
+  }
 }
 
 // An accounting record message is generated everytime the user types a
