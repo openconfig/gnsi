@@ -106,8 +106,8 @@ The system will start with this profile and either bootz or enrollz will be resp
 
 Call `Certz.AddProfile` RPC with the `ssl_profile_id` field specifying the ID
 of the new SSL profile.
-A new profile can choose to use existing artifacts from other profiles, via sending `Entity` messages with `ExistingEntity` set with the ssl_profile_id set to the source
-profile to copy from.
+A new profile can choose to use existing artifacts from other profiles, via sending `Entity` messages with `ExistingEntity` set with the `ssl_profile_id` set to the source
+profile to copy from, and the `entity_type` field set to the type of entity to be copied.
 
 #### Delete a SSL profile
 
