@@ -523,7 +523,11 @@ message Entity {
 // ExistingEntity is used to use artifacts provided by another SSL policy.
 // This operation will copy the entity from the provided policy and entity
 // type into the policy defined in the Rotate Request.
-// If the ssl profile doesn't exist an error will be returned.
+// If the ssl profile doesn't exist a NotFound error will be returned.
+// If the entity type to copy is already being provided in the same
+// UploadRequest then an InvalidArgument error will be returned.
+// (e.g. EntityType == ENTITY_TYPE_TRUST_BUNDLE cannot be used
+// if the UploadRequest contains a trust_bundle entity already)
 message ExistingEntity {
   enum EntityType {
     ENTITY_TYPE_UNSPECIFIED = 0;
