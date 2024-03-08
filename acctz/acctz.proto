@@ -322,14 +322,25 @@ message RecordResponse {
   // since the unix epoch (Jan 1, 1970 00:00:00 UTC).
   google.protobuf.Timestamp timestamp = 2;
 
-  // True, if the server's history does not include a message with the given
-  // RecordRequest.timestamp or an older record, indicating that history
-  // truncation has occurred relative to the timestamp reference point and
-  // records might have been missed.
-  // If RecordRequest.timestamp was not equal to a previously received
-  // RecordResponse.timestamp received, instead randomly chosen, the Collector
-  // can not know if it missed records.
-  // If RecordRequest.timestamp = 0, this must be false.
+  // True, if the server’s history is missing records prior to the time
+  // specified in the timestamp of the RecordResponse message. This can happen
+  // in the below scenarios,
+  // 1. A client connects and sends RecordRequest(timestamp=t1). If the server
+  //    does not have all records after time t1, the first RecordResponse it
+  //    sends will have this field as True. Subsequent RecordResponses
+  //    may have this field as false.
+  // 2. A client connects and sends RecordResponse(timestamp=t1) where t1 is
+  //    earlier than the uptime of the switch. In such scenarios, the first
+  //    RecordResponse will have this field as True. Subsequent RecordResponses
+  //    may have this field as false.
+  // 3. A client has an active stream where it's getting RecordResponse messages
+  //    from the server. The server detects that some events were not accounted
+  //    for, the next RecordResponse message it sends to the client will have
+  //    this field as True. Subsequent RecordResponses may have this field as
+  //    false.
+  // If timestamp=0 in the RecordRequest message, the first RecordResponse
+  // response message will have this field as False irrespective of history
+  // truncation. Subsequent RecordResponses may have this field as false.
   bool history_istruncated = 3;
 
   // Service request details of the accounting record.
