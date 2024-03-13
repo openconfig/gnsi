@@ -453,11 +453,52 @@ message Certificate {
   // Actual certificate.
   // The exact encoding depends upon the type of certificate.
   // for X509, this should be a PEM encoded Certificate.
-  bytes certificate = 3;
+  // Deprecated in favour of certificate_type
+  bytes certificate = 3 [deprecated=true];
 
   // Optional.
   // Not needed if the device knows the private key or does not have to know it.
-  bytes private_key = 4;
+  // Deprecated in favour of private_key_type
+  bytes private_key = 4 [deprecated=true];
+
+  enum CertSource {
+    CERT_SOURCE_UNSPECIFIED = 0;
+
+    // certificates stored in TPM
+    CERT_SOURCE_OIDEVID_TPM = 1;
+    CERT_SOURCE_IDEVID_TPM = 2;
+  }
+
+  oneof certificate_type {
+    // Actual certificate
+    // The exact encoding depends upon the type of certificate.
+    // for X509, this should be a PEM encoded Certificate.
+    bytes raw_certificate = 5;
+
+    // specify an alternative source for the certificate
+    CertSource cert_source = 6;
+  }
+
+  enum KeySource {
+    // KEY_SOURCE_UNSPECIFIED can be used in the case where the
+    // certificate does not need a private key (e.g. trusted certs)
+    KEY_SOURCE_UNSPECIFIED = 0;
+
+    // keys stored in TPM
+    KEY_SOURCE_OIDEVID_TPM = 1;
+    KEY_SOURCE_IDEVID_TPM = 2;
+
+    // key was generated with a CSR as part of rotation
+    KEY_SOURCE_GENERATED = 3;
+  }
+
+  oneof private_key_type {
+    bytes raw_private_key = 7;
+
+    // specify an alternative source for the private key
+    // or use KEY_SOURCE_UNSPECIFIED if no key is needed
+    KeySource key_source = 8;
+  }
 }
 
 // A certificate revocation list (CRL)
