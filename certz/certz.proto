@@ -464,9 +464,9 @@ message Certificate {
   enum CertSource {
     CERT_SOURCE_UNSPECIFIED = 0;
 
-    // certificates stored in TPM
-    CERT_SOURCE_OIDEVID_TPM = 1;
-    CERT_SOURCE_IDEVID_TPM = 2;
+    // certificates present on the device already
+    CERT_SOURCE_OIDEVID = 1;
+    CERT_SOURCE_IDEVID = 2;
   }
 
   oneof certificate_type {
@@ -484,12 +484,11 @@ message Certificate {
     // certificate does not need a private key (e.g. trusted certs)
     KEY_SOURCE_UNSPECIFIED = 0;
 
-    // keys stored in TPM
-    KEY_SOURCE_OIDEVID_TPM = 1;
-    KEY_SOURCE_IDEVID_TPM = 2;
+    // key is IDevID key stored in TPM
+    KEY_SOURCE_IDEVID_TPM = 1;
 
     // key was generated with a CSR as part of rotation
-    KEY_SOURCE_GENERATED = 3;
+    KEY_SOURCE_GENERATED = 2;
   }
 
   oneof private_key_type {
