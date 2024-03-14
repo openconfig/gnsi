@@ -111,16 +111,10 @@ module gnsi-acctz {
         leaf history_istruncated {
             type oc-yang:counter64;
             description
-              "The total number of times that a RecordRequest resulted in
-               a RecordResponse being marked history_istruncated.  ie: a
-               request was made for a timestamp that did not exist in the
-               history.";
-        }
-        leaf IdleTimeouts {
-            type oc-yang:counter64;
-            description
-              "The total number of times that a client was disconnected
-               due to missing keepalives (ie: RecordRequests).";
+              "The total number of times that a RecordResponse were marked
+               with history_istruncated true.  ie: a request was made for a
+               timestamp that did not exist in the history or another
+               qualifying event as documented in acctz.prot.";
         }
         leaf RecordRequests {
             type oc-yang:counter64;

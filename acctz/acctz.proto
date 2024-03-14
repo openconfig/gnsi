@@ -322,7 +322,7 @@ message RecordResponse {
   // since the unix epoch (Jan 1, 1970 00:00:00 UTC).
   google.protobuf.Timestamp timestamp = 2;
 
-  // True, if the server’s history is missing records prior to the time
+  // True, if the server's history is missing records prior to the time
   // specified in the timestamp of the RecordResponse message. This can happen
   // in the below scenarios,
   // 1. A client connects and sends RecordRequest(timestamp=t1). If the server
