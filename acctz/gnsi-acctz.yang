@@ -130,7 +130,7 @@ module gnsi-acctz {
         leaf RecordResponses {
             type oc-yang:counter64;
             description
-              "The total number of RecordRequest RPCs that have been sent.";
+              "The total number of RecordResponse RPCs that have been sent.";
         }
     }
 
