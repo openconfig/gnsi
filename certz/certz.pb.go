@@ -220,6 +220,104 @@ func (CertificateEncoding) EnumDescriptor() ([]byte, []int) {
 	return file_github_com_openconfig_gnsi_certz_certz_proto_rawDescGZIP(), []int{2}
 }
 
+type Certificate_CertSource int32
+
+const (
+	Certificate_CERT_SOURCE_UNSPECIFIED Certificate_CertSource = 0
+	Certificate_CERT_SOURCE_OIDEVID     Certificate_CertSource = 1
+	Certificate_CERT_SOURCE_IDEVID      Certificate_CertSource = 2
+)
+
+// Enum value maps for Certificate_CertSource.
+var (
+	Certificate_CertSource_name = map[int32]string{
+		0: "CERT_SOURCE_UNSPECIFIED",
+		1: "CERT_SOURCE_OIDEVID",
+		2: "CERT_SOURCE_IDEVID",
+	}
+	Certificate_CertSource_value = map[string]int32{
+		"CERT_SOURCE_UNSPECIFIED": 0,
+		"CERT_SOURCE_OIDEVID":     1,
+		"CERT_SOURCE_IDEVID":      2,
+	}
+)
+
+func (x Certificate_CertSource) Enum() *Certificate_CertSource {
+	p := new(Certificate_CertSource)
+	*p = x
+	return p
+}
+
+func (x Certificate_CertSource) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (Certificate_CertSource) Descriptor() protoreflect.EnumDescriptor {
+	return file_github_com_openconfig_gnsi_certz_certz_proto_enumTypes[3].Descriptor()
+}
+
+func (Certificate_CertSource) Type() protoreflect.EnumType {
+	return &file_github_com_openconfig_gnsi_certz_certz_proto_enumTypes[3]
+}
+
+func (x Certificate_CertSource) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use Certificate_CertSource.Descriptor instead.
+func (Certificate_CertSource) EnumDescriptor() ([]byte, []int) {
+	return file_github_com_openconfig_gnsi_certz_certz_proto_rawDescGZIP(), []int{14, 0}
+}
+
+type Certificate_KeySource int32
+
+const (
+	Certificate_KEY_SOURCE_UNSPECIFIED Certificate_KeySource = 0
+	Certificate_KEY_SOURCE_IDEVID_TPM  Certificate_KeySource = 1
+	Certificate_KEY_SOURCE_GENERATED   Certificate_KeySource = 2
+)
+
+// Enum value maps for Certificate_KeySource.
+var (
+	Certificate_KeySource_name = map[int32]string{
+		0: "KEY_SOURCE_UNSPECIFIED",
+		1: "KEY_SOURCE_IDEVID_TPM",
+		2: "KEY_SOURCE_GENERATED",
+	}
+	Certificate_KeySource_value = map[string]int32{
+		"KEY_SOURCE_UNSPECIFIED": 0,
+		"KEY_SOURCE_IDEVID_TPM":  1,
+		"KEY_SOURCE_GENERATED":   2,
+	}
+)
+
+func (x Certificate_KeySource) Enum() *Certificate_KeySource {
+	p := new(Certificate_KeySource)
+	*p = x
+	return p
+}
+
+func (x Certificate_KeySource) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (Certificate_KeySource) Descriptor() protoreflect.EnumDescriptor {
+	return file_github_com_openconfig_gnsi_certz_certz_proto_enumTypes[4].Descriptor()
+}
+
+func (Certificate_KeySource) Type() protoreflect.EnumType {
+	return &file_github_com_openconfig_gnsi_certz_certz_proto_enumTypes[4]
+}
+
+func (x Certificate_KeySource) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use Certificate_KeySource.Descriptor instead.
+func (Certificate_KeySource) EnumDescriptor() ([]byte, []int) {
+	return file_github_com_openconfig_gnsi_certz_certz_proto_rawDescGZIP(), []int{14, 1}
+}
+
 type ExistingEntity_EntityType int32
 
 const (
@@ -259,11 +357,11 @@ func (x ExistingEntity_EntityType) String() string {
 }
 
 func (ExistingEntity_EntityType) Descriptor() protoreflect.EnumDescriptor {
-	return file_github_com_openconfig_gnsi_certz_certz_proto_enumTypes[3].Descriptor()
+	return file_github_com_openconfig_gnsi_certz_certz_proto_enumTypes[5].Descriptor()
 }
 
 func (ExistingEntity_EntityType) Type() protoreflect.EnumType {
-	return &file_github_com_openconfig_gnsi_certz_certz_proto_enumTypes[3]
+	return &file_github_com_openconfig_gnsi_certz_certz_proto_enumTypes[5]
 }
 
 func (x ExistingEntity_EntityType) Number() protoreflect.EnumNumber {
@@ -1102,10 +1200,20 @@ type Certificate struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Type        CertificateType     `protobuf:"varint,1,opt,name=type,proto3,enum=gnsi.certz.v1.CertificateType" json:"type,omitempty"`
-	Encoding    CertificateEncoding `protobuf:"varint,2,opt,name=encoding,proto3,enum=gnsi.certz.v1.CertificateEncoding" json:"encoding,omitempty"`
-	Certificate []byte              `protobuf:"bytes,3,opt,name=certificate,proto3" json:"certificate,omitempty"`
-	PrivateKey  []byte              `protobuf:"bytes,4,opt,name=private_key,json=privateKey,proto3" json:"private_key,omitempty"`
+	Type     CertificateType     `protobuf:"varint,1,opt,name=type,proto3,enum=gnsi.certz.v1.CertificateType" json:"type,omitempty"`
+	Encoding CertificateEncoding `protobuf:"varint,2,opt,name=encoding,proto3,enum=gnsi.certz.v1.CertificateEncoding" json:"encoding,omitempty"`
+	// Deprecated: Marked as deprecated in github.com/openconfig/gnsi/certz/certz.proto.
+	Certificate []byte `protobuf:"bytes,3,opt,name=certificate,proto3" json:"certificate,omitempty"`
+	// Deprecated: Marked as deprecated in github.com/openconfig/gnsi/certz/certz.proto.
+	PrivateKey []byte `protobuf:"bytes,4,opt,name=private_key,json=privateKey,proto3" json:"private_key,omitempty"`
+	// Types that are assignable to CertificateType:
+	//	*Certificate_RawCertificate
+	//	*Certificate_CertSource_
+	CertificateType isCertificate_CertificateType `protobuf_oneof:"certificate_type"`
+	// Types that are assignable to PrivateKeyType:
+	//	*Certificate_RawPrivateKey
+	//	*Certificate_KeySource_
+	PrivateKeyType isCertificate_PrivateKeyType `protobuf_oneof:"private_key_type"`
 }
 
 func (x *Certificate) Reset() {
@@ -1154,6 +1262,7 @@ func (x *Certificate) GetEncoding() CertificateEncoding {
 	return CertificateEncoding_CERTIFICATE_ENCODING_UNSPECIFIED
 }
 
+// Deprecated: Marked as deprecated in github.com/openconfig/gnsi/certz/certz.proto.
 func (x *Certificate) GetCertificate() []byte {
 	if x != nil {
 		return x.Certificate
@@ -1161,12 +1270,87 @@ func (x *Certificate) GetCertificate() []byte {
 	return nil
 }
 
+// Deprecated: Marked as deprecated in github.com/openconfig/gnsi/certz/certz.proto.
 func (x *Certificate) GetPrivateKey() []byte {
 	if x != nil {
 		return x.PrivateKey
 	}
 	return nil
 }
+
+func (m *Certificate) GetCertificateType() isCertificate_CertificateType {
+	if m != nil {
+		return m.CertificateType
+	}
+	return nil
+}
+
+func (x *Certificate) GetRawCertificate() []byte {
+	if x, ok := x.GetCertificateType().(*Certificate_RawCertificate); ok {
+		return x.RawCertificate
+	}
+	return nil
+}
+
+func (x *Certificate) GetCertSource() Certificate_CertSource {
+	if x, ok := x.GetCertificateType().(*Certificate_CertSource_); ok {
+		return x.CertSource
+	}
+	return Certificate_CERT_SOURCE_UNSPECIFIED
+}
+
+func (m *Certificate) GetPrivateKeyType() isCertificate_PrivateKeyType {
+	if m != nil {
+		return m.PrivateKeyType
+	}
+	return nil
+}
+
+func (x *Certificate) GetRawPrivateKey() []byte {
+	if x, ok := x.GetPrivateKeyType().(*Certificate_RawPrivateKey); ok {
+		return x.RawPrivateKey
+	}
+	return nil
+}
+
+func (x *Certificate) GetKeySource() Certificate_KeySource {
+	if x, ok := x.GetPrivateKeyType().(*Certificate_KeySource_); ok {
+		return x.KeySource
+	}
+	return Certificate_KEY_SOURCE_UNSPECIFIED
+}
+
+type isCertificate_CertificateType interface {
+	isCertificate_CertificateType()
+}
+
+type Certificate_RawCertificate struct {
+	RawCertificate []byte `protobuf:"bytes,5,opt,name=raw_certificate,json=rawCertificate,proto3,oneof"`
+}
+
+type Certificate_CertSource_ struct {
+	CertSource Certificate_CertSource `protobuf:"varint,6,opt,name=cert_source,json=certSource,proto3,enum=gnsi.certz.v1.Certificate_CertSource,oneof"`
+}
+
+func (*Certificate_RawCertificate) isCertificate_CertificateType() {}
+
+func (*Certificate_CertSource_) isCertificate_CertificateType() {}
+
+type isCertificate_PrivateKeyType interface {
+	isCertificate_PrivateKeyType()
+}
+
+type Certificate_RawPrivateKey struct {
+	RawPrivateKey []byte `protobuf:"bytes,7,opt,name=raw_private_key,json=rawPrivateKey,proto3,oneof"`
+}
+
+type Certificate_KeySource_ struct {
+	KeySource Certificate_KeySource `protobuf:"varint,8,opt,name=key_source,json=keySource,proto3,enum=gnsi.certz.v1.Certificate_KeySource,oneof"`
+}
+
+func (*Certificate_RawPrivateKey) isCertificate_PrivateKeyType() {}
+
+func (*Certificate_KeySource_) isCertificate_PrivateKeyType() {}
 
 type CertificateRevocationList struct {
 	state         protoimpl.MessageState
@@ -1895,7 +2079,7 @@ var file_github_com_openconfig_gnsi_certz_certz_proto_rawDesc = []byte{
 	0x12, 0x37, 0x0a, 0x06, 0x70, 0x61, 0x72, 0x65, 0x6e, 0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b,
 	0x32, 0x1f, 0x2e, 0x67, 0x6e, 0x73, 0x69, 0x2e, 0x63, 0x65, 0x72, 0x74, 0x7a, 0x2e, 0x76, 0x31,
 	0x2e, 0x43, 0x65, 0x72, 0x74, 0x69, 0x66, 0x69, 0x63, 0x61, 0x74, 0x65, 0x43, 0x68, 0x61, 0x69,
-	0x6e, 0x52, 0x06, 0x70, 0x61, 0x72, 0x65, 0x6e, 0x74, 0x22, 0xc4, 0x01, 0x0a, 0x0b, 0x43, 0x65,
+	0x6e, 0x52, 0x06, 0x70, 0x61, 0x72, 0x65, 0x6e, 0x74, 0x22, 0x94, 0x05, 0x0a, 0x0b, 0x43, 0x65,
 	0x72, 0x74, 0x69, 0x66, 0x69, 0x63, 0x61, 0x74, 0x65, 0x12, 0x32, 0x0a, 0x04, 0x74, 0x79, 0x70,
 	0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x1e, 0x2e, 0x67, 0x6e, 0x73, 0x69, 0x2e, 0x63,
 	0x65, 0x72, 0x74, 0x7a, 0x2e, 0x76, 0x31, 0x2e, 0x43, 0x65, 0x72, 0x74, 0x69, 0x66, 0x69, 0x63,
@@ -1903,11 +2087,40 @@ var file_github_com_openconfig_gnsi_certz_certz_proto_rawDesc = []byte{
 	0x08, 0x65, 0x6e, 0x63, 0x6f, 0x64, 0x69, 0x6e, 0x67, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0e, 0x32,
 	0x22, 0x2e, 0x67, 0x6e, 0x73, 0x69, 0x2e, 0x63, 0x65, 0x72, 0x74, 0x7a, 0x2e, 0x76, 0x31, 0x2e,
 	0x43, 0x65, 0x72, 0x74, 0x69, 0x66, 0x69, 0x63, 0x61, 0x74, 0x65, 0x45, 0x6e, 0x63, 0x6f, 0x64,
-	0x69, 0x6e, 0x67, 0x52, 0x08, 0x65, 0x6e, 0x63, 0x6f, 0x64, 0x69, 0x6e, 0x67, 0x12, 0x20, 0x0a,
+	0x69, 0x6e, 0x67, 0x52, 0x08, 0x65, 0x6e, 0x63, 0x6f, 0x64, 0x69, 0x6e, 0x67, 0x12, 0x24, 0x0a,
 	0x0b, 0x63, 0x65, 0x72, 0x74, 0x69, 0x66, 0x69, 0x63, 0x61, 0x74, 0x65, 0x18, 0x03, 0x20, 0x01,
-	0x28, 0x0c, 0x52, 0x0b, 0x63, 0x65, 0x72, 0x74, 0x69, 0x66, 0x69, 0x63, 0x61, 0x74, 0x65, 0x12,
-	0x1f, 0x0a, 0x0b, 0x70, 0x72, 0x69, 0x76, 0x61, 0x74, 0x65, 0x5f, 0x6b, 0x65, 0x79, 0x18, 0x04,
-	0x20, 0x01, 0x28, 0x0c, 0x52, 0x0a, 0x70, 0x72, 0x69, 0x76, 0x61, 0x74, 0x65, 0x4b, 0x65, 0x79,
+	0x28, 0x0c, 0x42, 0x02, 0x18, 0x01, 0x52, 0x0b, 0x63, 0x65, 0x72, 0x74, 0x69, 0x66, 0x69, 0x63,
+	0x61, 0x74, 0x65, 0x12, 0x23, 0x0a, 0x0b, 0x70, 0x72, 0x69, 0x76, 0x61, 0x74, 0x65, 0x5f, 0x6b,
+	0x65, 0x79, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0c, 0x42, 0x02, 0x18, 0x01, 0x52, 0x0a, 0x70, 0x72,
+	0x69, 0x76, 0x61, 0x74, 0x65, 0x4b, 0x65, 0x79, 0x12, 0x29, 0x0a, 0x0f, 0x72, 0x61, 0x77, 0x5f,
+	0x63, 0x65, 0x72, 0x74, 0x69, 0x66, 0x69, 0x63, 0x61, 0x74, 0x65, 0x18, 0x05, 0x20, 0x01, 0x28,
+	0x0c, 0x48, 0x00, 0x52, 0x0e, 0x72, 0x61, 0x77, 0x43, 0x65, 0x72, 0x74, 0x69, 0x66, 0x69, 0x63,
+	0x61, 0x74, 0x65, 0x12, 0x48, 0x0a, 0x0b, 0x63, 0x65, 0x72, 0x74, 0x5f, 0x73, 0x6f, 0x75, 0x72,
+	0x63, 0x65, 0x18, 0x06, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x25, 0x2e, 0x67, 0x6e, 0x73, 0x69, 0x2e,
+	0x63, 0x65, 0x72, 0x74, 0x7a, 0x2e, 0x76, 0x31, 0x2e, 0x43, 0x65, 0x72, 0x74, 0x69, 0x66, 0x69,
+	0x63, 0x61, 0x74, 0x65, 0x2e, 0x43, 0x65, 0x72, 0x74, 0x53, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x48,
+	0x00, 0x52, 0x0a, 0x63, 0x65, 0x72, 0x74, 0x53, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x12, 0x28, 0x0a,
+	0x0f, 0x72, 0x61, 0x77, 0x5f, 0x70, 0x72, 0x69, 0x76, 0x61, 0x74, 0x65, 0x5f, 0x6b, 0x65, 0x79,
+	0x18, 0x07, 0x20, 0x01, 0x28, 0x0c, 0x48, 0x01, 0x52, 0x0d, 0x72, 0x61, 0x77, 0x50, 0x72, 0x69,
+	0x76, 0x61, 0x74, 0x65, 0x4b, 0x65, 0x79, 0x12, 0x45, 0x0a, 0x0a, 0x6b, 0x65, 0x79, 0x5f, 0x73,
+	0x6f, 0x75, 0x72, 0x63, 0x65, 0x18, 0x08, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x24, 0x2e, 0x67, 0x6e,
+	0x73, 0x69, 0x2e, 0x63, 0x65, 0x72, 0x74, 0x7a, 0x2e, 0x76, 0x31, 0x2e, 0x43, 0x65, 0x72, 0x74,
+	0x69, 0x66, 0x69, 0x63, 0x61, 0x74, 0x65, 0x2e, 0x4b, 0x65, 0x79, 0x53, 0x6f, 0x75, 0x72, 0x63,
+	0x65, 0x48, 0x01, 0x52, 0x09, 0x6b, 0x65, 0x79, 0x53, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x22, 0x5a,
+	0x0a, 0x0a, 0x43, 0x65, 0x72, 0x74, 0x53, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x12, 0x1b, 0x0a, 0x17,
+	0x43, 0x45, 0x52, 0x54, 0x5f, 0x53, 0x4f, 0x55, 0x52, 0x43, 0x45, 0x5f, 0x55, 0x4e, 0x53, 0x50,
+	0x45, 0x43, 0x49, 0x46, 0x49, 0x45, 0x44, 0x10, 0x00, 0x12, 0x17, 0x0a, 0x13, 0x43, 0x45, 0x52,
+	0x54, 0x5f, 0x53, 0x4f, 0x55, 0x52, 0x43, 0x45, 0x5f, 0x4f, 0x49, 0x44, 0x45, 0x56, 0x49, 0x44,
+	0x10, 0x01, 0x12, 0x16, 0x0a, 0x12, 0x43, 0x45, 0x52, 0x54, 0x5f, 0x53, 0x4f, 0x55, 0x52, 0x43,
+	0x45, 0x5f, 0x49, 0x44, 0x45, 0x56, 0x49, 0x44, 0x10, 0x02, 0x22, 0x5c, 0x0a, 0x09, 0x4b, 0x65,
+	0x79, 0x53, 0x6f, 0x75, 0x72, 0x63, 0x65, 0x12, 0x1a, 0x0a, 0x16, 0x4b, 0x45, 0x59, 0x5f, 0x53,
+	0x4f, 0x55, 0x52, 0x43, 0x45, 0x5f, 0x55, 0x4e, 0x53, 0x50, 0x45, 0x43, 0x49, 0x46, 0x49, 0x45,
+	0x44, 0x10, 0x00, 0x12, 0x19, 0x0a, 0x15, 0x4b, 0x45, 0x59, 0x5f, 0x53, 0x4f, 0x55, 0x52, 0x43,
+	0x45, 0x5f, 0x49, 0x44, 0x45, 0x56, 0x49, 0x44, 0x5f, 0x54, 0x50, 0x4d, 0x10, 0x01, 0x12, 0x18,
+	0x0a, 0x14, 0x4b, 0x45, 0x59, 0x5f, 0x53, 0x4f, 0x55, 0x52, 0x43, 0x45, 0x5f, 0x47, 0x45, 0x4e,
+	0x45, 0x52, 0x41, 0x54, 0x45, 0x44, 0x10, 0x02, 0x42, 0x12, 0x0a, 0x10, 0x63, 0x65, 0x72, 0x74,
+	0x69, 0x66, 0x69, 0x63, 0x61, 0x74, 0x65, 0x5f, 0x74, 0x79, 0x70, 0x65, 0x42, 0x12, 0x0a, 0x10,
+	0x70, 0x72, 0x69, 0x76, 0x61, 0x74, 0x65, 0x5f, 0x6b, 0x65, 0x79, 0x5f, 0x74, 0x79, 0x70, 0x65,
 	0x22, 0xdf, 0x01, 0x0a, 0x19, 0x43, 0x65, 0x72, 0x74, 0x69, 0x66, 0x69, 0x63, 0x61, 0x74, 0x65,
 	0x52, 0x65, 0x76, 0x6f, 0x63, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x4c, 0x69, 0x73, 0x74, 0x12, 0x32,
 	0x0a, 0x04, 0x74, 0x79, 0x70, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x1e, 0x2e, 0x67,
@@ -2167,83 +2380,87 @@ func file_github_com_openconfig_gnsi_certz_certz_proto_rawDescGZIP() []byte {
 	return file_github_com_openconfig_gnsi_certz_certz_proto_rawDescData
 }
 
-var file_github_com_openconfig_gnsi_certz_certz_proto_enumTypes = make([]protoimpl.EnumInfo, 4)
+var file_github_com_openconfig_gnsi_certz_certz_proto_enumTypes = make([]protoimpl.EnumInfo, 6)
 var file_github_com_openconfig_gnsi_certz_certz_proto_msgTypes = make([]protoimpl.MessageInfo, 25)
 var file_github_com_openconfig_gnsi_certz_certz_proto_goTypes = []interface{}{
 	(CSRSuite)(0),                           // 0: gnsi.certz.v1.CSRSuite
 	(CertificateType)(0),                    // 1: gnsi.certz.v1.CertificateType
 	(CertificateEncoding)(0),                // 2: gnsi.certz.v1.CertificateEncoding
-	(ExistingEntity_EntityType)(0),          // 3: gnsi.certz.v1.ExistingEntity.EntityType
-	(*RotateCertificateRequest)(nil),        // 4: gnsi.certz.v1.RotateCertificateRequest
-	(*RotateCertificateResponse)(nil),       // 5: gnsi.certz.v1.RotateCertificateResponse
-	(*FinalizeRequest)(nil),                 // 6: gnsi.certz.v1.FinalizeRequest
-	(*AddProfileRequest)(nil),               // 7: gnsi.certz.v1.AddProfileRequest
-	(*AddProfileResponse)(nil),              // 8: gnsi.certz.v1.AddProfileResponse
-	(*DeleteProfileRequest)(nil),            // 9: gnsi.certz.v1.DeleteProfileRequest
-	(*DeleteProfileResponse)(nil),           // 10: gnsi.certz.v1.DeleteProfileResponse
-	(*GetProfileListRequest)(nil),           // 11: gnsi.certz.v1.GetProfileListRequest
-	(*GetProfileListResponse)(nil),          // 12: gnsi.certz.v1.GetProfileListResponse
-	(*V3ExtensionSAN)(nil),                  // 13: gnsi.certz.v1.V3ExtensionSAN
-	(*CSRParams)(nil),                       // 14: gnsi.certz.v1.CSRParams
-	(*CanGenerateCSRRequest)(nil),           // 15: gnsi.certz.v1.CanGenerateCSRRequest
-	(*CanGenerateCSRResponse)(nil),          // 16: gnsi.certz.v1.CanGenerateCSRResponse
-	(*CertificateChain)(nil),                // 17: gnsi.certz.v1.CertificateChain
-	(*Certificate)(nil),                     // 18: gnsi.certz.v1.Certificate
-	(*CertificateRevocationList)(nil),       // 19: gnsi.certz.v1.CertificateRevocationList
-	(*CertificateRevocationListBundle)(nil), // 20: gnsi.certz.v1.CertificateRevocationListBundle
-	(*AuthenticationPolicy)(nil),            // 21: gnsi.certz.v1.AuthenticationPolicy
-	(*Entity)(nil),                          // 22: gnsi.certz.v1.Entity
-	(*ExistingEntity)(nil),                  // 23: gnsi.certz.v1.ExistingEntity
-	(*UploadRequest)(nil),                   // 24: gnsi.certz.v1.UploadRequest
-	(*UploadResponse)(nil),                  // 25: gnsi.certz.v1.UploadResponse
-	(*CertificateSigningRequest)(nil),       // 26: gnsi.certz.v1.CertificateSigningRequest
-	(*GenerateCSRRequest)(nil),              // 27: gnsi.certz.v1.GenerateCSRRequest
-	(*GenerateCSRResponse)(nil),             // 28: gnsi.certz.v1.GenerateCSRResponse
-	(*anypb.Any)(nil),                       // 29: google.protobuf.Any
+	(Certificate_CertSource)(0),             // 3: gnsi.certz.v1.Certificate.CertSource
+	(Certificate_KeySource)(0),              // 4: gnsi.certz.v1.Certificate.KeySource
+	(ExistingEntity_EntityType)(0),          // 5: gnsi.certz.v1.ExistingEntity.EntityType
+	(*RotateCertificateRequest)(nil),        // 6: gnsi.certz.v1.RotateCertificateRequest
+	(*RotateCertificateResponse)(nil),       // 7: gnsi.certz.v1.RotateCertificateResponse
+	(*FinalizeRequest)(nil),                 // 8: gnsi.certz.v1.FinalizeRequest
+	(*AddProfileRequest)(nil),               // 9: gnsi.certz.v1.AddProfileRequest
+	(*AddProfileResponse)(nil),              // 10: gnsi.certz.v1.AddProfileResponse
+	(*DeleteProfileRequest)(nil),            // 11: gnsi.certz.v1.DeleteProfileRequest
+	(*DeleteProfileResponse)(nil),           // 12: gnsi.certz.v1.DeleteProfileResponse
+	(*GetProfileListRequest)(nil),           // 13: gnsi.certz.v1.GetProfileListRequest
+	(*GetProfileListResponse)(nil),          // 14: gnsi.certz.v1.GetProfileListResponse
+	(*V3ExtensionSAN)(nil),                  // 15: gnsi.certz.v1.V3ExtensionSAN
+	(*CSRParams)(nil),                       // 16: gnsi.certz.v1.CSRParams
+	(*CanGenerateCSRRequest)(nil),           // 17: gnsi.certz.v1.CanGenerateCSRRequest
+	(*CanGenerateCSRResponse)(nil),          // 18: gnsi.certz.v1.CanGenerateCSRResponse
+	(*CertificateChain)(nil),                // 19: gnsi.certz.v1.CertificateChain
+	(*Certificate)(nil),                     // 20: gnsi.certz.v1.Certificate
+	(*CertificateRevocationList)(nil),       // 21: gnsi.certz.v1.CertificateRevocationList
+	(*CertificateRevocationListBundle)(nil), // 22: gnsi.certz.v1.CertificateRevocationListBundle
+	(*AuthenticationPolicy)(nil),            // 23: gnsi.certz.v1.AuthenticationPolicy
+	(*Entity)(nil),                          // 24: gnsi.certz.v1.Entity
+	(*ExistingEntity)(nil),                  // 25: gnsi.certz.v1.ExistingEntity
+	(*UploadRequest)(nil),                   // 26: gnsi.certz.v1.UploadRequest
+	(*UploadResponse)(nil),                  // 27: gnsi.certz.v1.UploadResponse
+	(*CertificateSigningRequest)(nil),       // 28: gnsi.certz.v1.CertificateSigningRequest
+	(*GenerateCSRRequest)(nil),              // 29: gnsi.certz.v1.GenerateCSRRequest
+	(*GenerateCSRResponse)(nil),             // 30: gnsi.certz.v1.GenerateCSRResponse
+	(*anypb.Any)(nil),                       // 31: google.protobuf.Any
 }
 var file_github_com_openconfig_gnsi_certz_certz_proto_depIdxs = []int32{
-	27, // 0: gnsi.certz.v1.RotateCertificateRequest.generate_csr:type_name -> gnsi.certz.v1.GenerateCSRRequest
-	24, // 1: gnsi.certz.v1.RotateCertificateRequest.certificates:type_name -> gnsi.certz.v1.UploadRequest
-	6,  // 2: gnsi.certz.v1.RotateCertificateRequest.finalize_rotation:type_name -> gnsi.certz.v1.FinalizeRequest
-	28, // 3: gnsi.certz.v1.RotateCertificateResponse.generated_csr:type_name -> gnsi.certz.v1.GenerateCSRResponse
-	25, // 4: gnsi.certz.v1.RotateCertificateResponse.certificates:type_name -> gnsi.certz.v1.UploadResponse
+	29, // 0: gnsi.certz.v1.RotateCertificateRequest.generate_csr:type_name -> gnsi.certz.v1.GenerateCSRRequest
+	26, // 1: gnsi.certz.v1.RotateCertificateRequest.certificates:type_name -> gnsi.certz.v1.UploadRequest
+	8,  // 2: gnsi.certz.v1.RotateCertificateRequest.finalize_rotation:type_name -> gnsi.certz.v1.FinalizeRequest
+	30, // 3: gnsi.certz.v1.RotateCertificateResponse.generated_csr:type_name -> gnsi.certz.v1.GenerateCSRResponse
+	27, // 4: gnsi.certz.v1.RotateCertificateResponse.certificates:type_name -> gnsi.certz.v1.UploadResponse
 	0,  // 5: gnsi.certz.v1.CSRParams.csr_suite:type_name -> gnsi.certz.v1.CSRSuite
-	13, // 6: gnsi.certz.v1.CSRParams.san:type_name -> gnsi.certz.v1.V3ExtensionSAN
-	14, // 7: gnsi.certz.v1.CanGenerateCSRRequest.params:type_name -> gnsi.certz.v1.CSRParams
-	18, // 8: gnsi.certz.v1.CertificateChain.certificate:type_name -> gnsi.certz.v1.Certificate
-	17, // 9: gnsi.certz.v1.CertificateChain.parent:type_name -> gnsi.certz.v1.CertificateChain
+	15, // 6: gnsi.certz.v1.CSRParams.san:type_name -> gnsi.certz.v1.V3ExtensionSAN
+	16, // 7: gnsi.certz.v1.CanGenerateCSRRequest.params:type_name -> gnsi.certz.v1.CSRParams
+	20, // 8: gnsi.certz.v1.CertificateChain.certificate:type_name -> gnsi.certz.v1.Certificate
+	19, // 9: gnsi.certz.v1.CertificateChain.parent:type_name -> gnsi.certz.v1.CertificateChain
 	1,  // 10: gnsi.certz.v1.Certificate.type:type_name -> gnsi.certz.v1.CertificateType
 	2,  // 11: gnsi.certz.v1.Certificate.encoding:type_name -> gnsi.certz.v1.CertificateEncoding
-	1,  // 12: gnsi.certz.v1.CertificateRevocationList.type:type_name -> gnsi.certz.v1.CertificateType
-	2,  // 13: gnsi.certz.v1.CertificateRevocationList.encoding:type_name -> gnsi.certz.v1.CertificateEncoding
-	19, // 14: gnsi.certz.v1.CertificateRevocationListBundle.certificate_revocation_lists:type_name -> gnsi.certz.v1.CertificateRevocationList
-	29, // 15: gnsi.certz.v1.AuthenticationPolicy.serialized:type_name -> google.protobuf.Any
-	17, // 16: gnsi.certz.v1.Entity.certificate_chain:type_name -> gnsi.certz.v1.CertificateChain
-	17, // 17: gnsi.certz.v1.Entity.trust_bundle:type_name -> gnsi.certz.v1.CertificateChain
-	20, // 18: gnsi.certz.v1.Entity.certificate_revocation_list_bundle:type_name -> gnsi.certz.v1.CertificateRevocationListBundle
-	21, // 19: gnsi.certz.v1.Entity.authentication_policy:type_name -> gnsi.certz.v1.AuthenticationPolicy
-	23, // 20: gnsi.certz.v1.Entity.existing_entity:type_name -> gnsi.certz.v1.ExistingEntity
-	3,  // 21: gnsi.certz.v1.ExistingEntity.entity_type:type_name -> gnsi.certz.v1.ExistingEntity.EntityType
-	22, // 22: gnsi.certz.v1.UploadRequest.entities:type_name -> gnsi.certz.v1.Entity
-	1,  // 23: gnsi.certz.v1.CertificateSigningRequest.type:type_name -> gnsi.certz.v1.CertificateType
-	2,  // 24: gnsi.certz.v1.CertificateSigningRequest.encoding:type_name -> gnsi.certz.v1.CertificateEncoding
-	14, // 25: gnsi.certz.v1.GenerateCSRRequest.params:type_name -> gnsi.certz.v1.CSRParams
-	26, // 26: gnsi.certz.v1.GenerateCSRResponse.certificate_signing_request:type_name -> gnsi.certz.v1.CertificateSigningRequest
-	4,  // 27: gnsi.certz.v1.Certz.Rotate:input_type -> gnsi.certz.v1.RotateCertificateRequest
-	7,  // 28: gnsi.certz.v1.Certz.AddProfile:input_type -> gnsi.certz.v1.AddProfileRequest
-	9,  // 29: gnsi.certz.v1.Certz.DeleteProfile:input_type -> gnsi.certz.v1.DeleteProfileRequest
-	11, // 30: gnsi.certz.v1.Certz.GetProfileList:input_type -> gnsi.certz.v1.GetProfileListRequest
-	15, // 31: gnsi.certz.v1.Certz.CanGenerateCSR:input_type -> gnsi.certz.v1.CanGenerateCSRRequest
-	5,  // 32: gnsi.certz.v1.Certz.Rotate:output_type -> gnsi.certz.v1.RotateCertificateResponse
-	8,  // 33: gnsi.certz.v1.Certz.AddProfile:output_type -> gnsi.certz.v1.AddProfileResponse
-	10, // 34: gnsi.certz.v1.Certz.DeleteProfile:output_type -> gnsi.certz.v1.DeleteProfileResponse
-	12, // 35: gnsi.certz.v1.Certz.GetProfileList:output_type -> gnsi.certz.v1.GetProfileListResponse
-	16, // 36: gnsi.certz.v1.Certz.CanGenerateCSR:output_type -> gnsi.certz.v1.CanGenerateCSRResponse
-	32, // [32:37] is the sub-list for method output_type
-	27, // [27:32] is the sub-list for method input_type
-	27, // [27:27] is the sub-list for extension type_name
-	27, // [27:27] is the sub-list for extension extendee
-	0,  // [0:27] is the sub-list for field type_name
+	3,  // 12: gnsi.certz.v1.Certificate.cert_source:type_name -> gnsi.certz.v1.Certificate.CertSource
+	4,  // 13: gnsi.certz.v1.Certificate.key_source:type_name -> gnsi.certz.v1.Certificate.KeySource
+	1,  // 14: gnsi.certz.v1.CertificateRevocationList.type:type_name -> gnsi.certz.v1.CertificateType
+	2,  // 15: gnsi.certz.v1.CertificateRevocationList.encoding:type_name -> gnsi.certz.v1.CertificateEncoding
+	21, // 16: gnsi.certz.v1.CertificateRevocationListBundle.certificate_revocation_lists:type_name -> gnsi.certz.v1.CertificateRevocationList
+	31, // 17: gnsi.certz.v1.AuthenticationPolicy.serialized:type_name -> google.protobuf.Any
+	19, // 18: gnsi.certz.v1.Entity.certificate_chain:type_name -> gnsi.certz.v1.CertificateChain
+	19, // 19: gnsi.certz.v1.Entity.trust_bundle:type_name -> gnsi.certz.v1.CertificateChain
+	22, // 20: gnsi.certz.v1.Entity.certificate_revocation_list_bundle:type_name -> gnsi.certz.v1.CertificateRevocationListBundle
+	23, // 21: gnsi.certz.v1.Entity.authentication_policy:type_name -> gnsi.certz.v1.AuthenticationPolicy
+	25, // 22: gnsi.certz.v1.Entity.existing_entity:type_name -> gnsi.certz.v1.ExistingEntity
+	5,  // 23: gnsi.certz.v1.ExistingEntity.entity_type:type_name -> gnsi.certz.v1.ExistingEntity.EntityType
+	24, // 24: gnsi.certz.v1.UploadRequest.entities:type_name -> gnsi.certz.v1.Entity
+	1,  // 25: gnsi.certz.v1.CertificateSigningRequest.type:type_name -> gnsi.certz.v1.CertificateType
+	2,  // 26: gnsi.certz.v1.CertificateSigningRequest.encoding:type_name -> gnsi.certz.v1.CertificateEncoding
+	16, // 27: gnsi.certz.v1.GenerateCSRRequest.params:type_name -> gnsi.certz.v1.CSRParams
+	28, // 28: gnsi.certz.v1.GenerateCSRResponse.certificate_signing_request:type_name -> gnsi.certz.v1.CertificateSigningRequest
+	6,  // 29: gnsi.certz.v1.Certz.Rotate:input_type -> gnsi.certz.v1.RotateCertificateRequest
+	9,  // 30: gnsi.certz.v1.Certz.AddProfile:input_type -> gnsi.certz.v1.AddProfileRequest
+	11, // 31: gnsi.certz.v1.Certz.DeleteProfile:input_type -> gnsi.certz.v1.DeleteProfileRequest
+	13, // 32: gnsi.certz.v1.Certz.GetProfileList:input_type -> gnsi.certz.v1.GetProfileListRequest
+	17, // 33: gnsi.certz.v1.Certz.CanGenerateCSR:input_type -> gnsi.certz.v1.CanGenerateCSRRequest
+	7,  // 34: gnsi.certz.v1.Certz.Rotate:output_type -> gnsi.certz.v1.RotateCertificateResponse
+	10, // 35: gnsi.certz.v1.Certz.AddProfile:output_type -> gnsi.certz.v1.AddProfileResponse
+	12, // 36: gnsi.certz.v1.Certz.DeleteProfile:output_type -> gnsi.certz.v1.DeleteProfileResponse
+	14, // 37: gnsi.certz.v1.Certz.GetProfileList:output_type -> gnsi.certz.v1.GetProfileListResponse
+	18, // 38: gnsi.certz.v1.Certz.CanGenerateCSR:output_type -> gnsi.certz.v1.CanGenerateCSRResponse
+	34, // [34:39] is the sub-list for method output_type
+	29, // [29:34] is the sub-list for method input_type
+	29, // [29:29] is the sub-list for extension type_name
+	29, // [29:29] is the sub-list for extension extendee
+	0,  // [0:29] is the sub-list for field type_name
 }
 
 func init() { file_github_com_openconfig_gnsi_certz_certz_proto_init() }
@@ -2562,6 +2779,12 @@ func file_github_com_openconfig_gnsi_certz_certz_proto_init() {
 		(*RotateCertificateResponse_GeneratedCsr)(nil),
 		(*RotateCertificateResponse_Certificates)(nil),
 	}
+	file_github_com_openconfig_gnsi_certz_certz_proto_msgTypes[14].OneofWrappers = []interface{}{
+		(*Certificate_RawCertificate)(nil),
+		(*Certificate_CertSource_)(nil),
+		(*Certificate_RawPrivateKey)(nil),
+		(*Certificate_KeySource_)(nil),
+	}
 	file_github_com_openconfig_gnsi_certz_certz_proto_msgTypes[17].OneofWrappers = []interface{}{
 		(*AuthenticationPolicy_Serialized)(nil),
 	}
@@ -2577,7 +2800,7 @@ func file_github_com_openconfig_gnsi_certz_certz_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_github_com_openconfig_gnsi_certz_certz_proto_rawDesc,
-			NumEnums:      4,
+			NumEnums:      6,
 			NumMessages:   25,
 			NumExtensions: 0,
 			NumServices:   1,
