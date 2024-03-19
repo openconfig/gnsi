@@ -12,7 +12,7 @@ services include:
   3. Certificate management
   4. Console access management
   5. Secure Shell (ssh) certificate/key management
-  6. Associated YANG models for telemetry collection of gNSI systems.
+  6. Associated YANG models for telemetry collection of gNSI systems are defined at the [OpenConfig public data model repository](https://github.com/openconfig/public/tree/master/release/models/gnsi)
 
 ## Releases
 

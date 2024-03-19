@@ -35,23 +35,6 @@ of this history should be configurable by the administrator.  The default
 depth and configurability are subject to implementation support, but should
 be documented.
 
-## OpenConfig Extension for the gMNI gRPC-based Accounting telemetry
-### gnsi-acctz.yang
-An overview of the changes defined in the gnsi-acctz.yang file are shown below.
+## OpenConfig data models for gNSI Accounting
 
-```txt
-module: gnsi-acctz
-  augment /oc-sys:system/oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server:
-    +--ro counters
-       +--ro last-cleared-on?   oc-types:timeticks64
-       +--ro client-counters
-       |  +--ro history_istruncated?   oc-yang:counter64
-       |  +--ro IdleTimeouts?          oc-yang:counter64
-       |  +--ro RecordRequests?        oc-yang:counter64
-       |  +--ro RecordResponses?       oc-yang:counter64
-       +--ro source-counters
-          +--ro source-records* [service type]
-             +--ro service    service-request
-             +--ro type       service-type
-             +--ro records?   oc-yang:counter64
-```
+Yang data models for acctz are defined in the [OpenConfig public repository(https://github.com/openconfig/public/tree/master/release/models/gnsi)].  Documentation for OpenConfig including searchable list of paths and tree representations are at [OpenConfig.net](https://openconfig.net/projects/models/)
