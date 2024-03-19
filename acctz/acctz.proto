@@ -284,14 +284,32 @@ message GrpcService {
 
   // A string of bytes that are gRPC encoded. Best to decode using
   // PROTO_ANY.
-  repeated google.protobuf.Any payloads = 3;
+  // Deprecated in favour of using the payload field.
+  // A warning when using this field: if a google.protobuf.Any value
+  // is truncated, then it will not be possible for the client to
+  // unmarshal this value upon receiving.
+  repeated google.protobuf.Any payloads = 3 [deprecated=true];
 
-  // True, if truncation of payloads occurs due to an implementation
+  // True, if truncation of payload occurs due to an implementation
   // limitation in the originating service, any middleware, or the receiver.
   bool payload_istruncated = 5;
 
   // Authorization details
   AuthzDetail authz = 6;
+
+  // the payload of the RPC, as either a string or proto-encoded.
+  // Note that this may be partially redacted to avoid leaking
+  // sensitive info (e.g. private keys rotated via certz/credentialz)
+  oneof payload {
+    // the payload in proto form.
+    // (suitable for small messages which don't require truncation)
+    // This can be unmarshalled by the acctz client.
+    google.protobuf.Any proto_val = 7;
+
+    // A string describing the payload of the RPC.
+    // This may be truncated.
+    string string_val = 8;
+  }
 }
 
 // An accounting record message is generated everytime the user types a
@@ -304,14 +322,25 @@ message RecordResponse {
   // since the unix epoch (Jan 1, 1970 00:00:00 UTC).
   google.protobuf.Timestamp timestamp = 2;
 
-  // True, if the server's history does not include a message with the given
-  // RecordRequest.timestamp or an older record, indicating that history
-  // truncation has occurred relative to the timestamp reference point and
-  // records might have been missed.
-  // If RecordRequest.timestamp was not equal to a previously received
-  // RecordResponse.timestamp received, instead randomly chosen, the Collector
-  // can not know if it missed records.
-  // If RecordRequest.timestamp = 0, this must be false.
+  // True, if the server's history is missing records prior to the time
+  // specified in the timestamp of the RecordResponse message. This can happen
+  // in the below scenarios,
+  // 1. A client connects and sends RecordRequest(timestamp=t1). If the server
+  //    does not have all records after time t1, the first RecordResponse it
+  //    sends will have this field as True. Subsequent RecordResponses
+  //    may have this field as false.
+  // 2. A client connects and sends RecordResponse(timestamp=t1) where t1 is
+  //    earlier than the uptime of the switch. In such scenarios, the first
+  //    RecordResponse will have this field as True. Subsequent RecordResponses
+  //    may have this field as false.
+  // 3. A client has an active stream where it's getting RecordResponse messages
+  //    from the server. The server detects that some events were not accounted
+  //    for, the next RecordResponse message it sends to the client will have
+  //    this field as True. Subsequent RecordResponses may have this field as
+  //    false.
+  // If timestamp=0 in the RecordRequest message, the first RecordResponse
+  // response message will have this field as False irrespective of history
+  // truncation. Subsequent RecordResponses may have this field as false.
   bool history_istruncated = 3;
 
   // Service request details of the accounting record.
@@ -324,7 +353,14 @@ message RecordResponse {
   // accomplish the request on the system.
   repeated string task_ids = 7;
 
-  // Name of the component where the accounting record originated from
+  // Name of the component in a vendor system configuration where the accounting
+  // record originated from. This helps to indentify the source of the accouting
+  // record when multiple components can generate them. This is how the
+  // component is identified in the components hierarchy in the
+  // openconfig-platform model.
+  // For reference: /components/component[name="chassis0"]
+  // Eg: component_name = "linecard0"
+  //     component_name = "chassis0"
   string component_name = 8;
 }
 

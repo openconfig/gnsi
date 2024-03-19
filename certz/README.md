@@ -40,10 +40,9 @@ Certificate Authority chain of certificates (a.k.a. a CA trust bundle) and
 a set of Certificate Revocation Lists into a set that then can be assigned
 as a whole to a gRPC server.
 
-There is at least one profile present on a target - the one that is used by
-the gNxI server. Its ID is `gNxI` but when the `ssl_profile_id` field in the
+There is always at least one profile present on a target - the `system_default_profile` which is vendor provided. This profile cannot be changed. If the use but when the `ssl_profile_id` field in the
 `RotateCertificateRequest` message is not set (or set to an empty string) it
-also refers this SSL profile.
+also refers this SSL profile. (This statement will be deprecated once all vendors standardize on the key name)
 
 Profiles existing on a target can be discovered using the
 `Certz.GetProfileList()` RPC.
@@ -97,14 +96,18 @@ policy before accepting the connection.
 
 The system will always provide a default TLS profile that uses the IDevID cert.
 This profile will always be available and cannot be changed. It should use the name
-"gNxI".
+"system_default_profile".
 
 An attempt to change or delete this profile will return an error.
+
+The system will start with this profile and either bootz or enrollz will be responsible for creating an alternate profile during device turnup if those workflows are used.
 
 #### Create a SSL profile
 
 Call `Certz.AddProfile` RPC with the `ssl_profile_id` field specifying the ID
 of the new SSL profile.
+A new profile can choose to use existing artifacts from other profiles, via sending `Entity` messages with `ExistingEntity` set with the `ssl_profile_id` set to the source
+profile to copy from, and the `entity_type` field set to the type of entity to be copied.
 
 #### Delete a SSL profile
 

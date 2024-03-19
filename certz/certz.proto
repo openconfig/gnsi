@@ -41,7 +41,8 @@ option go_package = "github.com/openconfig/gnsi/cert";
 //
 // Target (as seen from gNSI.certificate microservice point of view)
 // |
-// +-+ SSL profile for gNXI; always present; ssl_profile_id := "gNxI"
+// +-+ SSL profile for gNXI; always present and immutable; 
+//   | ssl_profile_id := "system_default_profile"
 // | |
 // | +-+ certificate
 // | | +- certificate (with public key)
@@ -452,11 +453,53 @@ message Certificate {
   // Actual certificate.
   // The exact encoding depends upon the type of certificate.
   // for X509, this should be a PEM encoded Certificate.
-  bytes certificate = 3;
+  // Deprecated in favour of certificate_type
+  bytes certificate = 3 [deprecated=true];
 
   // Optional.
+  // PEM encoded private key.
   // Not needed if the device knows the private key or does not have to know it.
-  bytes private_key = 4;
+  // Deprecated in favour of private_key_type
+  bytes private_key = 4 [deprecated=true];
+
+  enum CertSource {
+    CERT_SOURCE_UNSPECIFIED = 0;
+
+    // certificates present on the device already
+    CERT_SOURCE_OIDEVID = 1;
+    CERT_SOURCE_IDEVID = 2;
+  }
+
+  oneof certificate_type {
+    // Actual certificate
+    // The exact encoding depends upon the type of certificate.
+    // for X509, this should be a PEM encoded Certificate.
+    bytes raw_certificate = 5;
+
+    // specify an alternative source for the certificate
+    CertSource cert_source = 6;
+  }
+
+  enum KeySource {
+    // KEY_SOURCE_UNSPECIFIED can be used in the case where the
+    // certificate does not need a private key (e.g. trusted certs)
+    KEY_SOURCE_UNSPECIFIED = 0;
+
+    // key is IDevID key stored in TPM
+    KEY_SOURCE_IDEVID_TPM = 1;
+
+    // key was generated with a CSR as part of the current Rotate RPC
+    KEY_SOURCE_GENERATED = 2;
+  }
+
+  oneof private_key_type {
+    // PEM encoded private key
+    bytes raw_private_key = 7;
+
+    // specify an alternative source for the private key
+    // or use KEY_SOURCE_UNSPECIFIED if no key is needed
+    KeySource key_source = 8;
+  }
 }
 
 // A certificate revocation list (CRL)
@@ -515,7 +558,29 @@ message Entity {
     CertificateChain trust_bundle = 4;
     CertificateRevocationListBundle certificate_revocation_list_bundle = 5;
     AuthenticationPolicy authentication_policy = 6;
+    ExistingEntity existing_entity = 7;
   }
+}
+
+// ExistingEntity is used to use artifacts provided by another SSL policy.
+// This operation will copy the entity from the provided policy and entity
+// type into the policy defined in the Rotate Request.
+// If the ssl profile doesn't exist a NotFound error will be returned.
+// If the entity type to copy is already being provided in the same
+// UploadRequest then an InvalidArgument error will be returned.
+// (e.g. EntityType == ENTITY_TYPE_TRUST_BUNDLE cannot be used
+// if the UploadRequest contains a trust_bundle entity already)
+message ExistingEntity {
+  enum EntityType {
+    ENTITY_TYPE_UNSPECIFIED = 0;
+    ENTITY_TYPE_CERTIFICATE_CHAIN = 1;
+    ENTITY_TYPE_TRUST_BUNDLE = 2;
+    ENTITY_TYPE_CERTIFICATE_REVOCATION_LIST_BUNDLE = 3;
+    ENTITY_TYPE_AUTHENTICATION_POLICY = 4;
+  }
+
+  string ssl_profile_id = 1;
+  EntityType entity_type = 2;
 }
 
 // UploadRequest instructs the target to store the given entities (certificate,
