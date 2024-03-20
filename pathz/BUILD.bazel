@@ -56,3 +56,9 @@ go_proto_library(
         "@com_github_openconfig_gnmi//proto/gnmi:gnmi_go_proto",
     ],
 )
+
+go_library(
+    name = "pathz",
+    embed = [":pathz_go_proto"],
+    importpath = "github.com/openconfig/gnsi/pathz",
+)
