@@ -41,7 +41,7 @@ option go_package = "github.com/openconfig/gnsi/cert";
 //
 // Target (as seen from gNSI.certificate microservice point of view)
 // |
-// +-+ SSL profile for gNXI; always present and immutable; 
+// +-+ SSL profile for gNXI; always present and immutable;
 //   | ssl_profile_id := "system_default_profile"
 // | |
 // | +-+ certificate
@@ -443,6 +443,12 @@ message CertificateChain {
   CertificateChain parent = 2;
 }
 
+message TrustBundle {
+  // A trust_bundle may be a PKCS#7 encoded string.
+  // This is a single string with many PEM encoded public keys included.
+  string pkcs7_block = 1;
+}
+
 // A certificate.
 message Certificate {
   // Type of certificate.
@@ -559,6 +565,7 @@ message Entity {
     CertificateRevocationListBundle certificate_revocation_list_bundle = 5;
     AuthenticationPolicy authentication_policy = 6;
     ExistingEntity existing_entity = 7;
+    TrustBundle trust_bundle_pcks7 = 8;
   }
 }
 
