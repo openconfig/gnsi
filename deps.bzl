@@ -25,8 +25,8 @@ def gnsi_deps():
       ],
       build_file_generation = "on",
       importpath = "github.com/openconfig/gnoi",
-      sum = "h1:ieThHVx5rRwAt6lqKOKzoA3pcr5FE5Xs40GJ7wNqshs=",
-      version = "v0.3.0",
+      sum = "h1:jbYXRMNmmvA8ZFv2FBLrYoxA1MFSui4tEui+8LAWyVc=",
+      version = "v0.4.0",
     )
   if not native.existing_rule("com_github_openconfig_gnmi"):
     go_repository(
