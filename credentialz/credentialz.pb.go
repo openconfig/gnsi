@@ -7,7 +7,11 @@
 package credentialz
 
 import (
+	context "context"
 	_ "github.com/openconfig/gnsi/version"
+	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -3591,4 +3595,257 @@ func file_github_com_openconfig_gnsi_credentialz_credentialz_proto_init() {
 	file_github_com_openconfig_gnsi_credentialz_credentialz_proto_rawDesc = nil
 	file_github_com_openconfig_gnsi_credentialz_credentialz_proto_goTypes = nil
 	file_github_com_openconfig_gnsi_credentialz_credentialz_proto_depIdxs = nil
+}
+
+// Reference imports to suppress errors if they are not otherwise used.
+var _ context.Context
+var _ grpc.ClientConnInterface
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion6
+
+// CredentialzClient is the client API for Credentialz service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type CredentialzClient interface {
+	RotateAccountCredentials(ctx context.Context, opts ...grpc.CallOption) (Credentialz_RotateAccountCredentialsClient, error)
+	RotateHostParameters(ctx context.Context, opts ...grpc.CallOption) (Credentialz_RotateHostParametersClient, error)
+	CanGenerateKey(ctx context.Context, in *CanGenerateKeyRequest, opts ...grpc.CallOption) (*CanGenerateKeyResponse, error)
+	GetPublicKeys(ctx context.Context, in *GetPublicKeysRequest, opts ...grpc.CallOption) (*GetPublicKeysResponse, error)
+}
+
+type credentialzClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewCredentialzClient(cc grpc.ClientConnInterface) CredentialzClient {
+	return &credentialzClient{cc}
+}
+
+func (c *credentialzClient) RotateAccountCredentials(ctx context.Context, opts ...grpc.CallOption) (Credentialz_RotateAccountCredentialsClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_Credentialz_serviceDesc.Streams[0], "/gnsi.credentialz.v1.Credentialz/RotateAccountCredentials", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &credentialzRotateAccountCredentialsClient{stream}
+	return x, nil
+}
+
+type Credentialz_RotateAccountCredentialsClient interface {
+	Send(*RotateAccountCredentialsRequest) error
+	Recv() (*RotateAccountCredentialsResponse, error)
+	grpc.ClientStream
+}
+
+type credentialzRotateAccountCredentialsClient struct {
+	grpc.ClientStream
+}
+
+func (x *credentialzRotateAccountCredentialsClient) Send(m *RotateAccountCredentialsRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *credentialzRotateAccountCredentialsClient) Recv() (*RotateAccountCredentialsResponse, error) {
+	m := new(RotateAccountCredentialsResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *credentialzClient) RotateHostParameters(ctx context.Context, opts ...grpc.CallOption) (Credentialz_RotateHostParametersClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_Credentialz_serviceDesc.Streams[1], "/gnsi.credentialz.v1.Credentialz/RotateHostParameters", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &credentialzRotateHostParametersClient{stream}
+	return x, nil
+}
+
+type Credentialz_RotateHostParametersClient interface {
+	Send(*RotateHostParametersRequest) error
+	Recv() (*RotateHostParametersResponse, error)
+	grpc.ClientStream
+}
+
+type credentialzRotateHostParametersClient struct {
+	grpc.ClientStream
+}
+
+func (x *credentialzRotateHostParametersClient) Send(m *RotateHostParametersRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *credentialzRotateHostParametersClient) Recv() (*RotateHostParametersResponse, error) {
+	m := new(RotateHostParametersResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *credentialzClient) CanGenerateKey(ctx context.Context, in *CanGenerateKeyRequest, opts ...grpc.CallOption) (*CanGenerateKeyResponse, error) {
+	out := new(CanGenerateKeyResponse)
+	err := c.cc.Invoke(ctx, "/gnsi.credentialz.v1.Credentialz/CanGenerateKey", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *credentialzClient) GetPublicKeys(ctx context.Context, in *GetPublicKeysRequest, opts ...grpc.CallOption) (*GetPublicKeysResponse, error) {
+	out := new(GetPublicKeysResponse)
+	err := c.cc.Invoke(ctx, "/gnsi.credentialz.v1.Credentialz/GetPublicKeys", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// CredentialzServer is the server API for Credentialz service.
+type CredentialzServer interface {
+	RotateAccountCredentials(Credentialz_RotateAccountCredentialsServer) error
+	RotateHostParameters(Credentialz_RotateHostParametersServer) error
+	CanGenerateKey(context.Context, *CanGenerateKeyRequest) (*CanGenerateKeyResponse, error)
+	GetPublicKeys(context.Context, *GetPublicKeysRequest) (*GetPublicKeysResponse, error)
+}
+
+// UnimplementedCredentialzServer can be embedded to have forward compatible implementations.
+type UnimplementedCredentialzServer struct {
+}
+
+func (*UnimplementedCredentialzServer) RotateAccountCredentials(Credentialz_RotateAccountCredentialsServer) error {
+	return status.Errorf(codes.Unimplemented, "method RotateAccountCredentials not implemented")
+}
+func (*UnimplementedCredentialzServer) RotateHostParameters(Credentialz_RotateHostParametersServer) error {
+	return status.Errorf(codes.Unimplemented, "method RotateHostParameters not implemented")
+}
+func (*UnimplementedCredentialzServer) CanGenerateKey(context.Context, *CanGenerateKeyRequest) (*CanGenerateKeyResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CanGenerateKey not implemented")
+}
+func (*UnimplementedCredentialzServer) GetPublicKeys(context.Context, *GetPublicKeysRequest) (*GetPublicKeysResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetPublicKeys not implemented")
+}
+
+func RegisterCredentialzServer(s *grpc.Server, srv CredentialzServer) {
+	s.RegisterService(&_Credentialz_serviceDesc, srv)
+}
+
+func _Credentialz_RotateAccountCredentials_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(CredentialzServer).RotateAccountCredentials(&credentialzRotateAccountCredentialsServer{stream})
+}
+
+type Credentialz_RotateAccountCredentialsServer interface {
+	Send(*RotateAccountCredentialsResponse) error
+	Recv() (*RotateAccountCredentialsRequest, error)
+	grpc.ServerStream
+}
+
+type credentialzRotateAccountCredentialsServer struct {
+	grpc.ServerStream
+}
+
+func (x *credentialzRotateAccountCredentialsServer) Send(m *RotateAccountCredentialsResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *credentialzRotateAccountCredentialsServer) Recv() (*RotateAccountCredentialsRequest, error) {
+	m := new(RotateAccountCredentialsRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func _Credentialz_RotateHostParameters_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(CredentialzServer).RotateHostParameters(&credentialzRotateHostParametersServer{stream})
+}
+
+type Credentialz_RotateHostParametersServer interface {
+	Send(*RotateHostParametersResponse) error
+	Recv() (*RotateHostParametersRequest, error)
+	grpc.ServerStream
+}
+
+type credentialzRotateHostParametersServer struct {
+	grpc.ServerStream
+}
+
+func (x *credentialzRotateHostParametersServer) Send(m *RotateHostParametersResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *credentialzRotateHostParametersServer) Recv() (*RotateHostParametersRequest, error) {
+	m := new(RotateHostParametersRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func _Credentialz_CanGenerateKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CanGenerateKeyRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CredentialzServer).CanGenerateKey(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/gnsi.credentialz.v1.Credentialz/CanGenerateKey",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CredentialzServer).CanGenerateKey(ctx, req.(*CanGenerateKeyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Credentialz_GetPublicKeys_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPublicKeysRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CredentialzServer).GetPublicKeys(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/gnsi.credentialz.v1.Credentialz/GetPublicKeys",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CredentialzServer).GetPublicKeys(ctx, req.(*GetPublicKeysRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+var _Credentialz_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "gnsi.credentialz.v1.Credentialz",
+	HandlerType: (*CredentialzServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "CanGenerateKey",
+			Handler:    _Credentialz_CanGenerateKey_Handler,
+		},
+		{
+			MethodName: "GetPublicKeys",
+			Handler:    _Credentialz_GetPublicKeys_Handler,
+		},
+	},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "RotateAccountCredentials",
+			Handler:       _Credentialz_RotateAccountCredentials_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
+		},
+		{
+			StreamName:    "RotateHostParameters",
+			Handler:       _Credentialz_RotateHostParameters_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
+		},
+	},
+	Metadata: "github.com/openconfig/gnsi/credentialz/credentialz.proto",
 }

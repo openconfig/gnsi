@@ -4,11 +4,6 @@ load("@bazel_gazelle//:def.bzl", "gazelle")
 gazelle(name = "gazelle")
 
 alias(
-    name = "yang",
-    actual = "//yang:ocbinds",
-)
-
-alias(
     name = "authz_go",
     actual = "//authz:authz",
 )

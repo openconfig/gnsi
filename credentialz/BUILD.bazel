@@ -16,8 +16,8 @@ filegroup(
 proto_library(
     name = "credentialz_proto",
     srcs = ["credentialz.proto"],
-    import_prefix = "github.com/openconfig/gnsi",
     deps = ["//version:version_proto"],
+    import_prefix = "github.com/openconfig/gnsi",
 )
 
 ##############################################################################
@@ -41,10 +41,7 @@ cpp_grpc_library(
 
 go_proto_library(
     name = "credentialz_go_proto",
-    compilers = [
-        "go_protoc_gen_go",
-        "go_protoc_gen_go_grpc",
-    ],
+    compilers = ["@io_bazel_rules_go//proto:go_grpc"],
     importpath = "github.com/openconfig/gnsi/credentialz",
     proto = ":credentialz_proto",
     deps = ["//version:version_go_proto"],
