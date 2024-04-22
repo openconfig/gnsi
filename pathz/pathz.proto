@@ -13,7 +13,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-
+// Define a list of policies, where the most specific policy is applied
+// on the device authorizing the action.
+//
+// Users may be referenced by user name, or as a group with a group name.
+// Groups are defined and managed in the authorization policy itself.
+//
+// Paths may be referenced in whole or in complete parts, ie:
+//   /interfaces/interface[name=Ethernet1/2/3]/state/counters
+//   /interfaces/interface[name=*]/state/oper-status
+//   /network-instances/network-instance/tables/table[proto=BGP][family=*]
+//
+// Paths are gnmi.Path protobufs.
+//
+// The most specific match is returned for a request, this means the longest
+// path and the most specific user match (user preferred over group).
+//
+// Additionally, the policy maintains a timestamp of creation
+// and version number from the underlying version control system.
+// The version/timestamp are available to requestors to verify which version
+// of policy is being applied at the time of the request.
+//
 // This file defines the gNSI API to be used for the OpenConfig Path-based
 // Authorization policy rotation.
 syntax = "proto3";
@@ -21,7 +41,6 @@ syntax = "proto3";
 package gnsi.pathz.v1;
 
 import "github.com/openconfig/gnmi/proto/gnmi/gnmi.proto";
-import "github.com/openconfig/gnsi/pathz/authorization.proto";
 import "github.com/openconfig/gnsi/version/version.proto";
 
 option go_package = "github.com/openconfig/gnsi/pathz";
@@ -233,4 +252,62 @@ message GetResponse {
 
   // The actual OpenConfig gNMI Path-based Authorization Policy.
   AuthorizationPolicy policy = 3;
+}
+
+// User is a singular username used only in the matching criteria.
+message User {
+  string name = 1;
+}
+
+// Group is a group of users, groups are a construct of the policy configuration
+// as a method to collect many users with the same authorizations together.
+message Group {
+  string name = 1;
+  repeated User users = 2;
+}
+
+// Action is the defined action for an AuthorizationPolicy.
+enum Action {
+  ACTION_UNSPECIFIED = 0;
+  ACTION_DENY = 1;
+  ACTION_PERMIT = 2;
+}
+
+// Mode is:
+//   READ: Ability to read/subscribe to data from the model.
+//   WRITE: Ability to mutate/write updates to data in the model.
+enum Mode {
+  MODE_UNSPECIFIED = 0;
+  MODE_READ = 1;
+  MODE_WRITE = 2;
+}
+
+message AuthorizationRule {
+  // Policy Identifier, a unique string per policy/rule, eg: uuid.
+  string id = 1;
+
+  oneof principal {
+    string user = 2;
+    string group = 3;
+  }
+
+  // Path is the request path, longest prefix (by path elements from left
+  // to right).
+  gnmi.Path path = 4;
+
+  // Permit or deny the user/group access to the path specified.
+  Action action = 5;
+
+  // Permit Read or Write access to the path specified.
+  Mode mode = 6;
+}
+
+// AuthorizationPolicy includes rules and user/group information.
+// The service which updates the policies will provide both a
+//   created_on - int64 - seconds since Jan 01 1970 00:00:00
+//   version - string - unique among the implementation's policies deployed.
+message AuthorizationPolicy {
+  repeated AuthorizationRule rules = 1;
+  // Groups of usernames collected for simplicity of policy expression.
+  repeated Group groups = 2;
 }
