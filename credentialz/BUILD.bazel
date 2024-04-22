@@ -4,9 +4,9 @@ load("@rules_proto//proto:defs.bzl", "proto_library")
 load("@rules_proto_grpc//cpp:defs.bzl", "cpp_grpc_library")
 load("//:common.bzl", "use_new_compilers")
 
-use_new_compilers()
-
 package(default_visibility = ["//visibility:public"])
+
+use_new_compilers()
 
 filegroup(
     name = "yang",
