@@ -2,13 +2,17 @@
 // versions:
 // 	protoc-gen-go v1.30.0
 // 	protoc        v3.21.10
-// source: github.com/openconfig/gnsi/pathz/pathz.proto
+// source: github.com/openconfig/gnsi/pathz/pathz/pathz.proto
 
 package pathz
 
 import (
+	context "context"
 	gnmi "github.com/openconfig/gnmi/proto/gnmi"
 	_ "github.com/openconfig/gnsi/version"
+	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -55,11 +59,11 @@ func (x PolicyInstance) String() string {
 }
 
 func (PolicyInstance) Descriptor() protoreflect.EnumDescriptor {
-	return file_github_com_openconfig_gnsi_pathz_pathz_proto_enumTypes[0].Descriptor()
+	return file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_enumTypes[0].Descriptor()
 }
 
 func (PolicyInstance) Type() protoreflect.EnumType {
-	return &file_github_com_openconfig_gnsi_pathz_pathz_proto_enumTypes[0]
+	return &file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_enumTypes[0]
 }
 
 func (x PolicyInstance) Number() protoreflect.EnumNumber {
@@ -68,7 +72,105 @@ func (x PolicyInstance) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use PolicyInstance.Descriptor instead.
 func (PolicyInstance) EnumDescriptor() ([]byte, []int) {
-	return file_github_com_openconfig_gnsi_pathz_pathz_proto_rawDescGZIP(), []int{0}
+	return file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_rawDescGZIP(), []int{0}
+}
+
+type Action int32
+
+const (
+	Action_ACTION_UNSPECIFIED Action = 0
+	Action_ACTION_DENY        Action = 1
+	Action_ACTION_PERMIT      Action = 2
+)
+
+// Enum value maps for Action.
+var (
+	Action_name = map[int32]string{
+		0: "ACTION_UNSPECIFIED",
+		1: "ACTION_DENY",
+		2: "ACTION_PERMIT",
+	}
+	Action_value = map[string]int32{
+		"ACTION_UNSPECIFIED": 0,
+		"ACTION_DENY":        1,
+		"ACTION_PERMIT":      2,
+	}
+)
+
+func (x Action) Enum() *Action {
+	p := new(Action)
+	*p = x
+	return p
+}
+
+func (x Action) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (Action) Descriptor() protoreflect.EnumDescriptor {
+	return file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_enumTypes[1].Descriptor()
+}
+
+func (Action) Type() protoreflect.EnumType {
+	return &file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_enumTypes[1]
+}
+
+func (x Action) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use Action.Descriptor instead.
+func (Action) EnumDescriptor() ([]byte, []int) {
+	return file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_rawDescGZIP(), []int{1}
+}
+
+type Mode int32
+
+const (
+	Mode_MODE_UNSPECIFIED Mode = 0
+	Mode_MODE_READ        Mode = 1
+	Mode_MODE_WRITE       Mode = 2
+)
+
+// Enum value maps for Mode.
+var (
+	Mode_name = map[int32]string{
+		0: "MODE_UNSPECIFIED",
+		1: "MODE_READ",
+		2: "MODE_WRITE",
+	}
+	Mode_value = map[string]int32{
+		"MODE_UNSPECIFIED": 0,
+		"MODE_READ":        1,
+		"MODE_WRITE":       2,
+	}
+)
+
+func (x Mode) Enum() *Mode {
+	p := new(Mode)
+	*p = x
+	return p
+}
+
+func (x Mode) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (Mode) Descriptor() protoreflect.EnumDescriptor {
+	return file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_enumTypes[2].Descriptor()
+}
+
+func (Mode) Type() protoreflect.EnumType {
+	return &file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_enumTypes[2]
+}
+
+func (x Mode) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use Mode.Descriptor instead.
+func (Mode) EnumDescriptor() ([]byte, []int) {
+	return file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_rawDescGZIP(), []int{2}
 }
 
 type RotateRequest struct {
@@ -86,7 +188,7 @@ type RotateRequest struct {
 func (x *RotateRequest) Reset() {
 	*x = RotateRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_github_com_openconfig_gnsi_pathz_pathz_proto_msgTypes[0]
+		mi := &file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -99,7 +201,7 @@ func (x *RotateRequest) String() string {
 func (*RotateRequest) ProtoMessage() {}
 
 func (x *RotateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_github_com_openconfig_gnsi_pathz_pathz_proto_msgTypes[0]
+	mi := &file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -112,7 +214,7 @@ func (x *RotateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RotateRequest.ProtoReflect.Descriptor instead.
 func (*RotateRequest) Descriptor() ([]byte, []int) {
-	return file_github_com_openconfig_gnsi_pathz_pathz_proto_rawDescGZIP(), []int{0}
+	return file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_rawDescGZIP(), []int{0}
 }
 
 func (m *RotateRequest) GetRotateRequest() isRotateRequest_RotateRequest {
@@ -172,7 +274,7 @@ type RotateResponse struct {
 func (x *RotateResponse) Reset() {
 	*x = RotateResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_github_com_openconfig_gnsi_pathz_pathz_proto_msgTypes[1]
+		mi := &file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -185,7 +287,7 @@ func (x *RotateResponse) String() string {
 func (*RotateResponse) ProtoMessage() {}
 
 func (x *RotateResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_github_com_openconfig_gnsi_pathz_pathz_proto_msgTypes[1]
+	mi := &file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -198,7 +300,7 @@ func (x *RotateResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RotateResponse.ProtoReflect.Descriptor instead.
 func (*RotateResponse) Descriptor() ([]byte, []int) {
-	return file_github_com_openconfig_gnsi_pathz_pathz_proto_rawDescGZIP(), []int{1}
+	return file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_rawDescGZIP(), []int{1}
 }
 
 func (m *RotateResponse) GetResponse() isRotateResponse_Response {
@@ -234,7 +336,7 @@ type FinalizeRequest struct {
 func (x *FinalizeRequest) Reset() {
 	*x = FinalizeRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_github_com_openconfig_gnsi_pathz_pathz_proto_msgTypes[2]
+		mi := &file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -247,7 +349,7 @@ func (x *FinalizeRequest) String() string {
 func (*FinalizeRequest) ProtoMessage() {}
 
 func (x *FinalizeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_github_com_openconfig_gnsi_pathz_pathz_proto_msgTypes[2]
+	mi := &file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -260,7 +362,7 @@ func (x *FinalizeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FinalizeRequest.ProtoReflect.Descriptor instead.
 func (*FinalizeRequest) Descriptor() ([]byte, []int) {
-	return file_github_com_openconfig_gnsi_pathz_pathz_proto_rawDescGZIP(), []int{2}
+	return file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_rawDescGZIP(), []int{2}
 }
 
 type UploadRequest struct {
@@ -276,7 +378,7 @@ type UploadRequest struct {
 func (x *UploadRequest) Reset() {
 	*x = UploadRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_github_com_openconfig_gnsi_pathz_pathz_proto_msgTypes[3]
+		mi := &file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -289,7 +391,7 @@ func (x *UploadRequest) String() string {
 func (*UploadRequest) ProtoMessage() {}
 
 func (x *UploadRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_github_com_openconfig_gnsi_pathz_pathz_proto_msgTypes[3]
+	mi := &file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -302,7 +404,7 @@ func (x *UploadRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UploadRequest.ProtoReflect.Descriptor instead.
 func (*UploadRequest) Descriptor() ([]byte, []int) {
-	return file_github_com_openconfig_gnsi_pathz_pathz_proto_rawDescGZIP(), []int{3}
+	return file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *UploadRequest) GetVersion() string {
@@ -335,7 +437,7 @@ type UploadResponse struct {
 func (x *UploadResponse) Reset() {
 	*x = UploadResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_github_com_openconfig_gnsi_pathz_pathz_proto_msgTypes[4]
+		mi := &file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -348,7 +450,7 @@ func (x *UploadResponse) String() string {
 func (*UploadResponse) ProtoMessage() {}
 
 func (x *UploadResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_github_com_openconfig_gnsi_pathz_pathz_proto_msgTypes[4]
+	mi := &file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -361,7 +463,7 @@ func (x *UploadResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UploadResponse.ProtoReflect.Descriptor instead.
 func (*UploadResponse) Descriptor() ([]byte, []int) {
-	return file_github_com_openconfig_gnsi_pathz_pathz_proto_rawDescGZIP(), []int{4}
+	return file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_rawDescGZIP(), []int{4}
 }
 
 type ProbeRequest struct {
@@ -371,14 +473,14 @@ type ProbeRequest struct {
 
 	User           string         `protobuf:"bytes,1,opt,name=user,proto3" json:"user,omitempty"`
 	Path           *gnmi.Path     `protobuf:"bytes,2,opt,name=path,proto3" json:"path,omitempty"`
-	Mode           Mode           `protobuf:"varint,3,opt,name=mode,proto3,enum=gnsi.pathz.Mode" json:"mode,omitempty"`
+	Mode           Mode           `protobuf:"varint,3,opt,name=mode,proto3,enum=gnsi.pathz.v1.Mode" json:"mode,omitempty"`
 	PolicyInstance PolicyInstance `protobuf:"varint,4,opt,name=policy_instance,json=policyInstance,proto3,enum=gnsi.pathz.v1.PolicyInstance" json:"policy_instance,omitempty"`
 }
 
 func (x *ProbeRequest) Reset() {
 	*x = ProbeRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_github_com_openconfig_gnsi_pathz_pathz_proto_msgTypes[5]
+		mi := &file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -391,7 +493,7 @@ func (x *ProbeRequest) String() string {
 func (*ProbeRequest) ProtoMessage() {}
 
 func (x *ProbeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_github_com_openconfig_gnsi_pathz_pathz_proto_msgTypes[5]
+	mi := &file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -404,7 +506,7 @@ func (x *ProbeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ProbeRequest.ProtoReflect.Descriptor instead.
 func (*ProbeRequest) Descriptor() ([]byte, []int) {
-	return file_github_com_openconfig_gnsi_pathz_pathz_proto_rawDescGZIP(), []int{5}
+	return file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *ProbeRequest) GetUser() string {
@@ -440,14 +542,14 @@ type ProbeResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Action  Action `protobuf:"varint,1,opt,name=action,proto3,enum=gnsi.pathz.Action" json:"action,omitempty"`
+	Action  Action `protobuf:"varint,1,opt,name=action,proto3,enum=gnsi.pathz.v1.Action" json:"action,omitempty"`
 	Version string `protobuf:"bytes,2,opt,name=version,proto3" json:"version,omitempty"`
 }
 
 func (x *ProbeResponse) Reset() {
 	*x = ProbeResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_github_com_openconfig_gnsi_pathz_pathz_proto_msgTypes[6]
+		mi := &file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -460,7 +562,7 @@ func (x *ProbeResponse) String() string {
 func (*ProbeResponse) ProtoMessage() {}
 
 func (x *ProbeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_github_com_openconfig_gnsi_pathz_pathz_proto_msgTypes[6]
+	mi := &file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -473,7 +575,7 @@ func (x *ProbeResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ProbeResponse.ProtoReflect.Descriptor instead.
 func (*ProbeResponse) Descriptor() ([]byte, []int) {
-	return file_github_com_openconfig_gnsi_pathz_pathz_proto_rawDescGZIP(), []int{6}
+	return file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *ProbeResponse) GetAction() Action {
@@ -501,7 +603,7 @@ type GetRequest struct {
 func (x *GetRequest) Reset() {
 	*x = GetRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_github_com_openconfig_gnsi_pathz_pathz_proto_msgTypes[7]
+		mi := &file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -514,7 +616,7 @@ func (x *GetRequest) String() string {
 func (*GetRequest) ProtoMessage() {}
 
 func (x *GetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_github_com_openconfig_gnsi_pathz_pathz_proto_msgTypes[7]
+	mi := &file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -527,7 +629,7 @@ func (x *GetRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetRequest.ProtoReflect.Descriptor instead.
 func (*GetRequest) Descriptor() ([]byte, []int) {
-	return file_github_com_openconfig_gnsi_pathz_pathz_proto_rawDescGZIP(), []int{7}
+	return file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *GetRequest) GetPolicyInstance() PolicyInstance {
@@ -550,7 +652,7 @@ type GetResponse struct {
 func (x *GetResponse) Reset() {
 	*x = GetResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_github_com_openconfig_gnsi_pathz_pathz_proto_msgTypes[8]
+		mi := &file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes[8]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -563,7 +665,7 @@ func (x *GetResponse) String() string {
 func (*GetResponse) ProtoMessage() {}
 
 func (x *GetResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_github_com_openconfig_gnsi_pathz_pathz_proto_msgTypes[8]
+	mi := &file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes[8]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -576,7 +678,7 @@ func (x *GetResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetResponse.ProtoReflect.Descriptor instead.
 func (*GetResponse) Descriptor() ([]byte, []int) {
-	return file_github_com_openconfig_gnsi_pathz_pathz_proto_rawDescGZIP(), []int{8}
+	return file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *GetResponse) GetVersion() string {
@@ -600,19 +702,285 @@ func (x *GetResponse) GetPolicy() *AuthorizationPolicy {
 	return nil
 }
 
-var File_github_com_openconfig_gnsi_pathz_pathz_proto protoreflect.FileDescriptor
+type User struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
 
-var file_github_com_openconfig_gnsi_pathz_pathz_proto_rawDesc = []byte{
-	0x0a, 0x2c, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x6f, 0x70, 0x65,
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+}
+
+func (x *User) Reset() {
+	*x = User{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes[9]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *User) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*User) ProtoMessage() {}
+
+func (x *User) ProtoReflect() protoreflect.Message {
+	mi := &file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes[9]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use User.ProtoReflect.Descriptor instead.
+func (*User) Descriptor() ([]byte, []int) {
+	return file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *User) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+type Group struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Name  string  `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Users []*User `protobuf:"bytes,2,rep,name=users,proto3" json:"users,omitempty"`
+}
+
+func (x *Group) Reset() {
+	*x = Group{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes[10]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Group) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Group) ProtoMessage() {}
+
+func (x *Group) ProtoReflect() protoreflect.Message {
+	mi := &file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes[10]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Group.ProtoReflect.Descriptor instead.
+func (*Group) Descriptor() ([]byte, []int) {
+	return file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *Group) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *Group) GetUsers() []*User {
+	if x != nil {
+		return x.Users
+	}
+	return nil
+}
+
+type AuthorizationRule struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	// Types that are assignable to Principal:
+	//	*AuthorizationRule_User
+	//	*AuthorizationRule_Group
+	Principal isAuthorizationRule_Principal `protobuf_oneof:"principal"`
+	Path      *gnmi.Path                    `protobuf:"bytes,4,opt,name=path,proto3" json:"path,omitempty"`
+	Action    Action                        `protobuf:"varint,5,opt,name=action,proto3,enum=gnsi.pathz.v1.Action" json:"action,omitempty"`
+	Mode      Mode                          `protobuf:"varint,6,opt,name=mode,proto3,enum=gnsi.pathz.v1.Mode" json:"mode,omitempty"`
+}
+
+func (x *AuthorizationRule) Reset() {
+	*x = AuthorizationRule{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes[11]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *AuthorizationRule) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AuthorizationRule) ProtoMessage() {}
+
+func (x *AuthorizationRule) ProtoReflect() protoreflect.Message {
+	mi := &file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes[11]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AuthorizationRule.ProtoReflect.Descriptor instead.
+func (*AuthorizationRule) Descriptor() ([]byte, []int) {
+	return file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *AuthorizationRule) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (m *AuthorizationRule) GetPrincipal() isAuthorizationRule_Principal {
+	if m != nil {
+		return m.Principal
+	}
+	return nil
+}
+
+func (x *AuthorizationRule) GetUser() string {
+	if x, ok := x.GetPrincipal().(*AuthorizationRule_User); ok {
+		return x.User
+	}
+	return ""
+}
+
+func (x *AuthorizationRule) GetGroup() string {
+	if x, ok := x.GetPrincipal().(*AuthorizationRule_Group); ok {
+		return x.Group
+	}
+	return ""
+}
+
+func (x *AuthorizationRule) GetPath() *gnmi.Path {
+	if x != nil {
+		return x.Path
+	}
+	return nil
+}
+
+func (x *AuthorizationRule) GetAction() Action {
+	if x != nil {
+		return x.Action
+	}
+	return Action_ACTION_UNSPECIFIED
+}
+
+func (x *AuthorizationRule) GetMode() Mode {
+	if x != nil {
+		return x.Mode
+	}
+	return Mode_MODE_UNSPECIFIED
+}
+
+type isAuthorizationRule_Principal interface {
+	isAuthorizationRule_Principal()
+}
+
+type AuthorizationRule_User struct {
+	User string `protobuf:"bytes,2,opt,name=user,proto3,oneof"`
+}
+
+type AuthorizationRule_Group struct {
+	Group string `protobuf:"bytes,3,opt,name=group,proto3,oneof"`
+}
+
+func (*AuthorizationRule_User) isAuthorizationRule_Principal() {}
+
+func (*AuthorizationRule_Group) isAuthorizationRule_Principal() {}
+
+type AuthorizationPolicy struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Rules  []*AuthorizationRule `protobuf:"bytes,1,rep,name=rules,proto3" json:"rules,omitempty"`
+	Groups []*Group             `protobuf:"bytes,2,rep,name=groups,proto3" json:"groups,omitempty"`
+}
+
+func (x *AuthorizationPolicy) Reset() {
+	*x = AuthorizationPolicy{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes[12]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *AuthorizationPolicy) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AuthorizationPolicy) ProtoMessage() {}
+
+func (x *AuthorizationPolicy) ProtoReflect() protoreflect.Message {
+	mi := &file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes[12]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AuthorizationPolicy.ProtoReflect.Descriptor instead.
+func (*AuthorizationPolicy) Descriptor() ([]byte, []int) {
+	return file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *AuthorizationPolicy) GetRules() []*AuthorizationRule {
+	if x != nil {
+		return x.Rules
+	}
+	return nil
+}
+
+func (x *AuthorizationPolicy) GetGroups() []*Group {
+	if x != nil {
+		return x.Groups
+	}
+	return nil
+}
+
+var File_github_com_openconfig_gnsi_pathz_pathz_pathz_proto protoreflect.FileDescriptor
+
+var file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_rawDesc = []byte{
+	0x0a, 0x32, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x6f, 0x70, 0x65,
 	0x6e, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x2f, 0x67, 0x6e, 0x73, 0x69, 0x2f, 0x70, 0x61, 0x74,
-	0x68, 0x7a, 0x2f, 0x70, 0x61, 0x74, 0x68, 0x7a, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x0d,
-	0x67, 0x6e, 0x73, 0x69, 0x2e, 0x70, 0x61, 0x74, 0x68, 0x7a, 0x2e, 0x76, 0x31, 0x1a, 0x30, 0x67,
-	0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x6f, 0x70, 0x65, 0x6e, 0x63, 0x6f,
-	0x6e, 0x66, 0x69, 0x67, 0x2f, 0x67, 0x6e, 0x6d, 0x69, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f,
-	0x67, 0x6e, 0x6d, 0x69, 0x2f, 0x67, 0x6e, 0x6d, 0x69, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a,
-	0x34, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x6f, 0x70, 0x65, 0x6e,
-	0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x2f, 0x67, 0x6e, 0x73, 0x69, 0x2f, 0x70, 0x61, 0x74, 0x68,
-	0x7a, 0x2f, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2e,
+	0x68, 0x7a, 0x2f, 0x70, 0x61, 0x74, 0x68, 0x7a, 0x2f, 0x70, 0x61, 0x74, 0x68, 0x7a, 0x2e, 0x70,
+	0x72, 0x6f, 0x74, 0x6f, 0x12, 0x0d, 0x67, 0x6e, 0x73, 0x69, 0x2e, 0x70, 0x61, 0x74, 0x68, 0x7a,
+	0x2e, 0x76, 0x31, 0x1a, 0x30, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f,
+	0x6f, 0x70, 0x65, 0x6e, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x2f, 0x67, 0x6e, 0x6d, 0x69, 0x2f,
+	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x2f, 0x67, 0x6e, 0x6d, 0x69, 0x2f, 0x67, 0x6e, 0x6d, 0x69, 0x2e,
 	0x70, 0x72, 0x6f, 0x74, 0x6f, 0x1a, 0x30, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f,
 	0x6d, 0x2f, 0x6f, 0x70, 0x65, 0x6e, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x2f, 0x67, 0x6e, 0x73,
 	0x69, 0x2f, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x2f, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f,
@@ -637,133 +1005,178 @@ var file_github_com_openconfig_gnsi_pathz_pathz_proto_rawDesc = []byte{
 	0x6f, 0x61, 0x64, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x48, 0x00, 0x52, 0x06, 0x75,
 	0x70, 0x6c, 0x6f, 0x61, 0x64, 0x42, 0x0a, 0x0a, 0x08, 0x72, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73,
 	0x65, 0x22, 0x11, 0x0a, 0x0f, 0x46, 0x69, 0x6e, 0x61, 0x6c, 0x69, 0x7a, 0x65, 0x52, 0x65, 0x71,
-	0x75, 0x65, 0x73, 0x74, 0x22, 0x81, 0x01, 0x0a, 0x0d, 0x55, 0x70, 0x6c, 0x6f, 0x61, 0x64, 0x52,
+	0x75, 0x65, 0x73, 0x74, 0x22, 0x84, 0x01, 0x0a, 0x0d, 0x55, 0x70, 0x6c, 0x6f, 0x61, 0x64, 0x52,
 	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x18, 0x0a, 0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f,
 	0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e,
 	0x12, 0x1d, 0x0a, 0x0a, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x5f, 0x6f, 0x6e, 0x18, 0x02,
 	0x20, 0x01, 0x28, 0x04, 0x52, 0x09, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x4f, 0x6e, 0x12,
-	0x37, 0x0a, 0x06, 0x70, 0x6f, 0x6c, 0x69, 0x63, 0x79, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32,
-	0x1f, 0x2e, 0x67, 0x6e, 0x73, 0x69, 0x2e, 0x70, 0x61, 0x74, 0x68, 0x7a, 0x2e, 0x41, 0x75, 0x74,
-	0x68, 0x6f, 0x72, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x50, 0x6f, 0x6c, 0x69, 0x63, 0x79,
-	0x52, 0x06, 0x70, 0x6f, 0x6c, 0x69, 0x63, 0x79, 0x22, 0x10, 0x0a, 0x0e, 0x55, 0x70, 0x6c, 0x6f,
-	0x61, 0x64, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0xb0, 0x01, 0x0a, 0x0c, 0x50,
-	0x72, 0x6f, 0x62, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x75,
-	0x73, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x75, 0x73, 0x65, 0x72, 0x12,
-	0x1e, 0x0a, 0x04, 0x70, 0x61, 0x74, 0x68, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0a, 0x2e,
-	0x67, 0x6e, 0x6d, 0x69, 0x2e, 0x50, 0x61, 0x74, 0x68, 0x52, 0x04, 0x70, 0x61, 0x74, 0x68, 0x12,
-	0x24, 0x0a, 0x04, 0x6d, 0x6f, 0x64, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x10, 0x2e,
-	0x67, 0x6e, 0x73, 0x69, 0x2e, 0x70, 0x61, 0x74, 0x68, 0x7a, 0x2e, 0x4d, 0x6f, 0x64, 0x65, 0x52,
-	0x04, 0x6d, 0x6f, 0x64, 0x65, 0x12, 0x46, 0x0a, 0x0f, 0x70, 0x6f, 0x6c, 0x69, 0x63, 0x79, 0x5f,
-	0x69, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x1d,
-	0x2e, 0x67, 0x6e, 0x73, 0x69, 0x2e, 0x70, 0x61, 0x74, 0x68, 0x7a, 0x2e, 0x76, 0x31, 0x2e, 0x50,
-	0x6f, 0x6c, 0x69, 0x63, 0x79, 0x49, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x52, 0x0e, 0x70,
-	0x6f, 0x6c, 0x69, 0x63, 0x79, 0x49, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x22, 0x55, 0x0a,
-	0x0d, 0x50, 0x72, 0x6f, 0x62, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x2a,
-	0x0a, 0x06, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x12,
-	0x2e, 0x67, 0x6e, 0x73, 0x69, 0x2e, 0x70, 0x61, 0x74, 0x68, 0x7a, 0x2e, 0x41, 0x63, 0x74, 0x69,
-	0x6f, 0x6e, 0x52, 0x06, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x18, 0x0a, 0x07, 0x76, 0x65,
-	0x72, 0x73, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x76, 0x65, 0x72,
-	0x73, 0x69, 0x6f, 0x6e, 0x22, 0x54, 0x0a, 0x0a, 0x47, 0x65, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65,
-	0x73, 0x74, 0x12, 0x46, 0x0a, 0x0f, 0x70, 0x6f, 0x6c, 0x69, 0x63, 0x79, 0x5f, 0x69, 0x6e, 0x73,
-	0x74, 0x61, 0x6e, 0x63, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x1d, 0x2e, 0x67, 0x6e,
-	0x73, 0x69, 0x2e, 0x70, 0x61, 0x74, 0x68, 0x7a, 0x2e, 0x76, 0x31, 0x2e, 0x50, 0x6f, 0x6c, 0x69,
-	0x63, 0x79, 0x49, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x52, 0x0e, 0x70, 0x6f, 0x6c, 0x69,
-	0x63, 0x79, 0x49, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x22, 0x7f, 0x0a, 0x0b, 0x47, 0x65,
-	0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x76, 0x65, 0x72,
-	0x73, 0x69, 0x6f, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x76, 0x65, 0x72, 0x73,
-	0x69, 0x6f, 0x6e, 0x12, 0x1d, 0x0a, 0x0a, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x5f, 0x6f,
-	0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x04, 0x52, 0x09, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64,
-	0x4f, 0x6e, 0x12, 0x37, 0x0a, 0x06, 0x70, 0x6f, 0x6c, 0x69, 0x63, 0x79, 0x18, 0x03, 0x20, 0x01,
-	0x28, 0x0b, 0x32, 0x1f, 0x2e, 0x67, 0x6e, 0x73, 0x69, 0x2e, 0x70, 0x61, 0x74, 0x68, 0x7a, 0x2e,
+	0x3a, 0x0a, 0x06, 0x70, 0x6f, 0x6c, 0x69, 0x63, 0x79, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32,
+	0x22, 0x2e, 0x67, 0x6e, 0x73, 0x69, 0x2e, 0x70, 0x61, 0x74, 0x68, 0x7a, 0x2e, 0x76, 0x31, 0x2e,
 	0x41, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x50, 0x6f, 0x6c,
-	0x69, 0x63, 0x79, 0x52, 0x06, 0x70, 0x6f, 0x6c, 0x69, 0x63, 0x79, 0x2a, 0x6a, 0x0a, 0x0e, 0x50,
-	0x6f, 0x6c, 0x69, 0x63, 0x79, 0x49, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x12, 0x1f, 0x0a,
-	0x1b, 0x50, 0x4f, 0x4c, 0x49, 0x43, 0x59, 0x5f, 0x49, 0x4e, 0x53, 0x54, 0x41, 0x4e, 0x43, 0x45,
-	0x5f, 0x55, 0x4e, 0x53, 0x50, 0x45, 0x43, 0x49, 0x46, 0x49, 0x45, 0x44, 0x10, 0x00, 0x12, 0x1a,
-	0x0a, 0x16, 0x50, 0x4f, 0x4c, 0x49, 0x43, 0x59, 0x5f, 0x49, 0x4e, 0x53, 0x54, 0x41, 0x4e, 0x43,
-	0x45, 0x5f, 0x41, 0x43, 0x54, 0x49, 0x56, 0x45, 0x10, 0x01, 0x12, 0x1b, 0x0a, 0x17, 0x50, 0x4f,
-	0x4c, 0x49, 0x43, 0x59, 0x5f, 0x49, 0x4e, 0x53, 0x54, 0x41, 0x4e, 0x43, 0x45, 0x5f, 0x53, 0x41,
-	0x4e, 0x44, 0x42, 0x4f, 0x58, 0x10, 0x02, 0x32, 0xd4, 0x01, 0x0a, 0x05, 0x50, 0x61, 0x74, 0x68,
-	0x7a, 0x12, 0x49, 0x0a, 0x06, 0x52, 0x6f, 0x74, 0x61, 0x74, 0x65, 0x12, 0x1c, 0x2e, 0x67, 0x6e,
-	0x73, 0x69, 0x2e, 0x70, 0x61, 0x74, 0x68, 0x7a, 0x2e, 0x76, 0x31, 0x2e, 0x52, 0x6f, 0x74, 0x61,
-	0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1d, 0x2e, 0x67, 0x6e, 0x73, 0x69,
-	0x2e, 0x70, 0x61, 0x74, 0x68, 0x7a, 0x2e, 0x76, 0x31, 0x2e, 0x52, 0x6f, 0x74, 0x61, 0x74, 0x65,
-	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x28, 0x01, 0x30, 0x01, 0x12, 0x42, 0x0a, 0x05,
-	0x50, 0x72, 0x6f, 0x62, 0x65, 0x12, 0x1b, 0x2e, 0x67, 0x6e, 0x73, 0x69, 0x2e, 0x70, 0x61, 0x74,
-	0x68, 0x7a, 0x2e, 0x76, 0x31, 0x2e, 0x50, 0x72, 0x6f, 0x62, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65,
-	0x73, 0x74, 0x1a, 0x1c, 0x2e, 0x67, 0x6e, 0x73, 0x69, 0x2e, 0x70, 0x61, 0x74, 0x68, 0x7a, 0x2e,
-	0x76, 0x31, 0x2e, 0x50, 0x72, 0x6f, 0x62, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x12, 0x3c, 0x0a, 0x03, 0x47, 0x65, 0x74, 0x12, 0x19, 0x2e, 0x67, 0x6e, 0x73, 0x69, 0x2e, 0x70,
-	0x61, 0x74, 0x68, 0x7a, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65,
-	0x73, 0x74, 0x1a, 0x1a, 0x2e, 0x67, 0x6e, 0x73, 0x69, 0x2e, 0x70, 0x61, 0x74, 0x68, 0x7a, 0x2e,
-	0x76, 0x31, 0x2e, 0x47, 0x65, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x22,
-	0x5a, 0x20, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x6f, 0x70, 0x65,
-	0x6e, 0x63, 0x6f, 0x6e, 0x66, 0x69, 0x67, 0x2f, 0x67, 0x6e, 0x73, 0x69, 0x2f, 0x70, 0x61, 0x74,
-	0x68, 0x7a, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x69, 0x63, 0x79, 0x52, 0x06, 0x70, 0x6f, 0x6c, 0x69, 0x63, 0x79, 0x22, 0x10, 0x0a, 0x0e, 0x55,
+	0x70, 0x6c, 0x6f, 0x61, 0x64, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0xb3, 0x01,
+	0x0a, 0x0c, 0x50, 0x72, 0x6f, 0x62, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x12,
+	0x0a, 0x04, 0x75, 0x73, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x75, 0x73,
+	0x65, 0x72, 0x12, 0x1e, 0x0a, 0x04, 0x70, 0x61, 0x74, 0x68, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b,
+	0x32, 0x0a, 0x2e, 0x67, 0x6e, 0x6d, 0x69, 0x2e, 0x50, 0x61, 0x74, 0x68, 0x52, 0x04, 0x70, 0x61,
+	0x74, 0x68, 0x12, 0x27, 0x0a, 0x04, 0x6d, 0x6f, 0x64, 0x65, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0e,
+	0x32, 0x13, 0x2e, 0x67, 0x6e, 0x73, 0x69, 0x2e, 0x70, 0x61, 0x74, 0x68, 0x7a, 0x2e, 0x76, 0x31,
+	0x2e, 0x4d, 0x6f, 0x64, 0x65, 0x52, 0x04, 0x6d, 0x6f, 0x64, 0x65, 0x12, 0x46, 0x0a, 0x0f, 0x70,
+	0x6f, 0x6c, 0x69, 0x63, 0x79, 0x5f, 0x69, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x18, 0x04,
+	0x20, 0x01, 0x28, 0x0e, 0x32, 0x1d, 0x2e, 0x67, 0x6e, 0x73, 0x69, 0x2e, 0x70, 0x61, 0x74, 0x68,
+	0x7a, 0x2e, 0x76, 0x31, 0x2e, 0x50, 0x6f, 0x6c, 0x69, 0x63, 0x79, 0x49, 0x6e, 0x73, 0x74, 0x61,
+	0x6e, 0x63, 0x65, 0x52, 0x0e, 0x70, 0x6f, 0x6c, 0x69, 0x63, 0x79, 0x49, 0x6e, 0x73, 0x74, 0x61,
+	0x6e, 0x63, 0x65, 0x22, 0x58, 0x0a, 0x0d, 0x50, 0x72, 0x6f, 0x62, 0x65, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x2d, 0x0a, 0x06, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x0e, 0x32, 0x15, 0x2e, 0x67, 0x6e, 0x73, 0x69, 0x2e, 0x70, 0x61, 0x74, 0x68,
+	0x7a, 0x2e, 0x76, 0x31, 0x2e, 0x41, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x06, 0x61, 0x63, 0x74,
+	0x69, 0x6f, 0x6e, 0x12, 0x18, 0x0a, 0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x22, 0x54, 0x0a,
+	0x0a, 0x47, 0x65, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x46, 0x0a, 0x0f, 0x70,
+	0x6f, 0x6c, 0x69, 0x63, 0x79, 0x5f, 0x69, 0x6e, 0x73, 0x74, 0x61, 0x6e, 0x63, 0x65, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x0e, 0x32, 0x1d, 0x2e, 0x67, 0x6e, 0x73, 0x69, 0x2e, 0x70, 0x61, 0x74, 0x68,
+	0x7a, 0x2e, 0x76, 0x31, 0x2e, 0x50, 0x6f, 0x6c, 0x69, 0x63, 0x79, 0x49, 0x6e, 0x73, 0x74, 0x61,
+	0x6e, 0x63, 0x65, 0x52, 0x0e, 0x70, 0x6f, 0x6c, 0x69, 0x63, 0x79, 0x49, 0x6e, 0x73, 0x74, 0x61,
+	0x6e, 0x63, 0x65, 0x22, 0x82, 0x01, 0x0a, 0x0b, 0x47, 0x65, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x12, 0x1d, 0x0a,
+	0x0a, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x5f, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28,
+	0x04, 0x52, 0x09, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x4f, 0x6e, 0x12, 0x3a, 0x0a, 0x06,
+	0x70, 0x6f, 0x6c, 0x69, 0x63, 0x79, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x22, 0x2e, 0x67,
+	0x6e, 0x73, 0x69, 0x2e, 0x70, 0x61, 0x74, 0x68, 0x7a, 0x2e, 0x76, 0x31, 0x2e, 0x41, 0x75, 0x74,
+	0x68, 0x6f, 0x72, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x50, 0x6f, 0x6c, 0x69, 0x63, 0x79,
+	0x52, 0x06, 0x70, 0x6f, 0x6c, 0x69, 0x63, 0x79, 0x22, 0x1a, 0x0a, 0x04, 0x55, 0x73, 0x65, 0x72,
+	0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04,
+	0x6e, 0x61, 0x6d, 0x65, 0x22, 0x46, 0x0a, 0x05, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x12, 0x12, 0x0a,
+	0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d,
+	0x65, 0x12, 0x29, 0x0a, 0x05, 0x75, 0x73, 0x65, 0x72, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x0b,
+	0x32, 0x13, 0x2e, 0x67, 0x6e, 0x73, 0x69, 0x2e, 0x70, 0x61, 0x74, 0x68, 0x7a, 0x2e, 0x76, 0x31,
+	0x2e, 0x55, 0x73, 0x65, 0x72, 0x52, 0x05, 0x75, 0x73, 0x65, 0x72, 0x73, 0x22, 0xd6, 0x01, 0x0a,
+	0x11, 0x41, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x75,
+	0x6c, 0x65, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02,
+	0x69, 0x64, 0x12, 0x14, 0x0a, 0x04, 0x75, 0x73, 0x65, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09,
+	0x48, 0x00, 0x52, 0x04, 0x75, 0x73, 0x65, 0x72, 0x12, 0x16, 0x0a, 0x05, 0x67, 0x72, 0x6f, 0x75,
+	0x70, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x48, 0x00, 0x52, 0x05, 0x67, 0x72, 0x6f, 0x75, 0x70,
+	0x12, 0x1e, 0x0a, 0x04, 0x70, 0x61, 0x74, 0x68, 0x18, 0x04, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0a,
+	0x2e, 0x67, 0x6e, 0x6d, 0x69, 0x2e, 0x50, 0x61, 0x74, 0x68, 0x52, 0x04, 0x70, 0x61, 0x74, 0x68,
+	0x12, 0x2d, 0x0a, 0x06, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x05, 0x20, 0x01, 0x28, 0x0e,
+	0x32, 0x15, 0x2e, 0x67, 0x6e, 0x73, 0x69, 0x2e, 0x70, 0x61, 0x74, 0x68, 0x7a, 0x2e, 0x76, 0x31,
+	0x2e, 0x41, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x06, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12,
+	0x27, 0x0a, 0x04, 0x6d, 0x6f, 0x64, 0x65, 0x18, 0x06, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x13, 0x2e,
+	0x67, 0x6e, 0x73, 0x69, 0x2e, 0x70, 0x61, 0x74, 0x68, 0x7a, 0x2e, 0x76, 0x31, 0x2e, 0x4d, 0x6f,
+	0x64, 0x65, 0x52, 0x04, 0x6d, 0x6f, 0x64, 0x65, 0x42, 0x0b, 0x0a, 0x09, 0x70, 0x72, 0x69, 0x6e,
+	0x63, 0x69, 0x70, 0x61, 0x6c, 0x22, 0x7b, 0x0a, 0x13, 0x41, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x69,
+	0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x50, 0x6f, 0x6c, 0x69, 0x63, 0x79, 0x12, 0x36, 0x0a, 0x05,
+	0x72, 0x75, 0x6c, 0x65, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x20, 0x2e, 0x67, 0x6e,
+	0x73, 0x69, 0x2e, 0x70, 0x61, 0x74, 0x68, 0x7a, 0x2e, 0x76, 0x31, 0x2e, 0x41, 0x75, 0x74, 0x68,
+	0x6f, 0x72, 0x69, 0x7a, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x75, 0x6c, 0x65, 0x52, 0x05, 0x72,
+	0x75, 0x6c, 0x65, 0x73, 0x12, 0x2c, 0x0a, 0x06, 0x67, 0x72, 0x6f, 0x75, 0x70, 0x73, 0x18, 0x02,
+	0x20, 0x03, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x67, 0x6e, 0x73, 0x69, 0x2e, 0x70, 0x61, 0x74, 0x68,
+	0x7a, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x72, 0x6f, 0x75, 0x70, 0x52, 0x06, 0x67, 0x72, 0x6f, 0x75,
+	0x70, 0x73, 0x2a, 0x6a, 0x0a, 0x0e, 0x50, 0x6f, 0x6c, 0x69, 0x63, 0x79, 0x49, 0x6e, 0x73, 0x74,
+	0x61, 0x6e, 0x63, 0x65, 0x12, 0x1f, 0x0a, 0x1b, 0x50, 0x4f, 0x4c, 0x49, 0x43, 0x59, 0x5f, 0x49,
+	0x4e, 0x53, 0x54, 0x41, 0x4e, 0x43, 0x45, 0x5f, 0x55, 0x4e, 0x53, 0x50, 0x45, 0x43, 0x49, 0x46,
+	0x49, 0x45, 0x44, 0x10, 0x00, 0x12, 0x1a, 0x0a, 0x16, 0x50, 0x4f, 0x4c, 0x49, 0x43, 0x59, 0x5f,
+	0x49, 0x4e, 0x53, 0x54, 0x41, 0x4e, 0x43, 0x45, 0x5f, 0x41, 0x43, 0x54, 0x49, 0x56, 0x45, 0x10,
+	0x01, 0x12, 0x1b, 0x0a, 0x17, 0x50, 0x4f, 0x4c, 0x49, 0x43, 0x59, 0x5f, 0x49, 0x4e, 0x53, 0x54,
+	0x41, 0x4e, 0x43, 0x45, 0x5f, 0x53, 0x41, 0x4e, 0x44, 0x42, 0x4f, 0x58, 0x10, 0x02, 0x2a, 0x44,
+	0x0a, 0x06, 0x41, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x16, 0x0a, 0x12, 0x41, 0x43, 0x54, 0x49,
+	0x4f, 0x4e, 0x5f, 0x55, 0x4e, 0x53, 0x50, 0x45, 0x43, 0x49, 0x46, 0x49, 0x45, 0x44, 0x10, 0x00,
+	0x12, 0x0f, 0x0a, 0x0b, 0x41, 0x43, 0x54, 0x49, 0x4f, 0x4e, 0x5f, 0x44, 0x45, 0x4e, 0x59, 0x10,
+	0x01, 0x12, 0x11, 0x0a, 0x0d, 0x41, 0x43, 0x54, 0x49, 0x4f, 0x4e, 0x5f, 0x50, 0x45, 0x52, 0x4d,
+	0x49, 0x54, 0x10, 0x02, 0x2a, 0x3b, 0x0a, 0x04, 0x4d, 0x6f, 0x64, 0x65, 0x12, 0x14, 0x0a, 0x10,
+	0x4d, 0x4f, 0x44, 0x45, 0x5f, 0x55, 0x4e, 0x53, 0x50, 0x45, 0x43, 0x49, 0x46, 0x49, 0x45, 0x44,
+	0x10, 0x00, 0x12, 0x0d, 0x0a, 0x09, 0x4d, 0x4f, 0x44, 0x45, 0x5f, 0x52, 0x45, 0x41, 0x44, 0x10,
+	0x01, 0x12, 0x0e, 0x0a, 0x0a, 0x4d, 0x4f, 0x44, 0x45, 0x5f, 0x57, 0x52, 0x49, 0x54, 0x45, 0x10,
+	0x02, 0x32, 0xd4, 0x01, 0x0a, 0x05, 0x50, 0x61, 0x74, 0x68, 0x7a, 0x12, 0x49, 0x0a, 0x06, 0x52,
+	0x6f, 0x74, 0x61, 0x74, 0x65, 0x12, 0x1c, 0x2e, 0x67, 0x6e, 0x73, 0x69, 0x2e, 0x70, 0x61, 0x74,
+	0x68, 0x7a, 0x2e, 0x76, 0x31, 0x2e, 0x52, 0x6f, 0x74, 0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x1a, 0x1d, 0x2e, 0x67, 0x6e, 0x73, 0x69, 0x2e, 0x70, 0x61, 0x74, 0x68, 0x7a,
+	0x2e, 0x76, 0x31, 0x2e, 0x52, 0x6f, 0x74, 0x61, 0x74, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x73, 0x65, 0x28, 0x01, 0x30, 0x01, 0x12, 0x42, 0x0a, 0x05, 0x50, 0x72, 0x6f, 0x62, 0x65, 0x12,
+	0x1b, 0x2e, 0x67, 0x6e, 0x73, 0x69, 0x2e, 0x70, 0x61, 0x74, 0x68, 0x7a, 0x2e, 0x76, 0x31, 0x2e,
+	0x50, 0x72, 0x6f, 0x62, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1c, 0x2e, 0x67,
+	0x6e, 0x73, 0x69, 0x2e, 0x70, 0x61, 0x74, 0x68, 0x7a, 0x2e, 0x76, 0x31, 0x2e, 0x50, 0x72, 0x6f,
+	0x62, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x3c, 0x0a, 0x03, 0x47, 0x65,
+	0x74, 0x12, 0x19, 0x2e, 0x67, 0x6e, 0x73, 0x69, 0x2e, 0x70, 0x61, 0x74, 0x68, 0x7a, 0x2e, 0x76,
+	0x31, 0x2e, 0x47, 0x65, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1a, 0x2e, 0x67,
+	0x6e, 0x73, 0x69, 0x2e, 0x70, 0x61, 0x74, 0x68, 0x7a, 0x2e, 0x76, 0x31, 0x2e, 0x47, 0x65, 0x74,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x22, 0x5a, 0x20, 0x67, 0x69, 0x74, 0x68,
+	0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x6f, 0x70, 0x65, 0x6e, 0x63, 0x6f, 0x6e, 0x66, 0x69,
+	0x67, 0x2f, 0x67, 0x6e, 0x73, 0x69, 0x2f, 0x70, 0x61, 0x74, 0x68, 0x7a, 0x62, 0x06, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
-	file_github_com_openconfig_gnsi_pathz_pathz_proto_rawDescOnce sync.Once
-	file_github_com_openconfig_gnsi_pathz_pathz_proto_rawDescData = file_github_com_openconfig_gnsi_pathz_pathz_proto_rawDesc
+	file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_rawDescOnce sync.Once
+	file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_rawDescData = file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_rawDesc
 )
 
-func file_github_com_openconfig_gnsi_pathz_pathz_proto_rawDescGZIP() []byte {
-	file_github_com_openconfig_gnsi_pathz_pathz_proto_rawDescOnce.Do(func() {
-		file_github_com_openconfig_gnsi_pathz_pathz_proto_rawDescData = protoimpl.X.CompressGZIP(file_github_com_openconfig_gnsi_pathz_pathz_proto_rawDescData)
+func file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_rawDescGZIP() []byte {
+	file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_rawDescOnce.Do(func() {
+		file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_rawDescData = protoimpl.X.CompressGZIP(file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_rawDescData)
 	})
-	return file_github_com_openconfig_gnsi_pathz_pathz_proto_rawDescData
+	return file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_rawDescData
 }
 
-var file_github_com_openconfig_gnsi_pathz_pathz_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_github_com_openconfig_gnsi_pathz_pathz_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
-var file_github_com_openconfig_gnsi_pathz_pathz_proto_goTypes = []interface{}{
+var file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
+var file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
+var file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_goTypes = []interface{}{
 	(PolicyInstance)(0),         // 0: gnsi.pathz.v1.PolicyInstance
-	(*RotateRequest)(nil),       // 1: gnsi.pathz.v1.RotateRequest
-	(*RotateResponse)(nil),      // 2: gnsi.pathz.v1.RotateResponse
-	(*FinalizeRequest)(nil),     // 3: gnsi.pathz.v1.FinalizeRequest
-	(*UploadRequest)(nil),       // 4: gnsi.pathz.v1.UploadRequest
-	(*UploadResponse)(nil),      // 5: gnsi.pathz.v1.UploadResponse
-	(*ProbeRequest)(nil),        // 6: gnsi.pathz.v1.ProbeRequest
-	(*ProbeResponse)(nil),       // 7: gnsi.pathz.v1.ProbeResponse
-	(*GetRequest)(nil),          // 8: gnsi.pathz.v1.GetRequest
-	(*GetResponse)(nil),         // 9: gnsi.pathz.v1.GetResponse
-	(*AuthorizationPolicy)(nil), // 10: gnsi.pathz.AuthorizationPolicy
-	(*gnmi.Path)(nil),           // 11: gnmi.Path
-	(Mode)(0),                   // 12: gnsi.pathz.Mode
-	(Action)(0),                 // 13: gnsi.pathz.Action
+	(Action)(0),                 // 1: gnsi.pathz.v1.Action
+	(Mode)(0),                   // 2: gnsi.pathz.v1.Mode
+	(*RotateRequest)(nil),       // 3: gnsi.pathz.v1.RotateRequest
+	(*RotateResponse)(nil),      // 4: gnsi.pathz.v1.RotateResponse
+	(*FinalizeRequest)(nil),     // 5: gnsi.pathz.v1.FinalizeRequest
+	(*UploadRequest)(nil),       // 6: gnsi.pathz.v1.UploadRequest
+	(*UploadResponse)(nil),      // 7: gnsi.pathz.v1.UploadResponse
+	(*ProbeRequest)(nil),        // 8: gnsi.pathz.v1.ProbeRequest
+	(*ProbeResponse)(nil),       // 9: gnsi.pathz.v1.ProbeResponse
+	(*GetRequest)(nil),          // 10: gnsi.pathz.v1.GetRequest
+	(*GetResponse)(nil),         // 11: gnsi.pathz.v1.GetResponse
+	(*User)(nil),                // 12: gnsi.pathz.v1.User
+	(*Group)(nil),               // 13: gnsi.pathz.v1.Group
+	(*AuthorizationRule)(nil),   // 14: gnsi.pathz.v1.AuthorizationRule
+	(*AuthorizationPolicy)(nil), // 15: gnsi.pathz.v1.AuthorizationPolicy
+	(*gnmi.Path)(nil),           // 16: gnmi.Path
 }
-var file_github_com_openconfig_gnsi_pathz_pathz_proto_depIdxs = []int32{
-	4,  // 0: gnsi.pathz.v1.RotateRequest.upload_request:type_name -> gnsi.pathz.v1.UploadRequest
-	3,  // 1: gnsi.pathz.v1.RotateRequest.finalize_rotation:type_name -> gnsi.pathz.v1.FinalizeRequest
-	5,  // 2: gnsi.pathz.v1.RotateResponse.upload:type_name -> gnsi.pathz.v1.UploadResponse
-	10, // 3: gnsi.pathz.v1.UploadRequest.policy:type_name -> gnsi.pathz.AuthorizationPolicy
-	11, // 4: gnsi.pathz.v1.ProbeRequest.path:type_name -> gnmi.Path
-	12, // 5: gnsi.pathz.v1.ProbeRequest.mode:type_name -> gnsi.pathz.Mode
+var file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_depIdxs = []int32{
+	6,  // 0: gnsi.pathz.v1.RotateRequest.upload_request:type_name -> gnsi.pathz.v1.UploadRequest
+	5,  // 1: gnsi.pathz.v1.RotateRequest.finalize_rotation:type_name -> gnsi.pathz.v1.FinalizeRequest
+	7,  // 2: gnsi.pathz.v1.RotateResponse.upload:type_name -> gnsi.pathz.v1.UploadResponse
+	15, // 3: gnsi.pathz.v1.UploadRequest.policy:type_name -> gnsi.pathz.v1.AuthorizationPolicy
+	16, // 4: gnsi.pathz.v1.ProbeRequest.path:type_name -> gnmi.Path
+	2,  // 5: gnsi.pathz.v1.ProbeRequest.mode:type_name -> gnsi.pathz.v1.Mode
 	0,  // 6: gnsi.pathz.v1.ProbeRequest.policy_instance:type_name -> gnsi.pathz.v1.PolicyInstance
-	13, // 7: gnsi.pathz.v1.ProbeResponse.action:type_name -> gnsi.pathz.Action
+	1,  // 7: gnsi.pathz.v1.ProbeResponse.action:type_name -> gnsi.pathz.v1.Action
 	0,  // 8: gnsi.pathz.v1.GetRequest.policy_instance:type_name -> gnsi.pathz.v1.PolicyInstance
-	10, // 9: gnsi.pathz.v1.GetResponse.policy:type_name -> gnsi.pathz.AuthorizationPolicy
-	1,  // 10: gnsi.pathz.v1.Pathz.Rotate:input_type -> gnsi.pathz.v1.RotateRequest
-	6,  // 11: gnsi.pathz.v1.Pathz.Probe:input_type -> gnsi.pathz.v1.ProbeRequest
-	8,  // 12: gnsi.pathz.v1.Pathz.Get:input_type -> gnsi.pathz.v1.GetRequest
-	2,  // 13: gnsi.pathz.v1.Pathz.Rotate:output_type -> gnsi.pathz.v1.RotateResponse
-	7,  // 14: gnsi.pathz.v1.Pathz.Probe:output_type -> gnsi.pathz.v1.ProbeResponse
-	9,  // 15: gnsi.pathz.v1.Pathz.Get:output_type -> gnsi.pathz.v1.GetResponse
-	13, // [13:16] is the sub-list for method output_type
-	10, // [10:13] is the sub-list for method input_type
-	10, // [10:10] is the sub-list for extension type_name
-	10, // [10:10] is the sub-list for extension extendee
-	0,  // [0:10] is the sub-list for field type_name
+	15, // 9: gnsi.pathz.v1.GetResponse.policy:type_name -> gnsi.pathz.v1.AuthorizationPolicy
+	12, // 10: gnsi.pathz.v1.Group.users:type_name -> gnsi.pathz.v1.User
+	16, // 11: gnsi.pathz.v1.AuthorizationRule.path:type_name -> gnmi.Path
+	1,  // 12: gnsi.pathz.v1.AuthorizationRule.action:type_name -> gnsi.pathz.v1.Action
+	2,  // 13: gnsi.pathz.v1.AuthorizationRule.mode:type_name -> gnsi.pathz.v1.Mode
+	14, // 14: gnsi.pathz.v1.AuthorizationPolicy.rules:type_name -> gnsi.pathz.v1.AuthorizationRule
+	13, // 15: gnsi.pathz.v1.AuthorizationPolicy.groups:type_name -> gnsi.pathz.v1.Group
+	3,  // 16: gnsi.pathz.v1.Pathz.Rotate:input_type -> gnsi.pathz.v1.RotateRequest
+	8,  // 17: gnsi.pathz.v1.Pathz.Probe:input_type -> gnsi.pathz.v1.ProbeRequest
+	10, // 18: gnsi.pathz.v1.Pathz.Get:input_type -> gnsi.pathz.v1.GetRequest
+	4,  // 19: gnsi.pathz.v1.Pathz.Rotate:output_type -> gnsi.pathz.v1.RotateResponse
+	9,  // 20: gnsi.pathz.v1.Pathz.Probe:output_type -> gnsi.pathz.v1.ProbeResponse
+	11, // 21: gnsi.pathz.v1.Pathz.Get:output_type -> gnsi.pathz.v1.GetResponse
+	19, // [19:22] is the sub-list for method output_type
+	16, // [16:19] is the sub-list for method input_type
+	16, // [16:16] is the sub-list for extension type_name
+	16, // [16:16] is the sub-list for extension extendee
+	0,  // [0:16] is the sub-list for field type_name
 }
 
-func init() { file_github_com_openconfig_gnsi_pathz_pathz_proto_init() }
-func file_github_com_openconfig_gnsi_pathz_pathz_proto_init() {
-	if File_github_com_openconfig_gnsi_pathz_pathz_proto != nil {
+func init() { file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_init() }
+func file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_init() {
+	if File_github_com_openconfig_gnsi_pathz_pathz_pathz_proto != nil {
 		return
 	}
-	file_github_com_openconfig_gnsi_pathz_authorization_proto_init()
 	if !protoimpl.UnsafeEnabled {
-		file_github_com_openconfig_gnsi_pathz_pathz_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
+		file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*RotateRequest); i {
 			case 0:
 				return &v.state
@@ -775,7 +1188,7 @@ func file_github_com_openconfig_gnsi_pathz_pathz_proto_init() {
 				return nil
 			}
 		}
-		file_github_com_openconfig_gnsi_pathz_pathz_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+		file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*RotateResponse); i {
 			case 0:
 				return &v.state
@@ -787,7 +1200,7 @@ func file_github_com_openconfig_gnsi_pathz_pathz_proto_init() {
 				return nil
 			}
 		}
-		file_github_com_openconfig_gnsi_pathz_pathz_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+		file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*FinalizeRequest); i {
 			case 0:
 				return &v.state
@@ -799,7 +1212,7 @@ func file_github_com_openconfig_gnsi_pathz_pathz_proto_init() {
 				return nil
 			}
 		}
-		file_github_com_openconfig_gnsi_pathz_pathz_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+		file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*UploadRequest); i {
 			case 0:
 				return &v.state
@@ -811,7 +1224,7 @@ func file_github_com_openconfig_gnsi_pathz_pathz_proto_init() {
 				return nil
 			}
 		}
-		file_github_com_openconfig_gnsi_pathz_pathz_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+		file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*UploadResponse); i {
 			case 0:
 				return &v.state
@@ -823,7 +1236,7 @@ func file_github_com_openconfig_gnsi_pathz_pathz_proto_init() {
 				return nil
 			}
 		}
-		file_github_com_openconfig_gnsi_pathz_pathz_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+		file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*ProbeRequest); i {
 			case 0:
 				return &v.state
@@ -835,7 +1248,7 @@ func file_github_com_openconfig_gnsi_pathz_pathz_proto_init() {
 				return nil
 			}
 		}
-		file_github_com_openconfig_gnsi_pathz_pathz_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+		file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*ProbeResponse); i {
 			case 0:
 				return &v.state
@@ -847,7 +1260,7 @@ func file_github_com_openconfig_gnsi_pathz_pathz_proto_init() {
 				return nil
 			}
 		}
-		file_github_com_openconfig_gnsi_pathz_pathz_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
+		file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*GetRequest); i {
 			case 0:
 				return &v.state
@@ -859,7 +1272,7 @@ func file_github_com_openconfig_gnsi_pathz_pathz_proto_init() {
 				return nil
 			}
 		}
-		file_github_com_openconfig_gnsi_pathz_pathz_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
+		file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*GetResponse); i {
 			case 0:
 				return &v.state
@@ -871,31 +1284,268 @@ func file_github_com_openconfig_gnsi_pathz_pathz_proto_init() {
 				return nil
 			}
 		}
+		file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*User); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes[10].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Group); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes[11].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*AuthorizationRule); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes[12].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*AuthorizationPolicy); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
-	file_github_com_openconfig_gnsi_pathz_pathz_proto_msgTypes[0].OneofWrappers = []interface{}{
+	file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes[0].OneofWrappers = []interface{}{
 		(*RotateRequest_UploadRequest)(nil),
 		(*RotateRequest_FinalizeRotation)(nil),
 	}
-	file_github_com_openconfig_gnsi_pathz_pathz_proto_msgTypes[1].OneofWrappers = []interface{}{
+	file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes[1].OneofWrappers = []interface{}{
 		(*RotateResponse_Upload)(nil),
+	}
+	file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes[11].OneofWrappers = []interface{}{
+		(*AuthorizationRule_User)(nil),
+		(*AuthorizationRule_Group)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: file_github_com_openconfig_gnsi_pathz_pathz_proto_rawDesc,
-			NumEnums:      1,
-			NumMessages:   9,
+			RawDescriptor: file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_rawDesc,
+			NumEnums:      3,
+			NumMessages:   13,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_github_com_openconfig_gnsi_pathz_pathz_proto_goTypes,
-		DependencyIndexes: file_github_com_openconfig_gnsi_pathz_pathz_proto_depIdxs,
-		EnumInfos:         file_github_com_openconfig_gnsi_pathz_pathz_proto_enumTypes,
-		MessageInfos:      file_github_com_openconfig_gnsi_pathz_pathz_proto_msgTypes,
+		GoTypes:           file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_goTypes,
+		DependencyIndexes: file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_depIdxs,
+		EnumInfos:         file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_enumTypes,
+		MessageInfos:      file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_msgTypes,
 	}.Build()
-	File_github_com_openconfig_gnsi_pathz_pathz_proto = out.File
-	file_github_com_openconfig_gnsi_pathz_pathz_proto_rawDesc = nil
-	file_github_com_openconfig_gnsi_pathz_pathz_proto_goTypes = nil
-	file_github_com_openconfig_gnsi_pathz_pathz_proto_depIdxs = nil
+	File_github_com_openconfig_gnsi_pathz_pathz_pathz_proto = out.File
+	file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_rawDesc = nil
+	file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_goTypes = nil
+	file_github_com_openconfig_gnsi_pathz_pathz_pathz_proto_depIdxs = nil
+}
+
+// Reference imports to suppress errors if they are not otherwise used.
+var _ context.Context
+var _ grpc.ClientConnInterface
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion6
+
+// PathzClient is the client API for Pathz service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type PathzClient interface {
+	Rotate(ctx context.Context, opts ...grpc.CallOption) (Pathz_RotateClient, error)
+	Probe(ctx context.Context, in *ProbeRequest, opts ...grpc.CallOption) (*ProbeResponse, error)
+	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
+}
+
+type pathzClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewPathzClient(cc grpc.ClientConnInterface) PathzClient {
+	return &pathzClient{cc}
+}
+
+func (c *pathzClient) Rotate(ctx context.Context, opts ...grpc.CallOption) (Pathz_RotateClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_Pathz_serviceDesc.Streams[0], "/gnsi.pathz.v1.Pathz/Rotate", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &pathzRotateClient{stream}
+	return x, nil
+}
+
+type Pathz_RotateClient interface {
+	Send(*RotateRequest) error
+	Recv() (*RotateResponse, error)
+	grpc.ClientStream
+}
+
+type pathzRotateClient struct {
+	grpc.ClientStream
+}
+
+func (x *pathzRotateClient) Send(m *RotateRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *pathzRotateClient) Recv() (*RotateResponse, error) {
+	m := new(RotateResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *pathzClient) Probe(ctx context.Context, in *ProbeRequest, opts ...grpc.CallOption) (*ProbeResponse, error) {
+	out := new(ProbeResponse)
+	err := c.cc.Invoke(ctx, "/gnsi.pathz.v1.Pathz/Probe", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *pathzClient) Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error) {
+	out := new(GetResponse)
+	err := c.cc.Invoke(ctx, "/gnsi.pathz.v1.Pathz/Get", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// PathzServer is the server API for Pathz service.
+type PathzServer interface {
+	Rotate(Pathz_RotateServer) error
+	Probe(context.Context, *ProbeRequest) (*ProbeResponse, error)
+	Get(context.Context, *GetRequest) (*GetResponse, error)
+}
+
+// UnimplementedPathzServer can be embedded to have forward compatible implementations.
+type UnimplementedPathzServer struct {
+}
+
+func (*UnimplementedPathzServer) Rotate(Pathz_RotateServer) error {
+	return status.Errorf(codes.Unimplemented, "method Rotate not implemented")
+}
+func (*UnimplementedPathzServer) Probe(context.Context, *ProbeRequest) (*ProbeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Probe not implemented")
+}
+func (*UnimplementedPathzServer) Get(context.Context, *GetRequest) (*GetResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
+}
+
+func RegisterPathzServer(s *grpc.Server, srv PathzServer) {
+	s.RegisterService(&_Pathz_serviceDesc, srv)
+}
+
+func _Pathz_Rotate_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(PathzServer).Rotate(&pathzRotateServer{stream})
+}
+
+type Pathz_RotateServer interface {
+	Send(*RotateResponse) error
+	Recv() (*RotateRequest, error)
+	grpc.ServerStream
+}
+
+type pathzRotateServer struct {
+	grpc.ServerStream
+}
+
+func (x *pathzRotateServer) Send(m *RotateResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *pathzRotateServer) Recv() (*RotateRequest, error) {
+	m := new(RotateRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func _Pathz_Probe_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ProbeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PathzServer).Probe(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/gnsi.pathz.v1.Pathz/Probe",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PathzServer).Probe(ctx, req.(*ProbeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Pathz_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PathzServer).Get(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/gnsi.pathz.v1.Pathz/Get",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PathzServer).Get(ctx, req.(*GetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+var _Pathz_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "gnsi.pathz.v1.Pathz",
+	HandlerType: (*PathzServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Probe",
+			Handler:    _Pathz_Probe_Handler,
+		},
+		{
+			MethodName: "Get",
+			Handler:    _Pathz_Get_Handler,
+		},
+	},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "Rotate",
+			Handler:       _Pathz_Rotate_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
+		},
+	},
+	Metadata: "github.com/openconfig/gnsi/pathz/pathz/pathz.proto",
 }
