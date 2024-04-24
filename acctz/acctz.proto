@@ -377,7 +377,7 @@ message RecordResponse {
   AuthDetail authen = 7 [deprecated=true];
 
   // Name of the component in a vendor system configuration where the accounting
-  // record originated from. This helps to indentify the source of the accouting
+  // record originated from. This helps to identify the source of the accounting
   // record when multiple components can generate them. This is how the
   // component is identified in the components hierarchy in the
   // openconfig-platform model.
