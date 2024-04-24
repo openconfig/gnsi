@@ -54,7 +54,7 @@ service Acctz {
   // A RecordRequest contains a timestamp indicating the last message
   // received. The Collector's expectation is that all messages after the
   // timestamp will be streamed. If this results in no records to be sent,
-  // because either the history is empty or no new accounting events occured
+  // because either the history is empty or no new accounting events occurred
   // after the requested timestamp, the server will be silent until new
   // records are created.
   //
@@ -87,7 +87,7 @@ service AcctzStream {
   // A RecordRequest contains a timestamp indicating the last message
   // received. The Collector's expectation is that all messages after the
   // timestamp will be streamed. If this results in no records to be sent,
-  // because either the history is empty or no new accounting events occured
+  // because either the history is empty or no new accounting events occurred
   // after the requested timestamp, the server will be silent until new
   // records are created.
   //
@@ -134,7 +134,7 @@ message SessionInfo {
   string channel_id = 6;
 
   // optional name of the tty, eg: console0, aux0, vty0, pty0.  If the
-  // connection is a serial line, such as a console, the adddress,
+  // connection is a serial line, such as a console, the address,
   // port, and protocol fields above will be omitted.
   string tty = 7;
 
