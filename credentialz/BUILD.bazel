@@ -41,7 +41,10 @@ cpp_grpc_library(
 
 go_proto_library(
     name = "credentialz_go_proto",
-    compilers = ["@io_bazel_rules_go//proto:go_grpc"],
+    compilers = [
+        "go_protoc_gen_go",
+        "go_protoc_gen_go_grpc",
+    ],
     importpath = "github.com/openconfig/gnsi/credentialz",
     proto = ":credentialz_proto",
     deps = ["//version:version_go_proto"],
