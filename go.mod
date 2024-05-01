@@ -1,6 +1,6 @@
 module github.com/openconfig/gnsi
 
-go 1.18
+go 1.20
 
 require (
 	github.com/openconfig/gnmi v0.0.0-20220617175856-41246b1b3507
