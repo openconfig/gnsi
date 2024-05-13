@@ -36,8 +36,8 @@ def gnsi_deps():
       ],
       build_file_generation = "on",
       importpath = "github.com/openconfig/gnmi",
-      sum = "h1:tv9HygDMXnoGyWuLmNCodMV2+PK6+uT/ndAxDVzsUUQ=",
-      version = "v0.0.0-20220617175856-41246b1b3507",
+      sum = "h1:H7pLIb/o3xObu3+x0Fv9DCK7TH3FUh7mNwbYe+34hFw=",
+      version = "v0.11.0",
     )
   if not native.existing_rule("com_github_kylelemons_godebug"):
     go_repository(
