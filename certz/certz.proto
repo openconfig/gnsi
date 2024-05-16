@@ -19,7 +19,6 @@ syntax = "proto3";
 
 package gnsi.certz.v1;
 
-import "github.com/openconfig/gnsi/version/version.proto";
 import "google/protobuf/any.proto";
 
 option go_package = "github.com/openconfig/gnsi/cert";

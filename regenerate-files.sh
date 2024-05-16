@@ -12,7 +12,7 @@ copy_generated() {
   # in the case where the protoc compiler doesn't generate any output. See:
   # https://github.com/bazelbuild/rules_go/blob/03a8b8e90eebe699d7/go/tools/builders/protoc.go#L190
   for file in "${BASE}"/"${pkg}"/"${proto}"_go_proto_/"${GNSI_NS}"/"${pkg}"/*.pb.go; do
-    [[ $(head -n 1 "${file}") == "// +build ignore" ]] || cp "${file}" "${pkg}"/
+    [[ $(head -n 1 "${file}") == "// +build ignore" ]] || (cp "${file}" "${pkg}"/ && chmod u+w,-x "${pkg}"/"$(basename "${file}")")
   done
 }
 
@@ -26,5 +26,3 @@ bazel build //credentialz:all
 copy_generated "credentialz"
 bazel build //pathz:all
 copy_generated "pathz"
-bazel build //version:all
-copy_generated "version"

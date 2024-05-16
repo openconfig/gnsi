@@ -17,17 +17,6 @@
 load("@bazel_gazelle//:deps.bzl", "go_repository")
 
 def gnsi_deps():
-  if not native.existing_rule("com_github_openconfig_gnoi"):
-    go_repository(
-      name = "com_github_openconfig_gnoi",
-      build_directives = [
-        "gazelle:proto_import_prefix github.com/openconfig/gnoi",
-      ],
-      build_file_generation = "on",
-      importpath = "github.com/openconfig/gnoi",
-      sum = "h1:jbYXRMNmmvA8ZFv2FBLrYoxA1MFSui4tEui+8LAWyVc=",
-      version = "v0.4.0",
-    )
   if not native.existing_rule("com_github_openconfig_gnmi"):
     go_repository(
       name = "com_github_openconfig_gnmi",
