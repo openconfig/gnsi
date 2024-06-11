@@ -41,7 +41,6 @@ syntax = "proto3";
 package gnsi.pathz.v1;
 
 import "github.com/openconfig/gnmi/proto/gnmi/gnmi.proto";
-import "github.com/openconfig/gnsi/version/version.proto";
 
 option go_package = "github.com/openconfig/gnsi/pathz";
 
