@@ -564,7 +564,7 @@ message Entity {
     CertificateRevocationListBundle certificate_revocation_list_bundle = 5;
     AuthenticationPolicy authentication_policy = 6;
     ExistingEntity existing_entity = 7;
-    TrustBundle trust_bundle_pcks7 = 8;
+    TrustBundle trust_bundle_pkcs7 = 8;
   }
 }
 
