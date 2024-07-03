@@ -1602,6 +1602,7 @@ type Entity struct {
 	//	*Entity_AuthenticationPolicy
 	//	*Entity_ExistingEntity
 	//	*Entity_TrustBundlePcks7
+	//	*Entity_TrustBundlePkcs7
 	Entity isEntity_Entity `protobuf_oneof:"entity"`
 }
 
@@ -1693,9 +1694,17 @@ func (x *Entity) GetExistingEntity() *ExistingEntity {
 	return nil
 }
 
+// Deprecated: Marked as deprecated in github.com/openconfig/gnsi/certz/certz.proto.
 func (x *Entity) GetTrustBundlePcks7() *TrustBundle {
 	if x, ok := x.GetEntity().(*Entity_TrustBundlePcks7); ok {
 		return x.TrustBundlePcks7
+	}
+	return nil
+}
+
+func (x *Entity) GetTrustBundlePkcs7() *TrustBundle {
+	if x, ok := x.GetEntity().(*Entity_TrustBundlePkcs7); ok {
+		return x.TrustBundlePkcs7
 	}
 	return nil
 }
@@ -1725,7 +1734,12 @@ type Entity_ExistingEntity struct {
 }
 
 type Entity_TrustBundlePcks7 struct {
+	// Deprecated: Marked as deprecated in github.com/openconfig/gnsi/certz/certz.proto.
 	TrustBundlePcks7 *TrustBundle `protobuf:"bytes,8,opt,name=trust_bundle_pcks7,json=trustBundlePcks7,proto3,oneof"`
+}
+
+type Entity_TrustBundlePkcs7 struct {
+	TrustBundlePkcs7 *TrustBundle `protobuf:"bytes,9,opt,name=trust_bundle_pkcs7,json=trustBundlePkcs7,proto3,oneof"`
 }
 
 func (*Entity_CertificateChain) isEntity_Entity() {}
@@ -1739,6 +1753,8 @@ func (*Entity_AuthenticationPolicy) isEntity_Entity() {}
 func (*Entity_ExistingEntity) isEntity_Entity() {}
 
 func (*Entity_TrustBundlePcks7) isEntity_Entity() {}
+
+func (*Entity_TrustBundlePkcs7) isEntity_Entity() {}
 
 type ExistingEntity struct {
 	state         protoimpl.MessageState
@@ -2215,7 +2231,7 @@ var file_github_com_openconfig_gnsi_certz_certz_proto_rawDesc = []byte{
 	0x61, 0x6c, 0x69, 0x7a, 0x65, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x67,
 	0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x41,
 	0x6e, 0x79, 0x48, 0x00, 0x52, 0x0a, 0x73, 0x65, 0x72, 0x69, 0x61, 0x6c, 0x69, 0x7a, 0x65, 0x64,
-	0x42, 0x08, 0x0a, 0x06, 0x70, 0x6f, 0x6c, 0x69, 0x63, 0x79, 0x22, 0xd2, 0x04, 0x0a, 0x06, 0x45,
+	0x42, 0x08, 0x0a, 0x06, 0x70, 0x6f, 0x6c, 0x69, 0x63, 0x79, 0x22, 0xa2, 0x05, 0x0a, 0x06, 0x45,
 	0x6e, 0x74, 0x69, 0x74, 0x79, 0x12, 0x18, 0x0a, 0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e,
 	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x76, 0x65, 0x72, 0x73, 0x69, 0x6f, 0x6e, 0x12,
 	0x1d, 0x0a, 0x0a, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x5f, 0x6f, 0x6e, 0x18, 0x02, 0x20,
@@ -2247,12 +2263,17 @@ var file_github_com_openconfig_gnsi_certz_certz_proto_rawDesc = []byte{
 	0x74, 0x79, 0x18, 0x07, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1d, 0x2e, 0x67, 0x6e, 0x73, 0x69, 0x2e,
 	0x63, 0x65, 0x72, 0x74, 0x7a, 0x2e, 0x76, 0x31, 0x2e, 0x45, 0x78, 0x69, 0x73, 0x74, 0x69, 0x6e,
 	0x67, 0x45, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x48, 0x00, 0x52, 0x0e, 0x65, 0x78, 0x69, 0x73, 0x74,
-	0x69, 0x6e, 0x67, 0x45, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x12, 0x4a, 0x0a, 0x12, 0x74, 0x72, 0x75,
+	0x69, 0x6e, 0x67, 0x45, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x12, 0x4e, 0x0a, 0x12, 0x74, 0x72, 0x75,
 	0x73, 0x74, 0x5f, 0x62, 0x75, 0x6e, 0x64, 0x6c, 0x65, 0x5f, 0x70, 0x63, 0x6b, 0x73, 0x37, 0x18,
 	0x08, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6e, 0x73, 0x69, 0x2e, 0x63, 0x65, 0x72,
 	0x74, 0x7a, 0x2e, 0x76, 0x31, 0x2e, 0x54, 0x72, 0x75, 0x73, 0x74, 0x42, 0x75, 0x6e, 0x64, 0x6c,
+	0x65, 0x42, 0x02, 0x18, 0x01, 0x48, 0x00, 0x52, 0x10, 0x74, 0x72, 0x75, 0x73, 0x74, 0x42, 0x75,
+	0x6e, 0x64, 0x6c, 0x65, 0x50, 0x63, 0x6b, 0x73, 0x37, 0x12, 0x4a, 0x0a, 0x12, 0x74, 0x72, 0x75,
+	0x73, 0x74, 0x5f, 0x62, 0x75, 0x6e, 0x64, 0x6c, 0x65, 0x5f, 0x70, 0x6b, 0x63, 0x73, 0x37, 0x18,
+	0x09, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6e, 0x73, 0x69, 0x2e, 0x63, 0x65, 0x72,
+	0x74, 0x7a, 0x2e, 0x76, 0x31, 0x2e, 0x54, 0x72, 0x75, 0x73, 0x74, 0x42, 0x75, 0x6e, 0x64, 0x6c,
 	0x65, 0x48, 0x00, 0x52, 0x10, 0x74, 0x72, 0x75, 0x73, 0x74, 0x42, 0x75, 0x6e, 0x64, 0x6c, 0x65,
-	0x50, 0x63, 0x6b, 0x73, 0x37, 0x42, 0x08, 0x0a, 0x06, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x22,
+	0x50, 0x6b, 0x63, 0x73, 0x37, 0x42, 0x08, 0x0a, 0x06, 0x65, 0x6e, 0x74, 0x69, 0x74, 0x79, 0x22,
 	0xc9, 0x02, 0x0a, 0x0e, 0x45, 0x78, 0x69, 0x73, 0x74, 0x69, 0x6e, 0x67, 0x45, 0x6e, 0x74, 0x69,
 	0x74, 0x79, 0x12, 0x24, 0x0a, 0x0e, 0x73, 0x73, 0x6c, 0x5f, 0x70, 0x72, 0x6f, 0x66, 0x69, 0x6c,
 	0x65, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x0c, 0x73, 0x73, 0x6c, 0x50,
@@ -2513,27 +2534,28 @@ var file_github_com_openconfig_gnsi_certz_certz_proto_depIdxs = []int32{
 	24, // 21: gnsi.certz.v1.Entity.authentication_policy:type_name -> gnsi.certz.v1.AuthenticationPolicy
 	26, // 22: gnsi.certz.v1.Entity.existing_entity:type_name -> gnsi.certz.v1.ExistingEntity
 	20, // 23: gnsi.certz.v1.Entity.trust_bundle_pcks7:type_name -> gnsi.certz.v1.TrustBundle
-	5,  // 24: gnsi.certz.v1.ExistingEntity.entity_type:type_name -> gnsi.certz.v1.ExistingEntity.EntityType
-	25, // 25: gnsi.certz.v1.UploadRequest.entities:type_name -> gnsi.certz.v1.Entity
-	1,  // 26: gnsi.certz.v1.CertificateSigningRequest.type:type_name -> gnsi.certz.v1.CertificateType
-	2,  // 27: gnsi.certz.v1.CertificateSigningRequest.encoding:type_name -> gnsi.certz.v1.CertificateEncoding
-	16, // 28: gnsi.certz.v1.GenerateCSRRequest.params:type_name -> gnsi.certz.v1.CSRParams
-	29, // 29: gnsi.certz.v1.GenerateCSRResponse.certificate_signing_request:type_name -> gnsi.certz.v1.CertificateSigningRequest
-	6,  // 30: gnsi.certz.v1.Certz.Rotate:input_type -> gnsi.certz.v1.RotateCertificateRequest
-	9,  // 31: gnsi.certz.v1.Certz.AddProfile:input_type -> gnsi.certz.v1.AddProfileRequest
-	11, // 32: gnsi.certz.v1.Certz.DeleteProfile:input_type -> gnsi.certz.v1.DeleteProfileRequest
-	13, // 33: gnsi.certz.v1.Certz.GetProfileList:input_type -> gnsi.certz.v1.GetProfileListRequest
-	17, // 34: gnsi.certz.v1.Certz.CanGenerateCSR:input_type -> gnsi.certz.v1.CanGenerateCSRRequest
-	7,  // 35: gnsi.certz.v1.Certz.Rotate:output_type -> gnsi.certz.v1.RotateCertificateResponse
-	10, // 36: gnsi.certz.v1.Certz.AddProfile:output_type -> gnsi.certz.v1.AddProfileResponse
-	12, // 37: gnsi.certz.v1.Certz.DeleteProfile:output_type -> gnsi.certz.v1.DeleteProfileResponse
-	14, // 38: gnsi.certz.v1.Certz.GetProfileList:output_type -> gnsi.certz.v1.GetProfileListResponse
-	18, // 39: gnsi.certz.v1.Certz.CanGenerateCSR:output_type -> gnsi.certz.v1.CanGenerateCSRResponse
-	35, // [35:40] is the sub-list for method output_type
-	30, // [30:35] is the sub-list for method input_type
-	30, // [30:30] is the sub-list for extension type_name
-	30, // [30:30] is the sub-list for extension extendee
-	0,  // [0:30] is the sub-list for field type_name
+	20, // 24: gnsi.certz.v1.Entity.trust_bundle_pkcs7:type_name -> gnsi.certz.v1.TrustBundle
+	5,  // 25: gnsi.certz.v1.ExistingEntity.entity_type:type_name -> gnsi.certz.v1.ExistingEntity.EntityType
+	25, // 26: gnsi.certz.v1.UploadRequest.entities:type_name -> gnsi.certz.v1.Entity
+	1,  // 27: gnsi.certz.v1.CertificateSigningRequest.type:type_name -> gnsi.certz.v1.CertificateType
+	2,  // 28: gnsi.certz.v1.CertificateSigningRequest.encoding:type_name -> gnsi.certz.v1.CertificateEncoding
+	16, // 29: gnsi.certz.v1.GenerateCSRRequest.params:type_name -> gnsi.certz.v1.CSRParams
+	29, // 30: gnsi.certz.v1.GenerateCSRResponse.certificate_signing_request:type_name -> gnsi.certz.v1.CertificateSigningRequest
+	6,  // 31: gnsi.certz.v1.Certz.Rotate:input_type -> gnsi.certz.v1.RotateCertificateRequest
+	9,  // 32: gnsi.certz.v1.Certz.AddProfile:input_type -> gnsi.certz.v1.AddProfileRequest
+	11, // 33: gnsi.certz.v1.Certz.DeleteProfile:input_type -> gnsi.certz.v1.DeleteProfileRequest
+	13, // 34: gnsi.certz.v1.Certz.GetProfileList:input_type -> gnsi.certz.v1.GetProfileListRequest
+	17, // 35: gnsi.certz.v1.Certz.CanGenerateCSR:input_type -> gnsi.certz.v1.CanGenerateCSRRequest
+	7,  // 36: gnsi.certz.v1.Certz.Rotate:output_type -> gnsi.certz.v1.RotateCertificateResponse
+	10, // 37: gnsi.certz.v1.Certz.AddProfile:output_type -> gnsi.certz.v1.AddProfileResponse
+	12, // 38: gnsi.certz.v1.Certz.DeleteProfile:output_type -> gnsi.certz.v1.DeleteProfileResponse
+	14, // 39: gnsi.certz.v1.Certz.GetProfileList:output_type -> gnsi.certz.v1.GetProfileListResponse
+	18, // 40: gnsi.certz.v1.Certz.CanGenerateCSR:output_type -> gnsi.certz.v1.CanGenerateCSRResponse
+	36, // [36:41] is the sub-list for method output_type
+	31, // [31:36] is the sub-list for method input_type
+	31, // [31:31] is the sub-list for extension type_name
+	31, // [31:31] is the sub-list for extension extendee
+	0,  // [0:31] is the sub-list for field type_name
 }
 
 func init() { file_github_com_openconfig_gnsi_certz_certz_proto_init() }
@@ -2880,6 +2902,7 @@ func file_github_com_openconfig_gnsi_certz_certz_proto_init() {
 		(*Entity_AuthenticationPolicy)(nil),
 		(*Entity_ExistingEntity)(nil),
 		(*Entity_TrustBundlePcks7)(nil),
+		(*Entity_TrustBundlePkcs7)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
