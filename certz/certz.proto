@@ -443,8 +443,8 @@ message CertificateChain {
 }
 
 message TrustBundle {
-  // A trust_bundle may be a PKCS#7 encoded string.
-  // This is a single string with many PEM encoded public keys included.
+  // A pkcs7_block will be a PKCS#7 encoded string.
+  // This is a single string with many PEM encoded certificates included.
   string pkcs7_block = 1;
 }
 
