@@ -286,8 +286,8 @@ message RotateCertificateRequest {
 
   // An identifier for the specific SSL profile (collection of
   // certs/bundles/CRLs) which is being rotated through this stream.
-  // Leaving this field blank means that this stream will rotate the SSL profile
-  // which is currently being used by the gNSI service.
+  // Leaving this field blank will result in an InvalidArgument error
+  // being returned to the client
   string ssl_profile_id = 2;
 
   // Request Messages.
@@ -586,6 +586,9 @@ message ExistingEntity {
     ENTITY_TYPE_AUTHENTICATION_POLICY = 4;
   }
 
+  // The existing SSL profile to reference.
+  // Leaving this field blank will result in an InvalidArgument error
+  // being returned to the client
   string ssl_profile_id = 1;
   EntityType entity_type = 2;
 }
