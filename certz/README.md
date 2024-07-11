@@ -40,9 +40,9 @@ Certificate Authority chain of certificates (a.k.a. a CA trust bundle) and
 a set of Certificate Revocation Lists into a set that then can be assigned
 as a whole to a gRPC server.
 
-There is always at least one profile present on a target - the `system_default_profile` which is vendor provided. This profile cannot be changed. If the use but when the `ssl_profile_id` field in the
-`RotateCertificateRequest` message is not set (or set to an empty string) it
-also refers this SSL profile. (This statement will be deprecated once all vendors standardize on the key name)
+There is always at least one profile present on a target - the `system_default_profile` which is vendor provided.
+This profile cannot be changed or deleted.
+See the the [System default SSL profile](#system-default-ssl-profile) section below.
 
 Profiles existing on a target can be discovered using the
 `Certz.GetProfileList()` RPC.
