@@ -160,7 +160,10 @@ message RotateAuthzRequest {
   // `upload_request` has been supplied, but the rotation has not been
   // finalised), and a second `RotateAuthzRequest` with `upload_request` is sent
   // from the client for profile "bar" this is considered an error.
-  string profile = 4;
+  //
+  // Note that the authz profile is considered independent from a SSL profile
+  // ID (as referenced by gnsi.Certz).
+  string authz_profile_id = 4;
 }
 
 // Response messages from the target.
