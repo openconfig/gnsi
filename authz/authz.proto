@@ -155,11 +155,11 @@ message RotateAuthzRequest {
   // are to supported by an endpoint, the value of the profile determines which
   // set of policies are to be rotated.
   //
-  // It is not permitted to rotate multiple profiles' policies at the same time -
-  // if a `Rotate` RPC is in progress for profile "foo" (i.e., `upload_request`
-  // has been supplied, but the rotation has not been finalised), and a second
-  // `RotateAuthzRequest` with `upload_request` is sent from the client for
-  // profile "bar" this is considered an error.
+  // It is not permitted to rotate multiple profiles' policies at the same time
+  // - if a `Rotate` RPC is in progress for profile "foo" (i.e.,
+  // `upload_request` has been supplied, but the rotation has not been
+  // finalised), and a second `RotateAuthzRequest` with `upload_request` is sent
+  // from the client for profile "bar" this is considered an error.
   string policy = 4;
 }
 
