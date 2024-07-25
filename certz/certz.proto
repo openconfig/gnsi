@@ -243,6 +243,12 @@ service Certz {
   //   Step 4: Final commit.
   //     Client ---> FinalizeRequest ----> Target
   //
+  // A `Rotate` RPC has a context of a single `profile` -- it is not
+  // permitted to multiplex operations for multiple profiles within the
+  // context of the same RPC (i.e., requesting a CSR for profile A, followed
+  // by requesting a CSR for profile B using the same `Rotate` RPC). In the
+  // case that such multiplexing is observed, the server should respond with
+  // an error specifying `InvalidArgument` as the status code.
   rpc Rotate(stream RotateCertificateRequest)
       returns (stream RotateCertificateResponse);
 
@@ -287,7 +293,7 @@ message RotateCertificateRequest {
   // An identifier for the specific SSL profile (collection of
   // certs/bundles/CRLs) which is being rotated through this stream.
   // Leaving this field blank will result in an InvalidArgument error
-  // being returned to the client
+  // being returned to the client.
   string ssl_profile_id = 2;
 
   // Request Messages.
