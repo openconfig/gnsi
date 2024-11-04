@@ -278,6 +278,11 @@ service Certz {
 
   // An RPC to ask a target if it can generate a Certificate Signing Request.
   rpc CanGenerateCSR(CanGenerateCSRRequest) returns (CanGenerateCSRResponse);
+
+  // An RPC to retrieve a RIM manifest from the device.
+  // See the TCG Reference Integrity Manifest (RIM) Information Model.
+  rpc GetIntegrityManifest(GetIntegrityManifestRequest)
+      returns (GetIntegrityManifestResponse);
 }
 
 // Request messages to rotate existing certificates on the target.
@@ -636,8 +641,81 @@ message CertificateSigningRequest {
 // the specified parameters.
 message GenerateCSRRequest {
   CSRParams params = 1;
+
+  // Indicates measurements that are prerequisites for certificate
+  // provisioning.
+  repeated ReferenceIntegrityData integrity = 2;
 }
+
 // A message sent by the target as response to the GenerateCSRRequest.
 message GenerateCSRResponse {
   CertificateSigningRequest certificate_signing_request = 1;
+}
+
+message GetIntegrityManifestRequest {}
+
+message GetIntegrityManifestResponse {
+  bytes manifest = 1;
+}
+
+// See the TCG Reference Integrity Manifest (RIM) Information Model.
+message ReferenceIntegritySpec {
+  // Identifies the Root of Trust component.
+  string rot_id = 1;
+
+  oneof type {
+    MBMSpec mbm = 3;
+  }
+}
+
+// See the TCG Reference Integrity Manifest (RIM) Information Model.
+message ReferenceIntegrityData {
+  // Identifies the Root of Trust component.
+  string rot_id = 1;
+
+  // Contains reference measurements for the RoT component.
+  oneof type {
+    MBMData mbm = 2;
+  }
+}
+
+// Measured Boot Manifest specification.
+// Fields of type bytes are octets; not text, not base64 encoded.
+message MBMSpec {
+  // Template for an ephemeral signing key.
+  // This is a packed TCG data structure.
+  bytes ak_template = 1;
+
+  // Random nonce used to prevent replay attacks.
+  bytes ak_nonce = 2;
+
+  // Measurement selection structure.
+  // This is a packed TCG data structure.
+  bytes selection = 3;
+
+  // Random nonce used to prevent replay attacks.
+  bytes nonce = 4;
+}
+
+// Measured Boot Manifest measurements.
+// Fields of type bytes are octets; not text, not base64 encoded.
+message MBMData {
+  bytes digest = 1;
+
+  // The signature over the integrity digest.
+  // This is a packed TCG data structure.
+  bytes signature = 2;
+
+  // The EK leaf certificate in PEM format.
+  string ek_cert = 3;
+
+  // The intermediate and signing certificate chain in PEM format.
+  string ek_cert_chain = 4;
+
+  // The AK public key.
+  string ak_pub_key = 5;
+
+  // The AK attestation structure.
+  // This is a packed TCG data structure.
+  bytes ak_attestation = 6;
 }
