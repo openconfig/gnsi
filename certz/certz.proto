@@ -644,12 +644,15 @@ message GenerateCSRRequest {
 
   // Indicates measurements that are prerequisites for certificate
   // provisioning.
-  repeated ReferenceIntegrityData integrity = 2;
+  repeated ReferenceIntegritySpec integrity = 2;
 }
 
 // A message sent by the target as response to the GenerateCSRRequest.
 message GenerateCSRResponse {
   CertificateSigningRequest certificate_signing_request = 1;
+
+  // Reference integrity measurements as specified in the request.
+  repeated ReferenceIntegrityData integrity = 2;
 }
 
 message GetIntegrityManifestRequest {}

@@ -187,6 +187,27 @@ The connection to the network system is broken, there is no
 The gNSI service rolls back the candidate and re-installs the original
 authentication policy.
 
+#### MBM-Boot workflow
+
+See the TCG Reference Integrity Manifest (RIM) Information Model for more
+details on the following
+(https://trustedcomputinggroup.org/resource/tcg-reference-integrity-manifest-rim-information-model/).
+
+Call `Certz.GetIntegrityManifest`. The `Certz.GetIntegrityManifestResponse`'s
+`manifest` field will contain the reference integrity manifest. Determine the
+PCRs to be included and all allowable digest values.
+
+Send a `Certz.GenerateCSRRequest` to the `Certz.Rotate` endpoint, containing a
+`Certz.ReferenceIntegritySpec`. Using the returned `Certz.GenerateCSRResponse`,
+do the following. Verify the EK certificate chain, and verify the
+AK by nonce and certification by EK. Validate PCR digest as signed by the
+validated AK. Verify the digest matches with one of the allowed ones. Lastly,
+validate the CSR by its AK signature, and then process and extract the public
+key.
+
+Get a new certificate issued by a trusted CA using the public key. Then
+`Certz.Rotate` as normal.
+
 ### Open Questions/Considerations
 
 None to date.
