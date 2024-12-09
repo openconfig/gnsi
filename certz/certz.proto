@@ -719,7 +719,7 @@ message MBMData {
   // The PCR quoted `TPM2B_ATTEST` structure. See section 18.4 of
   // https://trustedcomputinggroup.org/wp-content/uploads/TCG_TPM2_r1p59_Part3_Commands_pub.pdf#page=167 protolint:disable:this MAX_LINE_LENGTH
   // and section 10.12.13 of
-  // https://trustedcomputinggroup.org/wp-content/uploads/TCG_TPM2_r1p59_Part2_Structures_pub.pdf#page=135. protolint:disable:this MAX_LINE_LENGTH.
+  // https://trustedcomputinggroup.org/wp-content/uploads/TCG_TPM2_r1p59_Part2_Structures_pub.pdf#page=135. protolint:disable:this MAX_LINE_LENGTH
   bytes quoted = 1;
 
   // The digest signature `TPMT_SIGNATURE` structure. See section 18.4 of
