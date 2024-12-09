@@ -278,6 +278,11 @@ service Certz {
 
   // An RPC to ask a target if it can generate a Certificate Signing Request.
   rpc CanGenerateCSR(CanGenerateCSRRequest) returns (CanGenerateCSRResponse);
+
+  // An RPC to retrieve a RIM manifest from the device.
+  // See the TCG Reference Integrity Manifest (RIM) Information Model.
+  rpc GetIntegrityManifest(GetIntegrityManifestRequest)
+      returns (GetIntegrityManifestResponse);
 }
 
 // Request messages to rotate existing certificates on the target.
@@ -636,8 +641,112 @@ message CertificateSigningRequest {
 // the specified parameters.
 message GenerateCSRRequest {
   CSRParams params = 1;
+
+  // Indicates measurements that are prerequisites for certificate
+  // provisioning.
+  repeated ReferenceIntegritySpec integrities = 2;
 }
+
 // A message sent by the target as response to the GenerateCSRRequest.
 message GenerateCSRResponse {
   CertificateSigningRequest certificate_signing_request = 1;
+
+  // Reference integrity measurements as specified in the request.
+  repeated ReferenceIntegrityData integrities = 2;
+}
+
+message GetIntegrityManifestRequest {
+}
+
+message GetIntegrityManifestResponse {
+  // The manifest is a generic byte stream for passing protocol dependent
+  // (unsecured) data required prior to returning attestation data.
+  // This field will be migrated to structured data once a reference is
+  // defined.
+  bytes manifest = 1;
+}
+
+// See the TCG Reference Integrity Manifest (RIM) Information Model.
+message ReferenceIntegritySpec {
+  // Identifies the Root of Trust component (e.g. line card, etc).
+  string rot_id = 1;
+
+  // Contains measurement selections for the RoT component.
+  oneof type {
+    MBMSpec mbm = 3;
+  }
+}
+
+// See the TCG Reference Integrity Manifest (RIM) Information Model.
+message ReferenceIntegrityData {
+  // Identifies the Root of Trust component (e.g. line card, etc).
+  string rot_id = 1;
+
+  // Contains reference measurements for the RoT component.
+  oneof type {
+    MBMData mbm = 2;
+  }
+}
+
+// Measured Boot Manifest specification.
+// Fields of type bytes are byte representations of a struct; not text, not
+// base64 encoded.
+message MBMSpec {
+  // Template for an ephemeral signing key, as a `TPM2B_PUBLIC` structure. See
+  // section 24.1 of
+  // https://trustedcomputinggroup.org/wp-content/uploads/TCG_TPM2_r1p59_Part3_Commands_pub.pdf#page=293 protolint:disable:this MAX_LINE_LENGTH
+  // and section 12.2.5 of
+  // https://trustedcomputinggroup.org/wp-content/uploads/TCG_TPM2_r1p59_Part2_Structures_pub.pdf#page=160. protolint:disable:this MAX_LINE_LENGTH
+  bytes ak_template = 1;
+
+  // Random nonce used to prevent replay attacks.
+  bytes ak_nonce = 2;
+
+  // Measurement selection `TPML_PCR_SELECTION` structure. See section 24.1 of
+  // https://trustedcomputinggroup.org/wp-content/uploads/TCG_TPM2_r1p59_Part3_Commands_pub.pdf#page=293 protolint:disable:this MAX_LINE_LENGTH
+  // and section 10.9.7 of
+  // https://trustedcomputinggroup.org/wp-content/uploads/TCG_TPM2_r1p59_Part2_Structures_pub.pdf#page=125. protolint:disable:this MAX_LINE_LENGTH
+  bytes selection = 3;
+
+  // Random nonce used to prevent replay attacks.
+  bytes nonce = 4;
+}
+
+// Measured Boot Manifest measurements.
+// Fields of type bytes are byte representations of a struct; not text, not
+// base64 encoded.
+message MBMData {
+  // The PCR quoted `TPM2B_ATTEST` structure. See section 18.4 of
+  // https://trustedcomputinggroup.org/wp-content/uploads/TCG_TPM2_r1p59_Part3_Commands_pub.pdf#page=167 protolint:disable:this MAX_LINE_LENGTH
+  // and section 10.12.13 of
+  // https://trustedcomputinggroup.org/wp-content/uploads/TCG_TPM2_r1p59_Part2_Structures_pub.pdf#page=135. protolint:disable:this MAX_LINE_LENGTH
+  bytes quoted = 1;
+
+  // The digest signature `TPMT_SIGNATURE` structure. See section 18.4 of
+  // https://trustedcomputinggroup.org/wp-content/uploads/TCG_TPM2_r1p59_Part3_Commands_pub.pdf#page=167 protolint:disable:this MAX_LINE_LENGTH
+  // and section 11.3.4 of
+  // https://trustedcomputinggroup.org/wp-content/uploads/TCG_TPM2_r1p59_Part2_Structures_pub.pdf#page=153. protolint:disable:this MAX_LINE_LENGTH
+  bytes signature = 2;
+
+  // The EK leaf certificate in PEM format.
+  string ek_leaf_cert = 3;
+
+  // The intermediate and signing certificate chain in PEM format.
+  string ek_cert_chain = 4;
+
+  // The AK public key in PEM format.
+  string ak_pub_key = 5;
+
+  // The AK attestation `TPM2B_ATTEST` structure. See section 18.3 of
+  // https://trustedcomputinggroup.org/wp-content/uploads/TCG_TPM2_r1p59_Part3_Commands_pub.pdf#page=163 protolint:disable:this MAX_LINE_LENGTH
+  // and section 10.12.13 of
+  // https://trustedcomputinggroup.org/wp-content/uploads/TCG_TPM2_r1p59_Part2_Structures_pub.pdf#page=135. protolint:disable:this MAX_LINE_LENGTH
+  bytes ak_attestation = 6;
+
+  // The AK attestation signature `TPMT_SIGNATURE` structure. See section 18.3
+  // of
+  // https://trustedcomputinggroup.org/wp-content/uploads/TCG_TPM2_r1p59_Part3_Commands_pub.pdf#page=163 protolint:disable:this MAX_LINE_LENGTH
+  // and section 11.3.4 of
+  // https://trustedcomputinggroup.org/wp-content/uploads/TCG_TPM2_r1p59_Part2_Structures_pub.pdf#page=153. protolint:disable:this MAX_LINE_LENGTH
+  bytes ak_signature = 7;
 }

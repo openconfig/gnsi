@@ -27,6 +27,7 @@ type CertzClient interface {
 	DeleteProfile(ctx context.Context, in *DeleteProfileRequest, opts ...grpc.CallOption) (*DeleteProfileResponse, error)
 	GetProfileList(ctx context.Context, in *GetProfileListRequest, opts ...grpc.CallOption) (*GetProfileListResponse, error)
 	CanGenerateCSR(ctx context.Context, in *CanGenerateCSRRequest, opts ...grpc.CallOption) (*CanGenerateCSRResponse, error)
+	GetIntegrityManifest(ctx context.Context, in *GetIntegrityManifestRequest, opts ...grpc.CallOption) (*GetIntegrityManifestResponse, error)
 }
 
 type certzClient struct {
@@ -104,6 +105,15 @@ func (c *certzClient) CanGenerateCSR(ctx context.Context, in *CanGenerateCSRRequ
 	return out, nil
 }
 
+func (c *certzClient) GetIntegrityManifest(ctx context.Context, in *GetIntegrityManifestRequest, opts ...grpc.CallOption) (*GetIntegrityManifestResponse, error) {
+	out := new(GetIntegrityManifestResponse)
+	err := c.cc.Invoke(ctx, "/gnsi.certz.v1.Certz/GetIntegrityManifest", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CertzServer is the server API for Certz service.
 // All implementations must embed UnimplementedCertzServer
 // for forward compatibility
@@ -113,6 +123,7 @@ type CertzServer interface {
 	DeleteProfile(context.Context, *DeleteProfileRequest) (*DeleteProfileResponse, error)
 	GetProfileList(context.Context, *GetProfileListRequest) (*GetProfileListResponse, error)
 	CanGenerateCSR(context.Context, *CanGenerateCSRRequest) (*CanGenerateCSRResponse, error)
+	GetIntegrityManifest(context.Context, *GetIntegrityManifestRequest) (*GetIntegrityManifestResponse, error)
 	mustEmbedUnimplementedCertzServer()
 }
 
@@ -134,6 +145,9 @@ func (UnimplementedCertzServer) GetProfileList(context.Context, *GetProfileListR
 }
 func (UnimplementedCertzServer) CanGenerateCSR(context.Context, *CanGenerateCSRRequest) (*CanGenerateCSRResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CanGenerateCSR not implemented")
+}
+func (UnimplementedCertzServer) GetIntegrityManifest(context.Context, *GetIntegrityManifestRequest) (*GetIntegrityManifestResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetIntegrityManifest not implemented")
 }
 func (UnimplementedCertzServer) mustEmbedUnimplementedCertzServer() {}
 
@@ -246,6 +260,24 @@ func _Certz_CanGenerateCSR_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Certz_GetIntegrityManifest_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetIntegrityManifestRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CertzServer).GetIntegrityManifest(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/gnsi.certz.v1.Certz/GetIntegrityManifest",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CertzServer).GetIntegrityManifest(ctx, req.(*GetIntegrityManifestRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Certz_ServiceDesc is the grpc.ServiceDesc for Certz service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -268,6 +300,10 @@ var Certz_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CanGenerateCSR",
 			Handler:    _Certz_CanGenerateCSR_Handler,
+		},
+		{
+			MethodName: "GetIntegrityManifest",
+			Handler:    _Certz_GetIntegrityManifest_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
