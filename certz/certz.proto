@@ -660,6 +660,8 @@ message GetIntegrityManifestRequest {}
 message GetIntegrityManifestResponse {
   // The manifest is a generic byte stream for passing protocol dependent
   // (unsecured) data required prior to returning attestation data.
+  // This field will be migrated to structured data once a reference is
+  // defined.
   bytes manifest = 1;
 }
 
