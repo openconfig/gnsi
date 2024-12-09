@@ -658,6 +658,8 @@ message GenerateCSRResponse {
 message GetIntegrityManifestRequest {}
 
 message GetIntegrityManifestResponse {
+  // The manifest is a generic byte stream for passing protocol dependent
+  // (unsecured) data required prior to returning attestation data.
   bytes manifest = 1;
 }
 
