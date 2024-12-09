@@ -644,7 +644,7 @@ message GenerateCSRRequest {
 
   // Indicates measurements that are prerequisites for certificate
   // provisioning.
-  repeated ReferenceIntegritySpec integrity = 2;
+  repeated ReferenceIntegritySpec integrities = 2;
 }
 
 // A message sent by the target as response to the GenerateCSRRequest.
@@ -652,10 +652,11 @@ message GenerateCSRResponse {
   CertificateSigningRequest certificate_signing_request = 1;
 
   // Reference integrity measurements as specified in the request.
-  repeated ReferenceIntegrityData integrity = 2;
+  repeated ReferenceIntegrityData integrities = 2;
 }
 
-message GetIntegrityManifestRequest {}
+message GetIntegrityManifestRequest {
+}
 
 message GetIntegrityManifestResponse {
   // The manifest is a generic byte stream for passing protocol dependent
@@ -691,7 +692,8 @@ message ReferenceIntegrityData {
 // Fields of type bytes are byte representations of a struct; not text, not
 // base64 encoded.
 message MBMSpec {
-  // Template for an ephemeral signing key, as a `TPM2B_PUBLIC` structure. See section 24.1 of
+  // Template for an ephemeral signing key, as a `TPM2B_PUBLIC` structure. See
+  // section 24.1 of
   // https://trustedcomputinggroup.org/wp-content/uploads/TCG_TPM2_r1p59_Part3_Commands_pub.pdf#page=293 protolint:disable:this MAX_LINE_LENGTH
   // and section 12.2.5 of
   // https://trustedcomputinggroup.org/wp-content/uploads/TCG_TPM2_r1p59_Part2_Structures_pub.pdf#page=160. protolint:disable:this MAX_LINE_LENGTH

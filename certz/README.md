@@ -189,9 +189,9 @@ authentication policy.
 
 #### MBM-Boot workflow
 
-See the TCG Reference Integrity Manifest (RIM) Information Model for more
-details on the following
-(https://trustedcomputinggroup.org/resource/tcg-reference-integrity-manifest-rim-information-model/).
+See the [TCG Reference Integrity Manifest (RIM) Information
+Model](https://trustedcomputinggroup.org/resource/tcg-reference-integrity-manifest-rim-information-model/)
+for more details on the following workflow.
 
 Call `Certz.GetIntegrityManifest`. The `Certz.GetIntegrityManifestResponse`'s
 `manifest` field will contain the reference integrity manifest. Determine the
