@@ -178,7 +178,8 @@ message RotateAuthzResponse {
 // Note that the gRPC-level Authorization Policy change is considered rolled
 // back by the target if the target returns an error in response to the
 // Finalize message.
-message FinalizeRequest {}
+message FinalizeRequest {
+}
 
 // UploadRequest instructs the target to store the given gRPC-level
 // Authorization Policy.
@@ -214,7 +215,8 @@ message UploadRequest {
   string policy = 3;
 }
 
-message UploadResponse {}
+message UploadResponse {
+}
 
 // ProbeRequest contains a single user name and the fully qualified name of the
 // gRPC call being attempted.
