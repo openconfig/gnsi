@@ -38,9 +38,10 @@ The normal use-case would be to:
 SSL profiles logically group a certificate (private and public keys),
 Certificate Authority chain of certificates (a.k.a. a CA trust bundle) and
 a set of Certificate Revocation Lists into a set that then can be assigned
-as a whole to a gRPC server.
+as a whole to a gRPC service.
 
-There is always at least one profile present on a target - the `system_default_profile` which is vendor provided.
+There is always at least one profile present on a target - the `system_default_profile`
+which is vendor provided.
 This profile cannot be changed or deleted.
 See the the [System default SSL profile](#system-default-ssl-profile) section below.
 
@@ -49,7 +50,7 @@ Profiles existing on a target can be discovered using the
 
 A SSL profile can be added using the `Certz.AddProfile()` RPC.
 
-When no longer a profile is needed it can be removed from the target via
+When a profile is no longer needed it can be removed from the target via
 `Certz.DeleteProfile()` RPC. Note that the gNxI SSL profile cannot be
 removed.
 
