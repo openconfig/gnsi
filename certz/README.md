@@ -51,8 +51,8 @@ Profiles existing on a target can be discovered using the
 A SSL profile can be added using the `Certz.AddProfile()` RPC.
 
 When a profile is no longer needed it can be removed from the target via
-`Certz.DeleteProfile()` RPC. Note that the gNxI SSL profile cannot be
-removed.
+`Certz.DeleteProfile()` RPC. Note that the system_default_profile SSL
+profile cannot be removed.
 
 The SSL profile ID of a gRPC server is exposed in the YANG leaf
 `ssl-profile-id` which is an augment to the
