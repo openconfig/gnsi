@@ -25,7 +25,6 @@ cpp_grpc_library(
     name = "certz_cc_proto",
     protos = [
         ":certz_proto",
-        "@go_googleapis//google/rpc:status_proto",
     ],
 )
 
