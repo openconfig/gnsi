@@ -81,6 +81,8 @@ option go_package = "github.com/openconfig/gnsi/cert";
 // There is at least one SSL profile present on the target, the one that is used
 // by all gNxI microservices. It is created during the bootstrap phase and
 // cannot be removed.
+// SSL profiles maybe used by client, server or both services on the target
+// device.
 // Other services that require credentials _can_ use the same SSL profile as
 // the gNxI server or they can use a SSL profiles that is created using
 // the `AddProfile()` RPC. In any case, the assignment of a SSL profile to
