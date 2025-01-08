@@ -199,15 +199,19 @@ Call `Certz.GetIntegrityManifest`. The `Certz.GetIntegrityManifestResponse`'s
 PCRs to be included and all allowable digest values.
 
 Send a `Certz.GenerateCSRRequest` to the `Certz.Rotate` endpoint, containing a
-`Certz.ReferenceIntegritySpec`. Using the returned `Certz.GenerateCSRResponse`,
-do the following. Verify the EK certificate chain, and verify the
-AK by nonce and certification by EK. Validate PCR digest as signed by the
-validated AK. Verify the digest matches with one of the allowed ones. Lastly,
-validate the CSR by its AK signature, and then process and extract the public
-key.
+`Certz.ReferenceIntegritySpec`. Using the returned `Certz.GenerateCSRResponse`
+and the `MBMData` within, do the following:
 
-Get a new certificate issued by a trusted CA using the public key. Then
-`Certz.Rotate` as normal.
+* Verify the `ek_leaf_cert` using the `ek_cert_chain` and your trust anchor.
+* Validate the `ak_signature` over the `ak_attestation` struct which was
+  certified by the EK, and validate its contents. This verifies the AK.
+* Validate the `signature` over `quoted` by the AK. Then validate that the PCRs
+  match one of the allowed ones.
+* Validate the `csr_signature` over the `certificate_signing_request` by the AK.
+  This verifies the CSR.
+
+Get a new certificate issued by a trusted CA using the CSR. Then `Certz.Rotate`
+as normal.
 
 ### Open Questions/Considerations
 
