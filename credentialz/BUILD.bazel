@@ -1,17 +1,10 @@
+load("@com_github_grpc_grpc//bazel:cc_grpc_library.bzl", "cc_grpc_library")
+load("@com_google_protobuf//bazel:cc_proto_library.bzl", "cc_proto_library")
+load("@com_google_protobuf//bazel:proto_library.bzl", "proto_library")
 load("@io_bazel_rules_go//go:def.bzl", "go_library")
 load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
-load("@rules_proto//proto:defs.bzl", "proto_library")
-load("@rules_proto_grpc//cpp:defs.bzl", "cpp_grpc_library")
-load("//:common.bzl", "use_new_compilers")
 
 package(default_visibility = ["//visibility:public"])
-
-use_new_compilers()
-
-filegroup(
-    name = "yang",
-    srcs = glob(["*.yang"]),
-)
 
 proto_library(
     name = "credentialz_proto",
@@ -22,13 +15,16 @@ proto_library(
 ##############################################################################
 # C++
 ##############################################################################
-
-cpp_grpc_library(
+cc_proto_library(
     name = "credentialz_cc_proto",
-    protos = [
-        ":credentialz_proto",
-        "@go_googleapis//google/rpc:status_proto",
-    ],
+    deps = [":credentialz_proto"],
+)
+
+cc_grpc_library(
+    name = "credentialz_cc_grpc_proto",
+    srcs = [":credentialz_proto"],
+    grpc_only = True,
+    deps = [":credentialz_cc_proto"],
 )
 
 ##############################################################################
@@ -38,8 +34,8 @@ cpp_grpc_library(
 go_proto_library(
     name = "credentialz_go_proto",
     compilers = [
-        "go_protoc_gen_go",
-        "go_protoc_gen_go_grpc",
+        "@io_bazel_rules_go//proto:go_grpc_v2",
+        "@io_bazel_rules_go//proto:go_proto",
     ],
     importpath = "github.com/openconfig/gnsi/credentialz",
     proto = ":credentialz_proto",
