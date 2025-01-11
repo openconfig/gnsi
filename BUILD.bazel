@@ -11,15 +11,10 @@ gazelle(
     name = "gazelle_update_repos",
     args = [
         "-from_file=go.mod",
-        "-to_macro=gnmi_go_deps.bzl%gnmi_go_deps",
+        "-to_macro=gnsi_go_deps.bzl%gnsi_go_deps",
         "-prune",
     ],
     command = "update-repos",
-)
-
-gazelle_test(
-    name = "gazelle_test",
-    workspace = "//:BUILD.bazel",
 )
 
 alias(
