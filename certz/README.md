@@ -203,6 +203,8 @@ Send a `Certz.GenerateCSRRequest` to the `Certz.Rotate` endpoint, containing a
 and the `MBMData` within, do the following:
 
 * Verify the `ek_leaf_cert` using the `ek_cert_chain` and your trust anchor.
+* Optional: Verify that the AK matches your expectations, using the
+  `ak_creation_data` struct.
 * Validate the `ak_signature` over the `ak_attestation` struct which was
   certified by the EK, and validate its contents. This verifies the AK.
 * Validate the `signature` over `quoted` by the AK. Then validate that the PCRs

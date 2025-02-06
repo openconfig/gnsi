@@ -739,6 +739,13 @@ message MBMData {
   // The AK public key in PEM format.
   string ak_pub_key = 5;
 
+  // The AK attestation key creation data `TPM2B_CREATION_DATA` structure. See
+  // section 24.1 of
+  // https://trustedcomputinggroup.org/wp-content/uploads/TCG_TPM2_r1p59_Part3_Commands_pub.pdf#page=293 protolint:disable:this MAX_LINE_LENGTH
+  // and section 15.2 of
+  // https://trustedcomputinggroup.org/wp-content/uploads/TCG_TPM2_r1p59_Part2_Structures_pub.pdf#page=176. protolint:disable:this MAX_LINE_LENGTH
+  bytes ak_creation_data = 9;
+
   // The AK attestation `TPM2B_ATTEST` structure. See section 18.3 of
   // https://trustedcomputinggroup.org/wp-content/uploads/TCG_TPM2_r1p59_Part3_Commands_pub.pdf#page=163 protolint:disable:this MAX_LINE_LENGTH
   // and section 10.12.13 of
