@@ -91,12 +91,13 @@ out the action.
 If the stream is disconnected prior to the Finalize message being
 sent, the proposed configuration is rolled back automatically.
 
-### AuthorizationPolicy rotation and gNMI subscriptions
+### AuthorizationPolicy rotation interaction with gNMI Subscribe and gSII Modify RPCs
 
-When the pathz policy is rotated, ongoing gNMI subscriptions will be dropped.
+When the pathz policy is rotated, ongoing gNMI Subscribe RPCs will be disconnected.
+Any ongoing gSII Modify RPCs will also be disconnected.
 
-This forces gNMI clients to reconnect and ensures that all gNMI subscriptions
-are proceeding using the most recent pathz policy.
+This forces gNMI/gSII clients to reconnect and ensures that all gNMI subscriptions
+or gSII Modify streams are proceeding using the most recent pathz policy.
 
 ## Open Questions/Considerations
 
