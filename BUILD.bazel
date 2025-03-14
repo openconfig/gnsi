@@ -17,6 +17,11 @@ gazelle(
     command = "update-repos",
 )
 
+gazelle_test(
+    name = "gazelle_test",
+    workspace = "//:BUILD.bazel",
+)
+
 alias(
     name = "authz_go",
     actual = "//authz:authz",
