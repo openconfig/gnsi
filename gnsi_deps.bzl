@@ -85,7 +85,7 @@ def gnsi_deps():
     if not native.existing_rule("openconfig_gnmi"):
         http_archive(
             name = "openconfig_gnmi",
-            sha256 = "c4b3d9e2fecb0be91ff5d27a6a9eb45fd0d5f2c1dd80ac47cbd6be57a3005a21",
-            strip_prefix = "gnmi-0.13.0",
-            url = "https://github.com/openconfig/gnmi/releases/download/v0.13.0/gnmi-0.13.0.tar.gz",
+            sha256 = "813f8a52dfa06dd1b9a2c775b26c42d36a05595dfa6fb0a85dbaead46b5c43a3",
+            strip_prefix = "gnmi-0.14.1",
+            url = "https://github.com/openconfig/gnmi/archive/refs/tags/v0.14.1.tar.gz",
         )
