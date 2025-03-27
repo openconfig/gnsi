@@ -1,9 +1,9 @@
 module github.com/openconfig/gnsi
 
-go 1.23.4
+go 1.23.0
 
 require (
-	github.com/openconfig/gnmi v0.13.0
+	github.com/openconfig/gnmi v0.14.1
 	google.golang.org/grpc v1.69.2
 	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.5.1
 	google.golang.org/protobuf v1.36.2

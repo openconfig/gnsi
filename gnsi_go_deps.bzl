@@ -111,8 +111,8 @@ def gnsi_go_deps():
     go_repository(
         name = "com_github_openconfig_gnmi",
         importpath = "github.com/openconfig/gnmi",
-        sum = "h1:4aVopzMZVYtfrRqlpDqM0liutE+3/AiDMzNtI2r7em4=",
-        version = "v0.13.0",
+        sum = "h1:qKMuFvhIRR2/xxCOsStPQ25aKpbMDdWr3kI+nP9bhMs=",
+        version = "v0.14.1",
     )
     go_repository(
         name = "com_github_openconfig_goyang",
