@@ -44,7 +44,7 @@ go_proto_library(
     importpath = "github.com/openconfig/gnsi/pathz",
     proto = ":pathz_proto",
     deps = [
-        "@openconfig_gnmi//proto/gnmi:gnmi_go_proto",
+        "@openconfig_gnmi//proto/gnmi",
     ],
 )
 

@@ -3,7 +3,7 @@ load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_test")
 # gazelle:go_grpc_compilers @io_bazel_rules_go//proto:go_grpc_v2, @io_bazel_rules_go//proto:go_proto
 # gazelle:proto_import_prefix github.com/openconfig/gnsi
 # gazelle:prefix github.com/openconfig/gnsi
-# gazelle:resolve proto go github.com/openconfig/gnmi/proto/gnmi/gnmi.proto @openconfig_gnmi//proto/gnmi:gnmi_go_proto
+# gazelle:resolve proto go github.com/openconfig/gnmi/proto/gnmi/gnmi.proto @openconfig_gnmi//proto/gnmi:gnmi
 # gazelle:resolve proto github.com/openconfig/gnmi/proto/gnmi/gnmi.proto @openconfig_gnmi//proto/gnmi:gnmi_proto
 gazelle(name = "gazelle")
 
