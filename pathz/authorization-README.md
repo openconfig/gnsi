@@ -46,9 +46,11 @@ An implicit deny is assumed, if there is no matching rule in the policy.
 
 As a request is evaluated against the configured policy, a READ (gNMI `Get` or
 `Subscribe`) request for the configuration tree may traverse all of the tree
-and subtrees. For portions of the tree for which the user has no access no data
-will be returned. A WRITE request which attempts to write to a denied gNMI path
-or element will return a "Permission Denied" error to the caller.
+and subtrees. The client request must have an explicit permit for the path or
+a parent path of the request for the request to be permitted. For portions of
+the tree for which the user has no access no data will be returned. A WRITE
+request which attempts to write to a denied gNMI path or element will return
+a "Permission Denied" error to the caller.
 
 [gNMI paths](https://github.com/openconfig/reference/blob/master/rpc/gnmi/gnmi-specification.md#222-paths)
 are hierarchical, and rooted at a defined "origin". gNMI may contain paths
@@ -78,6 +80,7 @@ Permitted use:
 ```
 
 Not permitted use:
+
 ```proto
     /a/b[key=foo]/*/d
 ```
@@ -152,6 +155,45 @@ Installed Rules
 Result: DENY, both paths are the same length, have the same amount of definite keys,
 apply to groups that user is a member of, so prefer DENY over PERMIT.
 
+Example 5
+
+Installed Rules
+
+```sh
+/interfaces/interface[name=*] -> group core-controllers, action PERMIT
+/interfaces/interface[name=*] -> group core-eng, action PERMIT
+/interfaces/interface[name=et-1/0/1]/state/counters -> user customer-controller1, action PERMIT
+/interfaces/interface[name=et-1/0/2]/state/counters -> user customer-controller2, action PERMIT
+/interfaces/interface[name=et-1/0/1] -> core-controller, action DENY
+/interfaces/interface[name=et-1/0/2] -> core-controller, action DENY
+
+```
+
+Result:
+
+This will assume that core-controller1 is member of core-controllers
+This will assume that eng1 is member of core-eng
+
+* `gnmi.Subscribe(10.0.0.10:515253, eng1, /interfaces/interface/state/counters, ONCE)`
+
+Subscribe will be accepted and all subtrees will be returned as eng1 is member core-eng group
+
+* `gnmi.Subscribe(10.0.0.10:515253, customer-controller1, /interfaces/interface/state/counters, ONCE)`
+
+Subscribe will be rejected as user does not have access at that container
+
+* `gnmi.Subscribe(10.0.0.10:515253, customer-controller1, /interfaces/interface[name=et-1/0/1]/state/counters, ONCE)`
+
+Subscribe will be accepted and all subtrees will be returned.
+
+* `gnmi.Subscribe(10.0.0.10:515253, core-contollers, /interfaces/interface/state/counters, ONCE)`
+
+Subscribe will be accepted, only interfaces not matching the deny rule will be returned.
+
+* `gnmi.Subscribe(10.0.0.10:515253, core-controllers, /interfaces/interface[name=et-1/0/1]/state/counters, ONCE)`
+
+Subscribe will be rejected due to explicit DENY rule for path.
+
 ## Bootstrap / Install Options
 
 System bootstrap, or install, operations may include an authorization policy
@@ -160,11 +202,10 @@ process include the complete authorization policy so all production tools
 and services have immediate authorized access to finish installation and
 move devices into production in a timely manner.
 
-Using the Secure Zero Touch Provisioning (sZTP - RFC8572) process for
-bootstrap/installation is a recommended method for accomplishing this
-delivery, and the delivery of all other bootstrap artifacts in a secure manner.
-
-
+Using [Bootz](https://github.com/openconfig/bootz) or the Secure Zero Touch
+Provisioning (sZTP - RFC8572)process for bootstrap/installation is a recommended
+method for accomplishing this delivery, and the delivery of all other bootstrap
+artifacts in a secure manner.
 
 ## An Example Authorization Protobuf
 
