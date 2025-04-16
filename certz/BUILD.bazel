@@ -1,32 +1,33 @@
+load("@com_google_protobuf//bazel:cc_proto_library.bzl", "cc_proto_library")
+load("@com_google_protobuf//bazel:proto_library.bzl", "proto_library")
 load("@io_bazel_rules_go//go:def.bzl", "go_library")
 load("@io_bazel_rules_go//proto:def.bzl", "go_proto_library")
-load("@rules_proto//proto:defs.bzl", "proto_library")
-load("@rules_proto_grpc//cpp:defs.bzl", "cpp_grpc_library")
-load("//:common.bzl", "use_new_compilers")
+load("//bazel:cc_grpc_library.bzl", "cc_grpc_library")
 
 package(default_visibility = ["//visibility:public"])
-
-use_new_compilers()
 
 proto_library(
     name = "certz_proto",
     srcs = ["certz.proto"],
+    import_prefix = "github.com/openconfig/gnsi",
     deps = [
         "@com_google_protobuf//:any_proto",
     ],
-    import_prefix = "github.com/openconfig/gnsi",
 )
 
 ##############################################################################
 # C++
 ##############################################################################
-
-cpp_grpc_library(
+cc_proto_library(
     name = "certz_cc_proto",
-    protos = [
-        ":certz_proto",
-        "@go_googleapis//google/rpc:status_proto",
-    ],
+    deps = [":certz_proto"],
+)
+
+cc_grpc_library(
+    name = "certz_cc_grpc_proto",
+    srcs = [":certz_proto"],
+    grpc_only = True,
+    deps = [":certz_cc_proto"],
 )
 
 ##############################################################################
@@ -36,8 +37,8 @@ cpp_grpc_library(
 go_proto_library(
     name = "certz_go_proto",
     compilers = [
-        "go_protoc_gen_go",
-        "go_protoc_gen_go_grpc",
+        "@io_bazel_rules_go//proto:go_grpc_v2",
+        "@io_bazel_rules_go//proto:go_proto",
     ],
     importpath = "github.com/openconfig/gnsi/certz",
     proto = ":certz_proto",
@@ -47,4 +48,20 @@ go_library(
     name = "certz",
     embed = [":certz_go_proto"],
     importpath = "github.com/openconfig/gnsi/certz",
+)
+
+go_proto_library(
+    name = "cert_go_proto",
+    compilers = [
+        "@io_bazel_rules_go//proto:go_grpc_v2",
+        "@io_bazel_rules_go//proto:go_proto",
+    ],
+    importpath = "github.com/openconfig/gnsi/cert",
+    proto = ":certz_proto",
+)
+
+go_library(
+    name = "cert",
+    embed = [":cert_go_proto"],
+    importpath = "github.com/openconfig/gnsi/cert",
 )
