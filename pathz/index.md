@@ -1,5 +1,6 @@
 # gNSI Authorization Protobuf Definition
-**Contributors**: hines@google.com, morrowc@google.com, tmadejski@google.com
+
+**Contributors**: <hines@google.com>, <morrowc@google.com>, <tmadejski@google.com>
 **Last Updated**: 2022-07-12
 
 ## Background
@@ -56,6 +57,15 @@ the access expected is either permitted or denied in accordance
 with the expected to be deployed AuthroizationPolicy.
 
 ## User Experiences
+
+### gNMI interaction with Subscribe, Set or Get
+
+When a client makes a request to gNMI with a system with a pathz policy
+installed, the pathz policy is evaluated against the paths requested. The
+if there is no explicit permit to the path requested the client the RPC must
+be rejected. This keeps the gNMI server from being potentially DOS'ed by
+clients requesting top level paths which then have to be recursed for all
+possible accepts which might be a lower levels of the tree.
 
 ### An AuthorizationPolicy is to be installed
 

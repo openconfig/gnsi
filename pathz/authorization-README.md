@@ -46,9 +46,11 @@ An implicit deny is assumed, if there is no matching rule in the policy.
 
 As a request is evaluated against the configured policy, a READ (gNMI `Get` or
 `Subscribe`) request for the configuration tree may traverse all of the tree
-and subtrees. For portions of the tree for which the user has no access no data
-will be returned. A WRITE request which attempts to write to a denied gNMI path
-or element will return a "Permission Denied" error to the caller.
+and subtrees. The client request must have an explicit permit for the path or
+a parent path of the request for the request to be permitted. For portions of
+the tree for which the user has no access no data will be returned. A WRITE
+request which attempts to write to a denied gNMI path or element will return
+a "Permission Denied" error to the caller.
 
 [gNMI paths](https://github.com/openconfig/reference/blob/master/rpc/gnmi/gnmi-specification.md#222-paths)
 are hierarchical, and rooted at a defined "origin". gNMI may contain paths
