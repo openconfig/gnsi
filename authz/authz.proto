@@ -80,7 +80,6 @@ option go_package = "github.com/openconfig/gnsi/authz";
 // all other RPCs is implementation dependent.
 
 service Authz {
-
   // Rotate will replace an existing gRPC-level Authorization Policy on the
   // target.
   //
@@ -117,8 +116,7 @@ service Authz {
   //   Step 4: Final commit.
   //     Client ---> FinalizeRequest ----> Target
   //
-  rpc Rotate(stream RotateAuthzRequest)
-      returns (stream RotateAuthzResponse);
+  rpc Rotate(stream RotateAuthzRequest) returns (stream RotateAuthzResponse);
 
   // Probe allows for evaluation of the gRPC-level Authorization Policy engine
   // response to a gRPC call performed by a user.
@@ -230,6 +228,16 @@ message ProbeRequest {
   // It has to be a fully qualified name, like:
   //    "/gnsi.ssh.Ssh/MutateHostCredentials"
   string rpc = 2;
+
+  // The profile for which the authz policy is being probed. In the case that
+  // this field is not specified, the default authz policy which applies to all
+  // gRPC endpoints run by the target is assumed. Where non-default policies
+  // are to supported by an endpoint, the value of the profile determines which
+  // set of policies are to be probed.
+  //
+  // Note that the authz profile is considered independent from a SSL profile
+  // ID (as referenced by gnsi.Certz).
+  string authz_profile_id = 3;
 }
 
 // ProbeResponse returns the ACK/NACK for a single user request
@@ -247,10 +255,20 @@ message ProbeResponse {
 
   Action action = 1;
   string version = 2;
+  string authz_profile_id = 3;
 }
 
 // GetRequest used to request the gRPC-level Authorization Policy.
 message GetRequest {
+  // The profile for which the authz policy is being requested. In the case that
+  // this field is not specified, the default authz policy which applies to all
+  // gRPC endpoints run by the target is assumed. Where non-default policies
+  // are to supported by an endpoint, the value of the profile determines which
+  // set of policies are returned.
+  //
+  // Note that the authz profile is considered independent from a SSL profile
+  // ID (as referenced by gnsi.Certz).
+  string authz_profile_id = 1;
 }
 
 // GetResponse returns the requested instance of the gRPC-level Authorization
@@ -282,4 +300,5 @@ message GetResponse {
   // It is provided as a JSON formatted string whose structure is defined by
   // gRPC.
   string policy = 3;
+  string authz_profile_id = 4;
 }
