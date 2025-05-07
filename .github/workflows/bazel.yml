@@ -15,18 +15,18 @@ jobs:
     env:
       BAZEL: bazelisk-linux-amd64
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           submodules: recursive
       - name: Mount bazel cache
-        uses: actions/cache@v4
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4
         with:
           path: "~/.cache/bazel"
           key: bazel-${{ runner.os }}-build-${{ hashFiles('**/*.bzl', '**/*.bazel') }}
           restore-keys: |
             bazel-${{ runner.os }}-build-
       - name: Setup Bazel
-        uses: bazelbuild/setup-bazelisk@v2
+        uses: bazelbuild/setup-bazelisk@b39c379c82683a5f25d34f0d062761f62693e0b2 # v3
       - name: Build
         run: bazel build //...
       - name: Test
