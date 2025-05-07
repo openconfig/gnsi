@@ -25,8 +25,6 @@ jobs:
           key: bazel-${{ runner.os }}-build-${{ hashFiles('**/*.bzl', '**/*.bazel') }}
           restore-keys: |
             bazel-${{ runner.os }}-build-
-      - name: Setup Bazel
-        uses: bazelbuild/setup-bazelisk@b39c379c82683a5f25d34f0d062761f62693e0b2 # v3
       - name: Build
         run: bazel build //...
       - name: Test
