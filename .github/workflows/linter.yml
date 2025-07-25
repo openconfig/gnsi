@@ -40,7 +40,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Lint Code Base
-        uses: github/super-linter/slim@12150456a73e248bdc94d0794898f94e23127c88 # v7
+        uses: super-linter/super-linter@12150456a73e248bdc94d0794898f94e23127c88 # v7
         env:
           VALIDATE_ALL_CODEBASE: false
           VALIDATE_HTML: false
