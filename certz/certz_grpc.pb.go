@@ -4,7 +4,7 @@
 // - protoc             v6.32.0
 // source: github.com/openconfig/gnsi/certz/certz.proto
 
-package cert
+package certz
 
 import (
 	context "context"

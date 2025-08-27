@@ -4,7 +4,7 @@
 // 	protoc        v6.32.0
 // source: github.com/openconfig/gnsi/certz/certz.proto
 
-package cert
+package certz
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -2628,7 +2628,7 @@ const file_github_com_openconfig_gnsi_certz_certz_proto_rawDesc = "" +
 	"\rDeleteProfile\x12#.gnsi.certz.v1.DeleteProfileRequest\x1a$.gnsi.certz.v1.DeleteProfileResponse\x12]\n" +
 	"\x0eGetProfileList\x12$.gnsi.certz.v1.GetProfileListRequest\x1a%.gnsi.certz.v1.GetProfileListResponse\x12]\n" +
 	"\x0eCanGenerateCSR\x12$.gnsi.certz.v1.CanGenerateCSRRequest\x1a%.gnsi.certz.v1.CanGenerateCSRResponse\x12o\n" +
-	"\x14GetIntegrityManifest\x12*.gnsi.certz.v1.GetIntegrityManifestRequest\x1a+.gnsi.certz.v1.GetIntegrityManifestResponseB!Z\x1fgithub.com/openconfig/gnsi/certb\x06proto3"
+	"\x14GetIntegrityManifest\x12*.gnsi.certz.v1.GetIntegrityManifestRequest\x1a+.gnsi.certz.v1.GetIntegrityManifestResponseB\"Z github.com/openconfig/gnsi/certzb\x06proto3"
 
 var (
 	file_github_com_openconfig_gnsi_certz_certz_proto_rawDescOnce sync.Once
