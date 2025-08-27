@@ -359,6 +359,8 @@ message GetProfileListResponse {
 
 // CSRSuite specifies the valid types of keys and digests that can be used
 // to generate CSRs
+//
+// protolint:disable:next ENUM_FIELD_NAMES_PREFIX
 enum CSRSuite {
   CSRSUITE_CIPHER_UNSPECIFIED = 0;
 
