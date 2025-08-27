@@ -21,7 +21,7 @@ package gnsi.certz.v1;
 
 import "google/protobuf/any.proto";
 
-option go_package = "github.com/openconfig/gnsi/cert";
+option go_package = "github.com/openconfig/gnsi/certz";
 
 // The Certificate Management Service exported by targets.
 //
