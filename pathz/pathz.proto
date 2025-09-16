@@ -166,7 +166,7 @@ message UploadRequest {
   // a particular device).
   // Also, this timestamp must be persisted by the device for preservation
   // across system reboots / cold-starts.
-  // `created_on` is a timestamp: the number of seconds since
+  // `created_on` is a timestamp: the number of nanoseconds since
   // January 1st, 1970 00:00:00 GMT, a.k.a. unix epoch.
   uint64 created_on = 2;
 
