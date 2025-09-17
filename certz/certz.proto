@@ -21,7 +21,7 @@ package gnsi.certz.v1;
 
 import "google/protobuf/any.proto";
 
-option go_package = "github.com/openconfig/gnsi/cert";
+option go_package = "github.com/openconfig/gnsi/certz";
 
 // The Certificate Management Service exported by targets.
 //
@@ -359,6 +359,8 @@ message GetProfileListResponse {
 
 // CSRSuite specifies the valid types of keys and digests that can be used
 // to generate CSRs
+//
+// protolint:disable:next ENUM_FIELD_NAMES_PREFIX
 enum CSRSuite {
   CSRSUITE_CIPHER_UNSPECIFIED = 0;
 
