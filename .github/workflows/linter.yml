@@ -21,7 +21,9 @@ on:
   pull_request:
     branches: [main]
 
-permissions: {}
+permissions:
+  contents: read
+  statuses: write
 
 jobs:
   build:
