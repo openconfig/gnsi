@@ -226,6 +226,7 @@ const (
 	Certificate_CERT_SOURCE_UNSPECIFIED Certificate_CertSource = 0
 	Certificate_CERT_SOURCE_OIDEVID     Certificate_CertSource = 1
 	Certificate_CERT_SOURCE_IDEVID      Certificate_CertSource = 2
+	Certificate_CERT_SOURCE_SELFSIGNED  Certificate_CertSource = 3
 )
 
 // Enum value maps for Certificate_CertSource.
@@ -234,11 +235,13 @@ var (
 		0: "CERT_SOURCE_UNSPECIFIED",
 		1: "CERT_SOURCE_OIDEVID",
 		2: "CERT_SOURCE_IDEVID",
+		3: "CERT_SOURCE_SELFSIGNED",
 	}
 	Certificate_CertSource_value = map[string]int32{
 		"CERT_SOURCE_UNSPECIFIED": 0,
 		"CERT_SOURCE_OIDEVID":     1,
 		"CERT_SOURCE_IDEVID":      2,
+		"CERT_SOURCE_SELFSIGNED":  3,
 	}
 )
 
@@ -275,6 +278,7 @@ const (
 	Certificate_KEY_SOURCE_UNSPECIFIED Certificate_KeySource = 0
 	Certificate_KEY_SOURCE_IDEVID_TPM  Certificate_KeySource = 1
 	Certificate_KEY_SOURCE_GENERATED   Certificate_KeySource = 2
+	Certificate_KEY_SOURCE_SELFSIGNED  Certificate_KeySource = 3
 )
 
 // Enum value maps for Certificate_KeySource.
@@ -283,11 +287,13 @@ var (
 		0: "KEY_SOURCE_UNSPECIFIED",
 		1: "KEY_SOURCE_IDEVID_TPM",
 		2: "KEY_SOURCE_GENERATED",
+		3: "KEY_SOURCE_SELFSIGNED",
 	}
 	Certificate_KeySource_value = map[string]int32{
 		"KEY_SOURCE_UNSPECIFIED": 0,
 		"KEY_SOURCE_IDEVID_TPM":  1,
 		"KEY_SOURCE_GENERATED":   2,
+		"KEY_SOURCE_SELFSIGNED":  3,
 	}
 )
 
@@ -2489,7 +2495,7 @@ const file_github_com_openconfig_gnsi_certz_certz_proto_rawDesc = "" +
 	"\x06parent\x18\x02 \x01(\v2\x1f.gnsi.certz.v1.CertificateChainR\x06parent\".\n" +
 	"\vTrustBundle\x12\x1f\n" +
 	"\vpkcs7_block\x18\x01 \x01(\tR\n" +
-	"pkcs7Block\"\x94\x05\n" +
+	"pkcs7Block\"\xcb\x05\n" +
 	"\vCertificate\x122\n" +
 	"\x04type\x18\x01 \x01(\x0e2\x1e.gnsi.certz.v1.CertificateTypeR\x04type\x12>\n" +
 	"\bencoding\x18\x02 \x01(\x0e2\".gnsi.certz.v1.CertificateEncodingR\bencoding\x12$\n" +
@@ -2501,16 +2507,18 @@ const file_github_com_openconfig_gnsi_certz_certz_proto_rawDesc = "" +
 	"certSource\x12(\n" +
 	"\x0fraw_private_key\x18\a \x01(\fH\x01R\rrawPrivateKey\x12E\n" +
 	"\n" +
-	"key_source\x18\b \x01(\x0e2$.gnsi.certz.v1.Certificate.KeySourceH\x01R\tkeySource\"Z\n" +
+	"key_source\x18\b \x01(\x0e2$.gnsi.certz.v1.Certificate.KeySourceH\x01R\tkeySource\"v\n" +
 	"\n" +
 	"CertSource\x12\x1b\n" +
 	"\x17CERT_SOURCE_UNSPECIFIED\x10\x00\x12\x17\n" +
 	"\x13CERT_SOURCE_OIDEVID\x10\x01\x12\x16\n" +
-	"\x12CERT_SOURCE_IDEVID\x10\x02\"\\\n" +
+	"\x12CERT_SOURCE_IDEVID\x10\x02\x12\x1a\n" +
+	"\x16CERT_SOURCE_SELFSIGNED\x10\x03\"w\n" +
 	"\tKeySource\x12\x1a\n" +
 	"\x16KEY_SOURCE_UNSPECIFIED\x10\x00\x12\x19\n" +
 	"\x15KEY_SOURCE_IDEVID_TPM\x10\x01\x12\x18\n" +
-	"\x14KEY_SOURCE_GENERATED\x10\x02B\x12\n" +
+	"\x14KEY_SOURCE_GENERATED\x10\x02\x12\x19\n" +
+	"\x15KEY_SOURCE_SELFSIGNED\x10\x03B\x12\n" +
 	"\x10certificate_typeB\x12\n" +
 	"\x10private_key_type\"\xdf\x01\n" +
 	"\x19CertificateRevocationList\x122\n" +

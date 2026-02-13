@@ -488,6 +488,8 @@ message Certificate {
     // certificates present on the device already
     CERT_SOURCE_OIDEVID = 1;
     CERT_SOURCE_IDEVID = 2;
+    // self-signed certificate generated on device
+    CERT_SOURCE_SELFSIGNED = 3;
   }
 
   oneof certificate_type {
@@ -510,6 +512,9 @@ message Certificate {
 
     // key was generated with a CSR as part of the current Rotate RPC
     KEY_SOURCE_GENERATED = 2;
+
+    // self-signed key generated on device
+    KEY_SOURCE_SELFSIGNED = 3;
   }
 
   oneof private_key_type {
