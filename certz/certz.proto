@@ -487,6 +487,14 @@ message Certificate {
 
     // certificates present on the device already
     CERT_SOURCE_OIDEVID = 1;
+
+    // CERT_SOURCE_IDEVID can only be used on the leaf Certificate in a
+    // CertificateChain, and that if the leaf Certificate has cert_source
+    // set to CERT_SOURCE_IDEVID, then no Parent CertificateChain
+    // should be set.
+    // Internally, the handling for CERT_SOURCE_IDEVID may involve the device
+    // configuring one or more certificates in the ssl profile, so that it
+    // forms a valid and usable certificate chain.
     CERT_SOURCE_IDEVID = 2;
     // self-signed certificate generated on device
     CERT_SOURCE_SELFSIGNED = 3;
