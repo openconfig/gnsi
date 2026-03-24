@@ -45,6 +45,10 @@ which is vendor provided.
 This profile cannot be changed or deleted.
 See the the [System default SSL profile](#system-default-ssl-profile) section below.
 
+The profiles defined may include entirely different TLS artifacts, or there may
+be repeated content in the profiles. There should be no assumptions made about
+the content being either unique or repetitive when setting or using the profile.
+
 Profiles existing on a target can be discovered using the
 `Certz.GetProfileList()` RPC.
 
