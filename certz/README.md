@@ -1,7 +1,7 @@
 # gNSI.certz
 
 ## gNSI certz Service Protobuf Definition
-**Contributors**: hines@google.com, morrowc@google.com, tmadejski@google.com
+**Contributors**: <hines@google.com>, <morrowc@google.com>, <tmadejski@google.com>
 **Last Updated**: 2023-05-31
 
 ### Background
@@ -40,9 +40,9 @@ Certificate Authority chain of certificates (a.k.a. a CA trust bundle) and
 a set of Certificate Revocation Lists into a set that then can be assigned
 as a whole to a gRPC service.
 
-There is always at least one profile present on a target - the `system_default_profile`
-which is vendor provided.
-This profile cannot be changed or deleted.
+There is always at least one profile present on a target - the
+`system_default_profile` which is vendor provided. This profile cannot
+be changed or deleted.
 See the the [System default SSL profile](#system-default-ssl-profile) section below.
 
 The profiles defined may include entirely different TLS artifacts, or there may
