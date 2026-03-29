@@ -1,7 +1,8 @@
 # gNSI.certz
 
 ## gNSI certz Service Protobuf Definition
-**Contributors**: hines@google.com, morrowc@google.com, tmadejski@google.com
+
+**Contributors**: <hines@google.com>, <morrowc@google.com>, <tmadejski@google.com>
 **Last Updated**: 2023-05-31
 
 ### Background
@@ -27,11 +28,11 @@ a clear and direct method for installation and update.
 verification of function, of any of the PKI elements.
 The normal use-case would be to:
 
-* send an CertificateBundle to a network system as a
+- send an CertificateBundle to a network system as a
   `RotateCertificateRequest`.
-* verify that the services which will use the new certificate bundle
+- verify that the services which will use the new certificate bundle
   continue to operate normally.
-* send a `FinalizeRequest` to finish the rotation process.
+- send a `FinalizeRequest` to finish the rotation process.
 
 #### SSL profiles
 
@@ -40,10 +41,14 @@ Certificate Authority chain of certificates (a.k.a. a CA trust bundle) and
 a set of Certificate Revocation Lists into a set that then can be assigned
 as a whole to a gRPC service.
 
-There is always at least one profile present on a target - the `system_default_profile`
-which is vendor provided.
-This profile cannot be changed or deleted.
+There is always at least one profile present on a target - the
+`system_default_profile` which is vendor provided. This profile cannot
+be changed or deleted.
 See the the [System default SSL profile](#system-default-ssl-profile) section below.
+
+The profiles defined may include entirely different TLS artifacts, or there may
+be repeated content in the profiles. There should be no assumptions made about
+the content being either unique or repetitive when setting or using the profile.
 
 Profiles existing on a target can be discovered using the
 `Certz.GetProfileList()` RPC.
@@ -202,14 +207,14 @@ Send a `Certz.GenerateCSRRequest` to the `Certz.Rotate` endpoint, containing a
 `Certz.ReferenceIntegritySpec`. Using the returned `Certz.GenerateCSRResponse`
 and the `MBMData` within, do the following:
 
-* Verify the `ek_leaf_cert` using the `ek_cert_chain` and your trust anchor.
-* Optional: Verify that the AK matches your expectations, using the
+- Verify the `ek_leaf_cert` using the `ek_cert_chain` and your trust anchor.
+- Optional: Verify that the AK matches your expectations, using the
   `ak_creation_data` struct.
-* Validate the `ak_signature` over the `ak_attestation` struct which was
+- Validate the `ak_signature` over the `ak_attestation` struct which was
   certified by the EK, and validate its contents. This verifies the AK.
-* Validate the `signature` over `quoted` by the AK. Then validate that the PCRs
+- Validate the `signature` over `quoted` by the AK. Then validate that the PCRs
   match one of the allowed ones.
-* Validate the `csr_signature` over the `certificate_signing_request` by the AK.
+- Validate the `csr_signature` over the `certificate_signing_request` by the AK.
   This verifies the CSR.
 
 Get a new certificate issued by a trusted CA using the CSR. Then `Certz.Rotate`
@@ -221,4 +226,4 @@ None to date.
 
 ## OpenConfig Data models for gNSI certz
 
-Yang data models for certz are defined in the [OpenConfig public repository(https://github.com/openconfig/public/tree/master/release/models/gnsi)].  Documentation for OpenConfig including searchable list of paths and tree representations are at [OpenConfig.net](https://openconfig.net/projects/models/)
+Yang data models for certz are defined in the [OpenConfig public repository(https://github.com/openconfig/public/tree/master/release/models/gnsi)]. Documentation for OpenConfig including searchable list of paths and tree representations are at [OpenConfig.net](https://openconfig.net/projects/models/)
