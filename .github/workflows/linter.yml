@@ -53,3 +53,4 @@ jobs:
           IGNORE_GENERATED_FILES: true
           DEFAULT_BRANCH: main
           MULTI_STATUS: false
+          ENABLE_GITHUB_PULL_REQUEST_SUMMARY_COMMENT: false
