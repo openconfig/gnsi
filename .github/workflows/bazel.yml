@@ -9,7 +9,7 @@ on:
   schedule:
     - cron: "0 0 * * *"
 
-permissions: {}
+permissions: { }
 
 jobs:
   build:
