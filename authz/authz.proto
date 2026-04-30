@@ -251,6 +251,8 @@ message ProbeResponse {
 
 // GetRequest used to request the gRPC-level Authorization Policy.
 message GetRequest {
+  // The profile for which the authz policy is being requested.
+  string authz_profile_id = 1;
 }
 
 // GetResponse returns the requested instance of the gRPC-level Authorization
