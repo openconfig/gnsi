@@ -1,6 +1,6 @@
 module github.com/openconfig/gnsi
 
-go 1.24.0
+go 1.25.0
 
 toolchain go1.26.2
 
@@ -12,8 +12,8 @@ require (
 )
 
 require (
-	golang.org/x/net v0.49.0 // indirect
-	golang.org/x/sys v0.40.0 // indirect
-	golang.org/x/text v0.33.0 // indirect
+	golang.org/x/net v0.55.0 // indirect
+	golang.org/x/sys v0.45.0 // indirect
+	golang.org/x/text v0.37.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260120221211-b8f7ae30c516 // indirect
 )
