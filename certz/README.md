@@ -10,8 +10,8 @@ The certz service definition provides the API to be used for rotating and
 testing PKI primitives used on network systems.
 The `Rotate()` is bidirectional streaming RPC which permit
 mutating Certificates, Root Certificate Bundles, Certificate Revocation
-Lists and Authentication Policies. For `Rotate()` stream it is possible to
-mutate one or more of the elements, and to send a `Finalize` message once the
+Lists (CRLs) and Authentication Policies. For `Rotate()` stream it is possible
+to mutate one or more of the elements, and to send a `Finalize` message once the
 in-flight change has been verified to be operational. Failure to send
 the `Finalize` message will result in the candidate element being discarded
 and the original element being used instead.
@@ -36,7 +36,7 @@ The normal use-case would be to:
 #### SSL profiles
 
 SSL profiles logically group a certificate (private and public keys),
-Certificate Authority chain of certificates (a.k.a. a CA trust bundle) and
+Certificate Authority chain of certificates (a.k.a. a CA trust bundle), and
 a set of Certificate Revocation Lists into a set that then can be assigned
 as a whole to a gRPC service.
 
