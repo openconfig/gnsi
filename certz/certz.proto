@@ -84,7 +84,7 @@ option go_package = "github.com/openconfig/gnsi/certz";
 // SSL profiles maybe used by client, server or both services on the target
 // device.
 // Other services that require credentials _can_ use the same SSL profile as
-// the gNxI server or they can use a SSL profiles that is created using
+// the gNxI server or they can use a SSL profiles that are created using
 // the `AddProfile()` RPC. In any case, the assignment of a SSL profile to
 // a service is done by modifying the `/oc-sys:system/
 //  oc-sys-grpc:grpc-servers/oc-sys-grpc:grpc-server/oc-sys-grpc:config/
@@ -545,6 +545,8 @@ message CertificateRevocationList {
   // Actual CRL.
   // The exact encoding depends upon the type of CRL.
   // for X509, this should be a PEM encoded CRL.
+  // Note that a CRL with an empty tbsCertList (see rfc 5280) is valid.  An
+  // implementation should not ignore or discard such a CRL.
   bytes certificate_revocation_list = 3;
 
   // ID of this CRL, which is the CRL file hash.
