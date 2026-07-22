@@ -542,9 +542,7 @@ message CertificateRevocationList {
   // CRL encoding type.
   CertificateEncoding encoding = 2;
 
-  // Actual CRL.
-  // The exact encoding depends upon the type of CRL.
-  // for X509, this should be a PEM encoded CRL.
+  // Actual CRL, PEM encoded.
   // Note that a CRL with an empty tbsCertList (see rfc 5280) is valid.  An
   // implementation should not ignore or discard such a CRL.
   bytes certificate_revocation_list = 3;
