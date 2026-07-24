@@ -1,7 +1,7 @@
 # gNSI.certz
 
 ## gNSI certz Service Protobuf Definition
-**Contributors**: hines@google.com, morrowc@google.com, tmadejski@google.com
+**Contributors**: [hines](mailto:hines@google.com), [morrowc](mailto:morrowc@google.com), [tmadejski](mailto:tmadejski@google.com)
 **Last Updated**: 2023-05-31
 
 ### Background
