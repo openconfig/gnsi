@@ -1,4 +1,5 @@
 # gNSI.authz
+
 ## The idea
 
 Implementation of reliable and fast APIs to control remote network-connected
@@ -17,8 +18,8 @@ a switch to control which user can and cannot access specific RPCs.
 The policy to be enforced is defined in the form of a JSON string whose
 structure depends on the requirements of the RPC server.
 
-In the case of a `gRPC`-based server the JSON string's schema can be found
-[here](https://github.com/grpc/proposal/blob/master/A43-grpc-authorization-api.md).
+In the case of a `gRPC`-based server the JSON string's schema can be
+[found here](https://github.com/grpc/proposal/blob/master/A43-grpc-authorization-api.md).
 It also can be described using the following PROTOBUF definition.
 
 ```protobuf
@@ -160,20 +161,20 @@ Nobody else will be able to call any of the `gNSI.ssh` RPCs.
 ```json
 {
   "name": "gNSI.ssh policy",
-  "allow_rules": [{
-    "name": "admin-access",
-    "source": {
-      "principals": [
-        "spiffe://company.com/sa/alice",
-        "spiffe://company.com/sa/bob"
-      ]
-    },
-    "request": {
-      "paths": [
-        "/gnsi.ssh.Ssh/*"
-      ]
+  "allow_rules": [
+    {
+      "name": "admin-access",
+      "source": {
+        "principals": [
+          "spiffe://company.com/sa/alice",
+          "spiffe://company.com/sa/bob"
+        ]
+      },
+      "request": {
+        "paths": ["/gnsi.ssh.Ssh/*"]
+      }
     }
-  }]
+  ]
 }
 ```
 
@@ -187,6 +188,7 @@ When a device boots for the first time it should have:
 1. The default gRPC-level Authorization Policy for all active gRPC services.
 
    The default gRPC-level Authorization Policy must allow access to all RPCs.
+
 1. Once a gNSI policy is set (uploaded and Finalized), the default policy
    disposition becomes deny, as mentioned in the AuthorizationPolicy message
    documentation above.
@@ -212,41 +214,44 @@ Authorization Policy, namely:
    the `UploadRequest` message.
 
    For example:
+
    ```json
    {
      "version": "version-1",
      "created_on": "1632779276520673693",
      "policy": {
        "name": "gNSI.ssh policy",
-       "allow_rules": [{
-         "name": "admin-access",
-         "source": {
-           "principals": [
-             "spiffe://company.com/sa/alice",
-             "spiffe://company.com/sa/bob"
-           ]
-         },
-         "request": {
-           "paths": [
-             "/gnsi.ssh.Ssh/*"
-           ]
+       "allow_rules": [
+         {
+           "name": "admin-access",
+           "source": {
+             "principals": [
+               "spiffe://company.com/sa/alice",
+               "spiffe://company.com/sa/bob"
+             ]
+           },
+           "request": {
+             "paths": ["/gnsi.ssh.Ssh/*"]
+           }
          }
-       }],
-       "deny_rules": [{
-         "name": "sales-access",
-         "source": {
-           "principals": [
-             "spiffe://company.com/sa/marge",
-             "spiffe://company.com/sa/don"
-           ]
-         },
-         "request": {
-           "paths": [
-             "/gnsi.ssh.Ssh/MutateAccountCredentials",
-             "/gnsi.ssh.Ssh/MutateHostCredentials"
-           ]
+       ],
+       "deny_rules": [
+         {
+           "name": "sales-access",
+           "source": {
+             "principals": [
+               "spiffe://company.com/sa/eunice",
+               "spiffe://company.com/sa/don"
+             ]
+           },
+           "request": {
+             "paths": [
+               "/gnsi.ssh.Ssh/MutateAccountCredentials",
+               "/gnsi.ssh.Ssh/MutateHostCredentials"
+             ]
+           }
          }
-       }]
+       ]
      }
    }
    ```
@@ -318,4 +323,4 @@ expected result of the `gNSI.authz.Probe()` RPC is:
 
 ## OpenConfig data models for gNSI Authorization Policy
 
-Yang data models for authz are defined in the [OpenConfig public repository(https://github.com/openconfig/public/tree/master/release/models/gnsi)].  Documentation for OpenConfig including searchable list of paths and tree representations are at [OpenConfig.net](https://openconfig.net/projects/models/)
+Yang data models for authz are defined in the [OpenConfig public repository(https://github.com/openconfig/public/tree/master/release/models/gnsi)]. Documentation for OpenConfig including searchable list of paths and tree representations are at [OpenConfig.net](https://openconfig.net/projects/models/)

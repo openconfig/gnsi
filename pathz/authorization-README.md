@@ -7,10 +7,10 @@ to describe an authorization framework for controlling which gNMI paths of a
 network device users can access. The authorization policy is initially intended
 to be deployed to a device, with the ability to define:
 
-* Policy rules - each rule defines a single authorization policy.
-* Groups of users - as a method to logically group users in the administrative
+- Policy rules - each rule defines a single authorization policy.
+- Groups of users - as a method to logically group users in the administrative
   domain, for instance: operators or administrators.
-* Users - individuals referenced in rules or group definitions.
+- Users - individuals referenced in rules or group definitions.
 
 Authentication information is not included in this Authorization configuration.
 
@@ -38,9 +38,9 @@ is determined from the following rules in order:
 
 Match rules permit a match against:
 
-* User or Group (not both)
-* an gNMI path
-* an access mode (READ / WRITE)
+- User or Group (not both)
+- an gNMI path
+- an access mode (READ / WRITE)
 
 An implicit deny is assumed, if there is no matching rule in the policy.
 
@@ -174,23 +174,23 @@ Result:
 This will assume that core-controller1 is member of core-controllers
 This will assume that eng1 is member of core-eng
 
-* `gnmi.Subscribe(10.0.0.10:515253, eng1, /interfaces/interface/state/counters, ONCE)`
+- `gnmi.Subscribe(10.0.0.10:515253, eng1, /interfaces/interface/state/counters, ONCE)`
 
 Subscribe will be accepted and all subtrees will be returned as eng1 is member core-eng group
 
-* `gnmi.Subscribe(10.0.0.10:515253, customer-controller1, /interfaces/interface/state/counters, ONCE)`
+- `gnmi.Subscribe(10.0.0.10:515253, customer-controller1, /interfaces/interface/state/counters, ONCE)`
 
 Subscribe will be rejected as user does not have access at that container
 
-* `gnmi.Subscribe(10.0.0.10:515253, customer-controller1, /interfaces/interface[name=et-1/0/1]/state/counters, ONCE)`
+- `gnmi.Subscribe(10.0.0.10:515253, customer-controller1, /interfaces/interface[name=et-1/0/1]/state/counters, ONCE)`
 
 Subscribe will be accepted and all subtrees will be returned.
 
-* `gnmi.Subscribe(10.0.0.10:515253, core-contollers, /interfaces/interface/state/counters, ONCE)`
+- `gnmi.Subscribe(10.0.0.10:515253, core-contollers, /interfaces/interface/state/counters, ONCE)`
 
 Subscribe will be accepted, only interfaces not matching the deny rule will be returned.
 
-* `gnmi.Subscribe(10.0.0.10:515253, core-controllers, /interfaces/interface[name=et-1/0/1]/state/counters, ONCE)`
+- `gnmi.Subscribe(10.0.0.10:515253, core-controllers, /interfaces/interface[name=et-1/0/1]/state/counters, ONCE)`
 
 Subscribe will be rejected due to explicit DENY rule for path.
 
@@ -513,7 +513,7 @@ restrictions on the key values, but still as read-only:
 Additionally, the path elements beyond "message_path" are available for access
 to this group as well.
 
-The wildcard character "*" (asterisk) may only be used as a value in keyed
+The wildcard character "\*" (asterisk) may only be used as a value in keyed
 elements, if the keys are missing in a keyed path a wildcard is assumed. The
 wildcard is only used to mask out all possible values but not portions of
 values, for instance:
@@ -523,5 +523,5 @@ values, for instance:
     /this/is/a/keyed[name=Ethernet1/*/3]/things - NOT permitted usage of wildcard
 ```
 
-The end of every policy includes an implicit deny policy rule.  This rule will
+The end of every policy includes an implicit deny policy rule. This rule will
 cause all matches to be counted.

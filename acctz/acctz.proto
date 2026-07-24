@@ -143,7 +143,7 @@ message SessionInfo {
     SESSION_STATUS_LOGOUT = 2;	// "stop"
     SESSION_STATUS_ONCE = 3;	// simultaneous login, cmd, logout
     SESSION_STATUS_ENABLE = 4;	// change privilege level
-    SESSION_STATUS_IDLE = 5;	// "watchog"
+    SESSION_STATUS_IDLE = 5;	// "watchdog"
     SESSION_STATUS_OPERATION = 6;  // "cmd"
   }
   SessionStatus status = 8;
@@ -333,7 +333,7 @@ message GrpcService {
   }
 }
 
-// An accounting record message is generated everytime the user types a
+// An accounting record message is generated every time the user types a
 // shell/vendorCLI command or sends a gNxI request.
 message RecordResponse {
   // Session information

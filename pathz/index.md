@@ -42,11 +42,11 @@ active.
 Pathz.Rotate will permit rotation, and verification of function,
 of an AuthorizationPolicy. The normal use-case would be to:
 
-* send an AuthorizationPolicy to a network system as a
-RotatePathzRequest
-* verify access/authorization has changed to the desired state
-through existing gNMI methods, or with pathz.Probe requests.
-* send a FinalizeRequest to finish the installation process.
+- send an AuthorizationPolicy to a network system as a
+  RotatePathzRequest
+- verify access/authorization has changed to the desired state
+  through existing gNMI methods, or with pathz.Probe requests.
+- send a FinalizeRequest to finish the installation process.
 
 ### Pathz.Probe
 

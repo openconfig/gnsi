@@ -5,6 +5,7 @@ This is an API which creates a contract for how gNSI Credentialz and hiba-chk wi
 If changes are made to either gNSI Credentialz or hiba-chk which change how arguments are mapped this API will need to be incremented to handle this scenario. A vendor will then need to produce a new image which fulfills the new API version.
 
 ## API v1.0
+
 - Applicable to gNSI credentialz with proto version **0.2.0**
 - Applicable to hiba-chk utility with commit `cae606dafc5692240ac49441fd57653d7aade99b`
 

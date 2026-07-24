@@ -7,27 +7,28 @@ Therefore credentials should be set up before credential RPCs are executed.
 
 The following files are expected to be created during the bootstrap process:
 
-* Certificate Authority's public key
-  * required for certificate-based client authentication
-  * used to check if the client's certificate is valid
-* target's certificate
-  * required for remote (this) host authentication by the clients
-  * presented to the clients who validate it using CA's public key
-* target's public key
-  * always required
-* target's private key
-  * always required
+- Certificate Authority's public key
+  - required for certificate-based client authentication
+  - used to check if the client's certificate is valid
+- target's certificate
+  - required for remote (this) host authentication by the clients
+  - presented to the clients who validate it using CA's public key
+- target's public key
+  - always required
+- target's private key
+  - always required
 
 ## Console access authentication
 
-### Using ``gNSI.credentialz`` API
+### Using `gNSI.credentialz` API
 
-* Start streaming RPC call to the target device.
+- Start streaming RPC call to the target device.
 
 ```go
 stream := RotateAccountCredentials()
 ```
-* Send a password change request message to the target device.
+
+- Send a password change request message to the target device.
 
 ```go
 stream.Send(
@@ -50,9 +51,9 @@ stream.Send(
 resp := stream.Receive()
 ```
 
-* Check if the new password 'works'
+- Check if the new password 'works'
 
-* Finalize the operation
+- Finalize the operation
 
 ```go
 stream.Send(
@@ -66,13 +67,13 @@ stream.Send(
 
 There are three authentication methods used with SSH:
 
-* password
-* public key
-* certificate
+- password
+- public key
+- certificate
 
 ### Method 1: Password-based
 
-> **_NOTE:_**  The method is strongly discouraged.
+> **_NOTE:_** The method is strongly discouraged.
 
 Check out the ["Console access authentication"](#console-access-authentication)
 section for information how to change account's password.
@@ -81,22 +82,22 @@ section for information how to change account's password.
 
 In the case of public key based authentication users are authenticated by:
 
-* `username`
-* SSH public key
+- `username`
+- SSH public key
 
 #### Update the client's credentials
 
 ##### Update the client's authorized key
 
-* Start streaming RPC call to the target device.
+- Start streaming RPC call to the target device.
 
 ```go
 stream := RotateAccountCredentials()
 ```
 
-* Send a authorized keys change request message to the target device.
+- Send a authorized keys change request message to the target device.
 
-> **_NOTE:_**  The current list of authorized keys will be **replaced**.
+> **_NOTE:_** The current list of authorized keys will be **replaced**.
 
 ```go
 stream.Send(
@@ -120,9 +121,9 @@ stream.Send(
 resp := stream.Receive()
 ```
 
-* Check if the new SSH keys 'work'
+- Check if the new SSH keys 'work'
 
-* Finalize the operation
+- Finalize the operation
 
 ```go
 stream.Send(
@@ -134,13 +135,13 @@ stream.Send(
 
 #### Update the host's keys with externally created keys
 
-* Start streaming RPC call to the target device.
+- Start streaming RPC call to the target device.
 
 ```go
 stream := RotateHostParameters()
 ```
 
-* Send a server's keys change request message to the target device. The keys must be base64 encoded.
+- Send a server's keys change request message to the target device. The keys must be base64 encoded.
 
 ```go
 stream.Send(
@@ -158,9 +159,9 @@ stream.Send(
 resp := stream.Receive()
 ```
 
-* Check if the new keys 'work'
+- Check if the new keys 'work'
 
-* Finalize the operation
+- Finalize the operation
 
 ```go
 stream.Send(
@@ -172,13 +173,13 @@ stream.Send(
 
 #### Update the host's keys with generated keys
 
-* Start streaming RPC call to the target device.
+- Start streaming RPC call to the target device.
 
 ```go
 stream := RotateHostParameters()
 ```
 
-* Send a server's keys change request message to the target device. The bytes are expected to be base64 encoded.
+- Send a server's keys change request message to the target device. The bytes are expected to be base64 encoded.
 
 ```go
 stream.Send(
@@ -191,9 +192,9 @@ stream.Send(
 resp, err := stream.Receive()
 ```
 
-* Check if the new keys 'work'
+- Check if the new keys 'work'
 
-* Finalize the operation
+- Finalize the operation
 
 ```go
 stream.Send(
@@ -212,26 +213,26 @@ can verify the credentials of the remote side and certificates can expire.
 
 For this method to work the target's server has to have configured:
 
-* Certificate Authority public keys allowed to sign a client's certificate
-* A SSH host certificate singed by a Certificate Authority trusted by the client
-* server's private key
+- Certificate Authority public keys allowed to sign a client's certificate
+- A SSH host certificate signed by a Certificate Authority trusted by the client
+- server's private key
 
 Similarly, the client has to have the following:
 
-* Certificate Authority public key of the CA that has signed
+- Certificate Authority public key of the CA that has signed
   the servers's certificate
-* A SSH certificate singed by a Certificate Authority trusted by the server
-* client's private key
+- A SSH certificate signed by a Certificate Authority trusted by the server
+- client's private key
 
 #### Update the CA keys
 
-* Start streaming RPC call to the target device.
+- Start streaming RPC call to the target device.
 
 ```go
 stream := RotateHostParameters()
 ```
 
-* Send a CA key change request message to the target device.
+- Send a CA key change request message to the target device.
 
 ```go
 stream.Send(
@@ -247,9 +248,9 @@ stream.Send(
 resp := stream.Receive()
 ```
 
-* Check if the new CA key 'works'
+- Check if the new CA key 'works'
 
-* Finalize the operation
+- Finalize the operation
 
 ```go
 stream.Send(
@@ -261,13 +262,13 @@ stream.Send(
 
 #### Update the host's certificate
 
-* Start streaming RPC call to the target device.
+- Start streaming RPC call to the target device.
 
 ```go
 stream := RotateHostParameters()
 ```
 
-* Send a server's certificate change request message to the target device. The bytes must be base64 encoded.
+- Send a server's certificate change request message to the target device. The bytes must be base64 encoded.
 
 ```go
 stream.Send(
@@ -285,9 +286,9 @@ stream.Send(
 resp := stream.Receive()
 ```
 
-* Check if the new certificate 'works'
+- Check if the new certificate 'works'
 
-* Finalize the operation
+- Finalize the operation
 
 ```go
 stream.Send(
@@ -299,15 +300,15 @@ stream.Send(
 
 ##### Update the account's authorized `principal` list
 
-* Start streaming RPC call to the target device.
+- Start streaming RPC call to the target device.
 
 ```go
 stream := RotateAccountCredentials()
 ```
 
-* Send a authorized `principal` list change request message to the target device.
+- Send a authorized `principal` list change request message to the target device.
 
-> **_NOTE:_**  The current list of authorized `principal`s will be **replaced**.
+> **_NOTE:_** The current list of authorized `principal`s will be **replaced**.
 
 ```go
 stream.Send(
@@ -331,9 +332,9 @@ stream.Send(
 resp := stream.Receive()
 ```
 
-* Check if the new list of authorized `principal`s 'works'
+- Check if the new list of authorized `principal`s 'works'
 
-* Finalize the operation
+- Finalize the operation
 
 ```go
 stream.Send(
@@ -350,9 +351,9 @@ keyboard interactive authentication types. Certificate authentication is implied
 by way of setting a TrustedUserCaKeys file. In order to globally disable
 specific types, credentialz provides the `AllowedAuthenticationRequest`. Rather
 than operating with sshd defaults, this allows the operator to specify which
-authentication types are globally permissable.
+authentication types are globally permissible.
 
-* Set the list of allowed authentication types.
+- Set the list of allowed authentication types.
 
 ```go
 stream.Send(
@@ -366,9 +367,9 @@ stream.Send(
 )
 ```
 
-* Validate that new settings are working as expected.
+- Validate that new settings are working as expected.
 
-* Finalize request.
+- Finalize request.
 
 ```go
 stream.Send(
@@ -385,7 +386,7 @@ authorized principals for a given system role. This is a global setting and
 cannot be set at the same time as the role specific configuration
 `authorized_principals` in the `UserPolicy`.
 
-* Set the AuthorizedPrincipalsCommand tool
+- Set the AuthorizedPrincipalsCommand tool
 
 ```go
 stream.Send(
@@ -397,9 +398,9 @@ stream.Send(
 )
 ```
 
-* Validate that new settings are working as expected.
+- Validate that new settings are working as expected.
 
-* Finalize request.
+- Finalize request.
 
 ```go
 stream.Send(
@@ -415,16 +416,16 @@ stream.Send(
 
 The most common operation we are expecting to require on devices is the rotation of certificates used for SSH access for devices. This operation expects to reuse the existing host key on the device.
 
-* Get the public key configured on the host.
+- Get the public key configured on the host.
 
 ```go
 
 resp, err := c.GetPublicKeys(&GetPublicKeyRequests{})
 ```
 
-* Generate certificate based on key.
+- Generate certificate based on key.
 
-* Rotate certificate on device.
+- Rotate certificate on device.
 
 ```go
 stream.Send(
@@ -438,9 +439,9 @@ stream.Send(
 )
 ```
 
-* Validate that new settings are working as expected.
+- Validate that new settings are working as expected.
 
-* Finalize request.
+- Finalize request.
 
 ```go
 stream.Send(
@@ -454,28 +455,28 @@ stream.Send(
 
 This use case focuses on the rotation of a host key and then generation of the certificate based on the new public key.
 
-* Send request for generation of new private key.
+- Send request for generation of new private key.
 
 ```go
 stream.Send(
     RotateHostParametersRequest {
         generate_keys: []GenerateKeysRequest {{
-            key_params: KeyGen.KEY_GEN_SSH_KEY_TYPE_EDDSA_ED25519 
+            key_params: KeyGen.KEY_GEN_SSH_KEY_TYPE_EDDSA_ED25519
         }}
     }
 )
 ```
 
-* Get Response containing public key to generate the certificate.
+- Get Response containing public key to generate the certificate.
 
 ```go
 resp, err := stream.Recv()
 data := resp.PublicKeys
 ```
 
-* The caller will then use this data to generate a certificate.
+- The caller will then use this data to generate a certificate.
 
-* Send generated cert to device to rotate.
+- Send generated cert to device to rotate.
 
 ```go
 stream.Send(
@@ -489,7 +490,7 @@ stream.Send(
 )
 ```
 
-* Validate the `RotateCredentialsResponse`.
+- Validate the `RotateCredentialsResponse`.
 
 ```go
 if _, err := stream.Recv(); err != nil {
@@ -497,9 +498,9 @@ if _, err := stream.Recv(); err != nil {
 }
 ```
 
-* Validate that new settings are working as expected.
+- Validate that new settings are working as expected.
 
-* Finalize request
+- Finalize request
 
 ```go
 stream.Send(
@@ -511,4 +512,4 @@ stream.Send(
 
 ## OpenConfig Data models for gNSI credentialz
 
-Yang data models for certz are defined in the [OpenConfig public repository(https://github.com/openconfig/public/tree/master/release/models/gnsi)].  Documentation for OpenConfig including searchable list of paths and tree representations are at [OpenConfig.net](https://openconfig.net/projects/models/)
+Yang data models for certz are defined in the [OpenConfig public repository(https://github.com/openconfig/public/tree/master/release/models/gnsi)]. Documentation for OpenConfig including searchable list of paths and tree representations are at [OpenConfig.net](https://openconfig.net/projects/models/)

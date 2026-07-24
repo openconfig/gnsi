@@ -31,7 +31,7 @@
 //
 // Additionally, the policy maintains a timestamp of creation
 // and version number from the underlying version control system.
-// The version/timestamp are available to requestors to verify which version
+// The version/timestamp are available to requesters to verify which version
 // of policy is being applied at the time of the request.
 //
 // This file defines the gNSI API to be used for the OpenConfig Path-based
