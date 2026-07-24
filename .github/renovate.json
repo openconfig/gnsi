@@ -1,5 +1,9 @@
 {
-  "extends": ["config:recommended", "schedule:weekdays", ":semanticCommitsDisabled"],
+  "extends": [
+    "config:recommended",
+    "schedule:weekdays",
+    ":semanticCommitsDisabled"
+  ],
   "postUpdateOptions": ["gomodTidy"],
   "commitMessagePrefix": "chore(all): ",
   "commitMessageAction": "update",

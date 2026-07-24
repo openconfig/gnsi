@@ -58,7 +58,7 @@ option go_package = "github.com/openconfig/gnsi/authz";
 //         "name": "sales-access",
 //         "source": {
 //           "principals": [
-//             "spiffe://company.com/sa/marge",
+//             "spiffe://company.com/sa/eunice",
 //             "spiffe://company.com/sa/don"
 //           ]
 //         },

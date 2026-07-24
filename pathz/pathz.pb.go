@@ -985,7 +985,7 @@ const file_github_com_openconfig_gnsi_pathz_pathz_proto_rawDesc = "" +
 	"\x04name\x18\x01 \x01(\tR\x04name\"F\n" +
 	"\x05Group\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12)\n" +
-	"\x05users\x18\x02 \x03(\v2\x13.gnsi.pathz.v1.UserR\x05users\"\xd6\x01\n" +
+	"\x05users\x18\x02 \x03(\v2\x13.gnsi.pathz.v1.user\x05users\"\xd6\x01\n" +
 	"\x11AuthorizationRule\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x14\n" +
 	"\x04user\x18\x02 \x01(\tH\x00R\x04user\x12\x16\n" +
