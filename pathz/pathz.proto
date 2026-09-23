@@ -120,10 +120,10 @@ message RotateRequest {
   }
 
   // If set to `true` the requested operation will succeed even if the
-  // combination of `id` and `version` is already in use (is not unique).
+  // `version` from the UploadRequest is already in use (is not unique).
   // If set to `false` the requested operation will fail and the streaming RPC
-  // will be closed with the `ALREADY_EXISTS` gRPC error if the combination
-  // of `id` and `version` is already in use (is not unique).
+  // will be closed with the `ALREADY_EXISTS` gRPC error if the `version`
+  // from the UploadRequest is already in use (is not unique).
   // It is a no-op for the `finalize_rotation` request.
   bool force_overwrite = 3;
 }
