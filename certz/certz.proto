@@ -251,6 +251,12 @@ service Certz {
   // by requesting a CSR for profile B using the same `Rotate` RPC). In the
   // case that such multiplexing is observed, the server should respond with
   // an error specifying `InvalidArgument` as the status code.
+  //
+  // A `Rotate` RPC should not cause an SSL profile to transition from
+  // TLS to mTLS, if that SSL profile is in-use by the gRPC server which
+  // is currently hosting the Certz service through which the Rotate RPC
+  // is being performed. Attempting to do this should cause the server
+  // to respond with an error specifying `InvalidArgument` as the status code.
   rpc Rotate(stream RotateCertificateRequest)
       returns (stream RotateCertificateResponse);
 
