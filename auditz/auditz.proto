@@ -1,0 +1,328 @@
+// Runtime Host & Kernel Security Auditing (Auditz) for gNxI operations.
+//
+// Copyright 2026 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+// A protocol buffer definition used for streaming continuous OS, kernel,
+// process, filesystem, privilege, and socket runtime security audit telemetry
+// from a network device (System) to a remote Collector.
+//
+// This file assumes the following nomenclature:
+//
+//   o A System is a network device or other gN*I-enabled entity generating
+//     runtime host and kernel security EventResponse() records.
+//
+//   o A remote Collector connects to a System to retrieve runtime security
+//     events streamed in real time via EventSubscribe(). Operational status,
+//     resource utilization, and cumulative counters are exposed via gNMI in
+//     openconfig-gnsi-auditz.yang.
+//
+// Whereas gNSI.acctz records management-plane CLI and gRPC commands and
+// Attestz provides point-in-time cryptographic quotes of measured state,
+// gNSI.auditz provides continuous runtime security auditing and observability
+// of the underlying OS and kernel control plane.
+
+syntax = "proto3";
+
+package gnsi.auditz.v1;
+
+import "google/protobuf/timestamp.proto";
+import "github.com/openconfig/gnmi/proto/gnmi/gnmi.proto";
+
+option go_package = "github.com/openconfig/gnsi/auditz";
+
+// The gNSI Runtime Host & Kernel Security Auditing (Auditz) service exported by
+// targets.
+service Auditz {
+  // EventSubscribe returns a unidirectional stream of runtime security
+  // EventResponse messages sent from the System to a Collector.
+  //
+  // An EventRequest specifies a starting cursor using either after_sequence_id
+  // or timestamp. The Collector's expectation is that all events recorded after
+  // the specified cursor will be streamed. If no events exist after the
+  // requested cursor, the server remains silent until new events are generated
+  // or a periodic AgentHeartbeat is emitted.
+  //
+  // Any history for replay of events is maintained in a bounded in-memory ring
+  // buffer global to the System (or virtual tenant) so that new and
+  // reconnecting Collectors can resume without event loss or flash wear.
+  //
+  // Any device subsystem or FRU running an independent OS kernel (such as
+  // linecards, fabric cards, or a standby supervisor/RP) must proxy its
+  // runtime events through the active RP's gNSI endpoint and populate the
+  // originating component path in EventResponse.component.
+  //
+  // At connection initiation, if both after_sequence_id and timestamp are zero
+  // (or omitted), all events currently stored in the System's ring buffer
+  // are sent prior to streaming live events.
+  //
+  // The stream continues ad infinitum until the gNSI session is severed.
+  rpc EventSubscribe(EventRequest) returns (stream EventResponse);
+}
+
+// EventRequest specifies the starting point for runtime events to be streamed
+// to the caller.
+message EventRequest {
+  // Monotonically increasing sequence ID of the last EventResponse received by
+  // the Collector. When non-zero, the server streams all available events with
+  // sequence_id > after_sequence_id.
+  uint64 after_sequence_id = 1;
+
+  // Timestamp of the last EventResponse received by the Collector, represented
+  // as nanoseconds since the Unix epoch (Jan 1, 1970 00:00:00 UTC). Used when
+  // after_sequence_id is 0. A zero timestamp with after_sequence_id = 0
+  // indicates that the server should return all events currently present in the
+  // ring buffer followed by live events.
+  google.protobuf.Timestamp timestamp = 2;
+}
+
+// EventResponse represents a single runtime host/kernel security telemetry
+// record or periodic agent heartbeat. Event severity classification and
+// on-demand re-attestation policy are evaluated by the receiving off-box
+// security backends rather than on the device.
+message EventResponse {
+  // Monotonically increasing sequence number assigned by the System to each
+  // emitted EventResponse since boot or service start.
+  uint64 sequence_id = 1;
+
+  // The time when the System recorded this event, represented as nanoseconds
+  // since the Unix epoch (Jan 1, 1970 00:00:00 UTC).
+  google.protobuf.Timestamp timestamp = 2;
+
+  // True if the server's ring-buffer history is missing records prior to this
+  // EventResponse (for example, if the requested cursor predates the oldest
+  // event in the ring buffer or if events were dropped under backpressure).
+  // Subsequent EventResponse messages on the stream may have this field set to
+  // false once continuity is re-established.
+  bool history_istruncated = 3;
+
+  // OpenConfig gNMI path to the hardware or software component in the
+  // openconfig-platform model where the runtime event originated (e.g.,
+  // /components/component[name=supervisor0] or
+  // /components/component[name=linecard0]). Subsystems running independent OS
+  // kernels (linecards, fabric cards, standby RP) must proxy their events
+  // through the active RP and set this path accordingly.
+  gnmi.Path component = 4;
+
+  // Specific runtime telemetry payload. Event classes are defined by their
+  // semantic security behaviors rather than prescribing a specific kernel
+  // syscall implementation; if a vendor NOS intercepts or implements
+  // operations in user-space (e.g., via LD_PRELOAD shims or user-space
+  // network stacks), it must still emit the corresponding event message.
+  oneof event {
+    ProcessEvent process = 10;
+    KernelEvent kernel = 11;
+    FilesystemEvent filesystem = 12;
+    PrivilegeEvent privilege = 13;
+    SocketEvent socket = 14;
+    AgentHeartbeat heartbeat = 15;
+  }
+}
+
+// ProcessEvent captures semantic process creation, binary invocation, and
+// termination activity (e.g., fork, execve, exit) on the System control plane,
+// linecards, or within hosted containers.
+message ProcessEvent {
+  enum Action {
+    ACTION_UNSPECIFIED = 0;
+    ACTION_FORK = 1;
+    ACTION_EXEC = 2;
+    ACTION_EXIT = 3;
+  }
+  Action action = 1;
+
+  // Process ID and parent lineage.
+  uint32 pid = 2;
+  uint32 ppid = 3;
+  uint32 real_parent_pid = 4;
+
+  // Fork timestamp in microseconds since Unix epoch, forming a unique
+  // (pid, fork_time_usec) tuple across PID wrap-around.
+  uint64 fork_time_usec = 5;
+
+  // Real and effective user/group IDs at execution time.
+  uint32 uid = 6;
+  uint32 euid = 7;
+  uint32 gid = 8;
+  uint32 egid = 9;
+
+  // Absolute path to the executed binary on the filesystem.
+  string exe_path = 10;
+
+  // SHA-256 digest of the executed binary (or IMA digest if cached by kernel).
+  bytes exe_sha256 = 11;
+
+  // Filesystem type of the mount hosting exe_path (e.g., "squashfs", "ext4",
+  // "tmpfs", "overlay", "memfd").
+  string mount_fstype = 12;
+
+  // Command-line arguments (redacting sensitive secrets where applicable).
+  repeated string argv = 13;
+
+  // Working directory of the process.
+  string cwd = 14;
+
+  // Linux cgroup path or container/namespace identifier.
+  string cgroup_namespace = 15;
+
+  // Correlated gNSI.acctz session/channel identifier if the process was spawned
+  // from an authorized management session; empty if spawned outside AAA
+  // accounting (e.g., daemon exploit or background shell).
+  string acctz_session_id = 16;
+
+  // Exit code when action == ACTION_EXIT.
+  int32 exit_code = 17;
+}
+
+// KernelEvent captures kernel-level integrity events including kernel module
+// operations, eBPF program loads, probe attachments, and sysctl mutations.
+message KernelEvent {
+  enum Action {
+    ACTION_UNSPECIFIED = 0;
+    ACTION_MODULE_LOAD = 1;
+    ACTION_MODULE_UNLOAD = 2;
+    ACTION_BPF_PROG_LOAD = 3;
+    ACTION_KPROBE_ATTACH = 4;
+    ACTION_NETFILTER_HOOK = 5;
+    ACTION_SYSCTL_MUTATION = 6;
+  }
+  Action action = 1;
+
+  // Name of the kernel module, eBPF program, kprobe symbol, or sysctl key.
+  string target_name = 2;
+
+  // SHA-256 digest of the loaded kernel module or eBPF bytecode.
+  bytes artifact_sha256 = 3;
+
+  // True if the kernel cryptographically verified the module/program signature
+  // against the system keyring.
+  bool signature_verified = 4;
+
+  // PID of the user-space process that initiated the kernel operation.
+  uint32 caller_pid = 5;
+
+  // Optional additional detail (e.g., old/new sysctl value or hook priority).
+  string detail = 6;
+}
+
+// FilesystemEvent captures filesystem integrity violations, read-only mount
+// tampering, critical configuration file edits, and package manifest drift.
+message FilesystemEvent {
+  enum ViolationType {
+    VIOLATION_TYPE_UNSPECIFIED = 0;
+    VIOLATION_TYPE_REMOUNT_RW = 1;
+    VIOLATION_TYPE_DM_VERITY_FAILURE = 2;
+    VIOLATION_TYPE_FS_VERITY_FAILURE = 3;
+    VIOLATION_TYPE_IMA_APPRAISAL_FAILURE = 4;
+    VIOLATION_TYPE_CRITICAL_FILE_MODIFIED = 5;
+    VIOLATION_TYPE_PACKAGE_MANIFEST_DRIFT = 6;
+  }
+  ViolationType violation = 1;
+
+  // Mount point, block device, or absolute file path affected.
+  string mount_or_file_path = 2;
+
+  // Observed SHA-256 digest of the modified or corrupted file/block.
+  bytes observed_sha256 = 3;
+
+  // Expected golden SHA-256 digest from IMA, fs-verity, or CoRIM manifest.
+  bytes expected_sha256 = 4;
+
+  // PID of the process that performed the modification or remount.
+  uint32 actor_pid = 5;
+}
+
+// PrivilegeEvent captures credential transitions, Linux capability escalations,
+// namespace/container escapes, and unlinked binary executions.
+message PrivilegeEvent {
+  // PID of the process undergoing privilege transition.
+  uint32 pid = 1;
+
+  // Previous and new user/effective user IDs.
+  uint32 old_uid = 2;
+  uint32 new_uid = 3;
+  uint32 old_euid = 4;
+  uint32 new_euid = 5;
+
+  // Bitmask of newly added Linux capabilities (e.g., CAP_SYS_ADMIN,
+  // CAP_NET_RAW, CAP_SYS_MODULE).
+  uint64 added_capabilities_mask = 6;
+
+  // True if an unshare()/setns() transition escaped a non-root container or
+  // namespace into the host init namespace.
+  bool namespace_escape_detected = 7;
+
+  // True if the process is executing from an unlinked file descriptor
+  // (e.g., deleted binary on disk or anonymous memfd_create).
+  bool unlinked_executable = 8;
+
+  // Executable path of the process.
+  string exe_path = 9;
+}
+
+// SocketEvent captures semantic socket bind, listen, and outbound connect
+// operations across host, management, and revenue/data-plane VRFs—whether
+// executed via standard kernel socket syscalls or intercepted in user-space
+// (e.g., via LD_PRELOAD shims or user-space network stacks).
+message SocketEvent {
+  enum Action {
+    ACTION_UNSPECIFIED = 0;
+    ACTION_BIND = 1;
+    ACTION_LISTEN = 2;
+    ACTION_CONNECT = 3;
+  }
+  Action action = 1;
+
+  // PID and executable path owning the socket.
+  uint32 pid = 2;
+  string exe_path = 3;
+
+  // Network instance / VRF name (e.g., "default", "MGMT").
+  string vrf_name = 4;
+
+  // IP protocol number (e.g., 6 for TCP, 17 for UDP) per IANA assignment.
+  uint32 ip_proto = 5;
+
+  // Local and remote socket endpoints.
+  string local_address = 6;
+  uint32 local_port = 7;
+  string remote_address = 8;
+  uint32 remote_port = 9;
+}
+
+// AgentHeartbeat reports periodic liveness and TCB binary integrity of the
+// on-box Auditz collector stream. Point-in-time operational status, resource
+// overhead, and cumulative counters are exported via gNMI in
+// openconfig-gnsi-auditz.yang.
+message AgentHeartbeat {
+  // Semantic version string of the Auditz agent/subsystem.
+  string agent_version = 1;
+
+  // SHA-256 digest of the running Auditz agent binary (measurable via IMA/PCR).
+  bytes agent_binary_sha256 = 2;
+
+  // List of active kernel/OS telemetry collectors (e.g., "BPF_LSM", "IMA",
+  // "NETLINK_AUDIT", "FSNOTIFY", "USERSPACE_SHIM").
+  repeated string active_probes = 3;
+
+  // Cumulative count of runtime events shed due to ring-buffer backpressure or
+  // resource guardrails since agent start.
+  uint64 dropped_events_count = 4;
+
+  // Current resident set size (RSS) memory usage of the agent in kilobytes.
+  uint32 rss_memory_kb = 5;
+
+  // Current CPU utilization percentage of the agent (0.0 to 100.0).
+  float cpu_utilization_pct = 6;
+}
