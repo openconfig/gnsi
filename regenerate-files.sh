@@ -18,6 +18,8 @@ copy_generated() {
 
 bazel build //acctz:all
 copy_generated "acctz"
+bazel build //auditz:all
+copy_generated "auditz"
 bazel build //authz:all
 copy_generated "authz"
 bazel build //certz:all
