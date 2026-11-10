@@ -17,7 +17,7 @@ execution layer during device uptime.
 
 Runtime security audit records are available at the `gNSI` origin:
 
-```
+```text
 gnsi.auditz
 ```
 
