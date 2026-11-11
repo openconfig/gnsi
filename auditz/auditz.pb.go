@@ -250,11 +250,10 @@ func (SocketEvent_Action) EnumDescriptor() ([]byte, []int) {
 }
 
 type EventRequest struct {
-	state           protoimpl.MessageState `protogen:"open.v1"`
-	AfterSequenceId uint64                 `protobuf:"varint,1,opt,name=after_sequence_id,json=afterSequenceId,proto3" json:"after_sequence_id,omitempty"`
-	Timestamp       *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
-	unknownFields   protoimpl.UnknownFields
-	sizeCache       protoimpl.SizeCache
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Timestamp     *timestamppb.Timestamp `protobuf:"bytes,1,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *EventRequest) Reset() {
@@ -287,13 +286,6 @@ func (*EventRequest) Descriptor() ([]byte, []int) {
 	return file_github_com_openconfig_gnsi_auditz_auditz_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *EventRequest) GetAfterSequenceId() uint64 {
-	if x != nil {
-		return x.AfterSequenceId
-	}
-	return 0
-}
-
 func (x *EventRequest) GetTimestamp() *timestamppb.Timestamp {
 	if x != nil {
 		return x.Timestamp
@@ -303,10 +295,9 @@ func (x *EventRequest) GetTimestamp() *timestamppb.Timestamp {
 
 type EventResponse struct {
 	state              protoimpl.MessageState `protogen:"open.v1"`
-	SequenceId         uint64                 `protobuf:"varint,1,opt,name=sequence_id,json=sequenceId,proto3" json:"sequence_id,omitempty"`
-	Timestamp          *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
-	HistoryIstruncated bool                   `protobuf:"varint,3,opt,name=history_istruncated,json=historyIstruncated,proto3" json:"history_istruncated,omitempty"`
-	Component          *gnmi.Path             `protobuf:"bytes,4,opt,name=component,proto3" json:"component,omitempty"`
+	Timestamp          *timestamppb.Timestamp `protobuf:"bytes,1,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	HistoryIstruncated bool                   `protobuf:"varint,2,opt,name=history_istruncated,json=historyIstruncated,proto3" json:"history_istruncated,omitempty"`
+	Component          *gnmi.Path             `protobuf:"bytes,3,opt,name=component,proto3" json:"component,omitempty"`
 	// Types that are valid to be assigned to Event:
 	//
 	//	*EventResponse_Process
@@ -348,13 +339,6 @@ func (x *EventResponse) ProtoReflect() protoreflect.Message {
 // Deprecated: Use EventResponse.ProtoReflect.Descriptor instead.
 func (*EventResponse) Descriptor() ([]byte, []int) {
 	return file_github_com_openconfig_gnsi_auditz_auditz_proto_rawDescGZIP(), []int{1}
-}
-
-func (x *EventResponse) GetSequenceId() uint64 {
-	if x != nil {
-		return x.SequenceId
-	}
-	return 0
 }
 
 func (x *EventResponse) GetTimestamp() *timestamppb.Timestamp {
@@ -1115,16 +1099,13 @@ var File_github_com_openconfig_gnsi_auditz_auditz_proto protoreflect.FileDescrip
 
 const file_github_com_openconfig_gnsi_auditz_auditz_proto_rawDesc = "" +
 	"\n" +
-	".github.com/openconfig/gnsi/auditz/auditz.proto\x12\x0egnsi.auditz.v1\x1a0github.com/openconfig/gnmi/proto/gnmi/gnmi.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"t\n" +
-	"\fEventRequest\x12*\n" +
-	"\x11after_sequence_id\x18\x01 \x01(\x04R\x0fafterSequenceId\x128\n" +
-	"\ttimestamp\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\ttimestamp\"\xb9\x04\n" +
-	"\rEventResponse\x12\x1f\n" +
-	"\vsequence_id\x18\x01 \x01(\x04R\n" +
-	"sequenceId\x128\n" +
-	"\ttimestamp\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\ttimestamp\x12/\n" +
-	"\x13history_istruncated\x18\x03 \x01(\bR\x12historyIstruncated\x12(\n" +
-	"\tcomponent\x18\x04 \x01(\v2\n" +
+	".github.com/openconfig/gnsi/auditz/auditz.proto\x12\x0egnsi.auditz.v1\x1a0github.com/openconfig/gnmi/proto/gnmi/gnmi.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"H\n" +
+	"\fEventRequest\x128\n" +
+	"\ttimestamp\x18\x01 \x01(\v2\x1a.google.protobuf.TimestampR\ttimestamp\"\x98\x04\n" +
+	"\rEventResponse\x128\n" +
+	"\ttimestamp\x18\x01 \x01(\v2\x1a.google.protobuf.TimestampR\ttimestamp\x12/\n" +
+	"\x13history_istruncated\x18\x02 \x01(\bR\x12historyIstruncated\x12(\n" +
+	"\tcomponent\x18\x03 \x01(\v2\n" +
 	".gnmi.PathR\tcomponent\x128\n" +
 	"\aprocess\x18\n" +
 	" \x01(\v2\x1c.gnsi.auditz.v1.ProcessEventH\x00R\aprocess\x125\n" +

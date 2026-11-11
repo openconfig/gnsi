@@ -69,10 +69,13 @@ stacks on revenue ports), it must still emit the corresponding event message:
 
 Devices must maintain a bounded in-memory ring buffer of `EventResponse` records
 (with zero routine writes to onboard flash/SSD) so that newly connected or
-reconnecting Collectors can resume streaming via `EventRequest.after_sequence_id`
-or `EventRequest.timestamp`. If the requested cursor predates the oldest record
-in the ring buffer or if records were shed under load, the first returned
-`EventResponse` sets `history_istruncated = true`.
+reconnecting Collectors can resume streaming via `EventRequest.timestamp`.
+Timestamps assigned to `EventResponse.timestamp` in the ring buffer must be
+strictly increasing (if multiple events occur within the same clock tick or
+across an NTP clock adjustment, the System increments `nanos` by at least 1
+relative to the preceding record). If the requested `timestamp` predates the
+oldest record in the ring buffer or if records were shed under load, the first
+returned `EventResponse` sets `history_istruncated = true`.
 
 ### Control-Plane Safety & Co-Attestation
 
@@ -105,7 +108,7 @@ streaming service for discrete security events** (`auditz.proto`) paired with
    session drops and reconnects, it resyncs current state (`sync_response: true`)
    without replaying historical transitions missed during the outage (even when
    carrying protobuf payloads). `Auditz.EventSubscribe` replays missed events
-   from the on-box ring buffer via `after_sequence_id` or `timestamp` and flags
+   from the on-box ring buffer via `EventRequest.timestamp` and flags
    wrap-around via `history_istruncated`.
 3. **Protecting the Central NOS State Database:** Modeling a high-rate
    ring buffer as a keyed YANG list in `gNMI` would thrash the central NOS
