@@ -48,11 +48,11 @@ service Auditz {
   // EventSubscribe returns a unidirectional stream of runtime security
   // EventResponse messages sent from the System to a Collector.
   //
-  // An EventRequest specifies a starting cursor using either after_sequence_id
-  // or timestamp. The Collector's expectation is that all events recorded after
-  // the specified cursor will be streamed. If no events exist after the
-  // requested cursor, the server remains silent until new events are generated
-  // or a periodic AgentHeartbeat is emitted.
+  // An EventRequest contains a timestamp indicating the last EventResponse
+  // received. The Collector's expectation is that all events recorded after
+  // the timestamp will be streamed. If no events exist after the requested
+  // timestamp, the server remains silent until new events are generated or a
+  // periodic AgentHeartbeat is emitted.
   //
   // Any history for replay of events is maintained in a bounded in-memory ring
   // buffer global to the System (or virtual tenant) so that new and
@@ -63,28 +63,25 @@ service Auditz {
   // runtime events through the active RP's gNSI endpoint and populate the
   // originating component path in EventResponse.component.
   //
-  // At connection initiation, if both after_sequence_id and timestamp are zero
-  // (or omitted), all events currently stored in the System's ring buffer
-  // are sent prior to streaming live events.
+  // At connection initiation, the Collector may send either the current time
+  // or a zero (or omitted) timestamp. A zero timestamp indicates that all
+  // events currently stored in the System's ring buffer should be sent prior
+  // to streaming live events. A current timestamp indicates that only new
+  // events should be sent.
   //
   // The stream continues ad infinitum until the gNSI session is severed.
   rpc EventSubscribe(EventRequest) returns (stream EventResponse);
 }
 
 // EventRequest specifies the starting point for runtime events to be streamed
-// to the caller.
+// to the caller. A zero (or omitted) timestamp indicates that the server
+// should return all events currently present in the ring buffer followed by
+// live events.
 message EventRequest {
-  // Monotonically increasing sequence ID of the last EventResponse received by
-  // the Collector. When non-zero, the server streams all available events with
-  // sequence_id > after_sequence_id.
-  uint64 after_sequence_id = 1;
-
   // Timestamp of the last EventResponse received by the Collector, represented
-  // as nanoseconds since the Unix epoch (Jan 1, 1970 00:00:00 UTC). Used when
-  // after_sequence_id is 0. A zero timestamp with after_sequence_id = 0
-  // indicates that the server should return all events currently present in the
-  // ring buffer followed by live events.
-  google.protobuf.Timestamp timestamp = 2;
+  // as nanoseconds since the Unix epoch (Jan 1, 1970 00:00:00 UTC). The server
+  // streams all available events with timestamp > EventRequest.timestamp.
+  google.protobuf.Timestamp timestamp = 1;
 }
 
 // EventResponse represents a single runtime host/kernel security telemetry
@@ -92,20 +89,24 @@ message EventRequest {
 // on-demand re-attestation policy are evaluated by the receiving off-box
 // security backends rather than on the device.
 message EventResponse {
-  // Monotonically increasing sequence number assigned by the System to each
-  // emitted EventResponse since boot or service start.
-  uint64 sequence_id = 1;
-
   // The time when the System recorded this event, represented as nanoseconds
   // since the Unix epoch (Jan 1, 1970 00:00:00 UTC).
-  google.protobuf.Timestamp timestamp = 2;
+  //
+  // Timestamps must be strictly increasing across successive records appended
+  // to the System's ring buffer; if multiple events occur within the same
+  // clock tick or across an NTP clock adjustment, the System must increment
+  // nanos by at least 1 relative to the preceding EventResponse so each record
+  // has a unique, monotonically increasing timestamp cursor.
+  google.protobuf.Timestamp timestamp = 1;
 
-  // True if the server's ring-buffer history is missing records prior to this
-  // EventResponse (for example, if the requested cursor predates the oldest
-  // event in the ring buffer or if events were dropped under backpressure).
+  // True if the server's ring-buffer history is missing records prior to the
+  // time specified in the timestamp of this EventResponse (for example, if the
+  // requested timestamp predates the oldest event in the ring buffer or if
+  // events were dropped under backpressure). If timestamp is zero (or omitted)
+  // in EventRequest, the first EventResponse has this field set to false.
   // Subsequent EventResponse messages on the stream may have this field set to
   // false once continuity is re-established.
-  bool history_istruncated = 3;
+  bool history_istruncated = 2;
 
   // OpenConfig gNMI path to the hardware or software component in the
   // openconfig-platform model where the runtime event originated (e.g.,
@@ -113,7 +114,7 @@ message EventResponse {
   // /components/component[name=linecard0]). Subsystems running independent OS
   // kernels (linecards, fabric cards, standby RP) must proxy their events
   // through the active RP and set this path accordingly.
-  gnmi.Path component = 4;
+  gnmi.Path component = 3;
 
   // Specific runtime telemetry payload. Event classes are defined by their
   // semantic security behaviors rather than prescribing a specific kernel
